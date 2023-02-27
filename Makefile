@@ -1,40 +1,49 @@
+SRC			=	main.c
+
+SRCS		=	${addprefix sources/, ${SRC}}
+
+OBJ			=	${addprefix binaries/, ${SRC}}
+
+OBJS		=	$(OBJ:%.c=%.o)
+
+INCLUDES	=	Libft/includes/gnl Libft/includes/libc Libft/includes/ptf includes/
+
+HEADER 		=	includes/minishell.h
+
 NAME		=	minishell
-
-SRCS		=	sources/main.c						 \
-
-OBJS		=	$(SRCS:.c=.o)
-
-LIB			=	libft.a
-
-LIBFT		=	libft
-
-INCLUDES	=	-Ilibft
 
 CC			=	cc
 
-CFLAGS		=	-Wall -Wextra #-Werror
+CFLAGS		=	-Wall -Wextra -Werror
 
 RM			=	rm -f
 
-all:	libs $(NAME)
+MAKEFLAGS 	+= --no-print-directory
 
-$(NAME): $(OBJS)
-		$(CC) $(OBJS) $(LIBFT)/libft.a -lreadline -o $(NAME)
+binaries/%.o : sources/%.c ${HEADER} Libft/libft.a Makefile | binaries
+		$(CC) $(CFLAGS) -c $< -o $@ ${addprefix -I, ${INCLUDES}} 
 
-%.o:	%.c minishell.h Makefile
-		$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+${NAME}: ${OBJS}
+	${CC} -o ${NAME} ${OBJS} -LLibft -lft -lreadline
 
-libs:
-		@$(MAKE) -C $(LIBFT)
+all: $(NAME)
+
+Libft/libft.a :
+	@make -C Libft
+
+binaries :
+	@mkdir -p binaries/
+
+bonus: all
 
 clean:
-		@$(RM) $(OBJS)
-		@$(MAKE) clean -C $(LIBFT)
+		@$(RM) -r binaries
+		@make clean -C Libft
 
 fclean:	clean
-		@$(RM) $(NAME)
-		@$(MAKE) fclean -C $(LIBFT)
+		@${RM} $(NAME)
+		@make fclean -C Libft
 
 re:		fclean all
 
-.PHONY: all libs clean fclean re
+.PHONY: all bonus clean fclean re

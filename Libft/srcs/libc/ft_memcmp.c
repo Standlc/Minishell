@@ -1,36 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/27 11:52:38 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/02/27 14:59:53 by marvin           ###   ########.fr       */
+/*   Created: 2022/11/08 13:25:08 by svan-de-          #+#    #+#             */
+/*   Updated: 2022/11/10 15:43:03 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-// void	get_commands(char *prompt)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (prompt[i])
-// 	{
-// 		i++;
-// 	}
-// }
-
-int	main()
+int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-	t_data	data;
-	char	*prompt;
+	size_t	i;
 
-	(void)data;
-	prompt = readline(NULL);
-	// printf("%s\n", line);
-	free(prompt);
+	i = 0;
+	while (i < n)
+	{
+		if (*(char *)(s1 + i) != *(char *)(s2 + i))
+			return (*(unsigned char *)(s1 + i) - *(unsigned char *)(s2 + i));
+		i++;
+	}
 	return (0);
 }
