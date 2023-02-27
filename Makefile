@@ -1,6 +1,6 @@
 NAME		=	minishell
 
-SRCS		=	main.c						 \
+SRCS		=	sources/main.c						 \
 
 OBJS		=	$(SRCS:.c=.o)
 
@@ -16,12 +16,12 @@ CFLAGS		=	-Wall -Wextra #-Werror
 
 RM			=	rm -f
 
-all : libs $(NAME)
+all:	libs $(NAME)
 
-$(NAME) : $(OBJS)
+$(NAME): $(OBJS)
 		$(CC) $(OBJS) $(LIBFT)/libft.a -o $(NAME)
 
-%.o : %.c minishell.h Makefile
+%.o:	%.c minishell.h Makefile
 		$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 libs:
