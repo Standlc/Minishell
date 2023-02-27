@@ -19,7 +19,7 @@ RM			=	rm -f
 all:	libs $(NAME)
 
 $(NAME): $(OBJS)
-		$(CC) $(OBJS) $(LIBFT)/libft.a -o $(NAME)
+		$(CC) $(OBJS) $(LIBFT)/libft.a -lreadline -o $(NAME)
 
 %.o:	%.c minishell.h Makefile
 		$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
