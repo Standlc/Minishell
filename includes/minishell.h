@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/27 11:52:36 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/02/27 15:05:05 by marvin           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -28,27 +16,37 @@
 # include "ft_printf.h"
 
 enum operators {
-    NONE = 0,
-    AND = 1,
-    OR = 2,
+	NONE = 0,
+	AND = 1,
+	OR = 2,
+	SIMPLE_LEFT = 3,
+	SIMPLE_RIGHT = 4,
+	DOUBLE_LEFT = 5,
+	DOUBLE_RIGHT = 6,
+	PIPE = 7,
 };
 
 typedef struct s_command
 {
-	char	*command;
+	char	*name;
 	char	**options;
-}				t_command;
-
-typedef struct s_pipe_commands
-{
-	t_command	*commands;
+	char	**arguments;
 	int		operator;
-}				t_pipe_commands;
+}				t_command;
 
 typedef struct s_data
 {
-	t_pipe_commands	*s_pipe_commands;
-	//OTHER
+	t_command	*commands;
 }				t_data;
+
+int		parse_line(t_data *data, char *line);
+int		is_operator(char *line);
+int		word_len(char *str);
+void	skip_spaces(char **line);
+int		get_options_amount(char *line);
+int		get_arguments_amount(char *line);
+int		get_commands_amount(char *line);
+
+void	free_data(t_data *data);
 
 #endif

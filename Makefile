@@ -1,4 +1,5 @@
-SRC			=	main.c
+SRC			=	main.c							parse_line.c \
+				parse_line_utils.c				close_program.c \
 
 SRCS		=	${addprefix sources/, ${SRC}}
 
@@ -14,7 +15,7 @@ NAME		=	minishell
 
 CC			=	cc
 
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra #-Werror
 
 RM			=	rm -f
 
