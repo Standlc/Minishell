@@ -28,7 +28,7 @@ void	display_data(t_data *data)
 		printf("	},\n");
 		i++;
 	}
-	printf("\n]");
+	printf("\n]\n");
 }
 
 int	main(int argc, char **argv, char **env)
