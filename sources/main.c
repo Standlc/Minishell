@@ -36,7 +36,7 @@ int	main(int argc, char **argv, char **env)
 	t_data	data;
 	char	*line;
 
-	line = readline(NULL);
+	line = readline("minishell$>");
 	while (line)
 	{
 		if (line && *line)
