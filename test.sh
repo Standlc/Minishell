@@ -1,0 +1,2 @@
+echo lala
+echo $!
