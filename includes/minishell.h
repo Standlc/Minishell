@@ -1,6 +1,9 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# define PROMPT	"➜  minishell "
+
+# include <signal.h>
 # include <unistd.h>
 # include <stdio.h>
 # include <sys/types.h>
