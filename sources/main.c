@@ -1,51 +1,31 @@
 #include "minishell.h"
 
-void	display_data(t_data *data)
+int	get_line(t_pipeline *pipelines)
 {
-	int	i = 0;
-	printf("[\n");
-	while (data->commands[i].name)
+	char	*line;
+
+	line = readline(PROMPT);
+	while (line)
 	{
-		printf("	{\n");
-		printf("		name: %s,\n", data->commands[i].name);
-		int	h = 0;
-		printf("		options: [");
-		while (data->commands[i].options[h])
-		{
-			printf("%s, ", data->commands[i].options[h]);
-			h++;
-		}
-		printf("\b],\n");
-		h = 0;
-		printf("		arguments: [");
-		while (data->commands[i].arguments[h])
-		{
-			printf("%s, ", data->commands[i].arguments[h]);
-			h++;
-		}
-		printf("\b],\n");
-		printf("		opertor: %d\n", data->commands[i].operator);
-		printf("	},\n");
-		i++;
+		if (*line)
+			add_history(line);
+		parse_line(pipelines, line);
+		free_pipelines(pipelines);
+		free(line);
+		line = readline(PROMPT);
 	}
-	printf("\n]\n");
+	return (0);
 }
 
 int	main(int argc, char **argv, char **env)
 {
-	t_data	data;
-	char	*line;
+	t_pipeline	pipelines;
 
-	line = readline("minishell$>");
-	while (line)
-	{
-		if (line && *line)
-			add_history(line);
-		parse_line(&data, line);
-		display_data(&data);
-		free_data(&data);
-		free(line);
-		line = readline(NULL);
-	}
+	(void)argc;
+	(void)argv;
+	hook_signals();
+	get_line(&pipelines);
+	printf("Exit\n");
+	rl_clear_history();
 	return (0);
 }

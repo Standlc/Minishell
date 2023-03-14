@@ -1,6 +1,9 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# define PROMPT	"➜  minishell $>"
+
+# include <signal.h>
 # include <unistd.h>
 # include <stdio.h>
 # include <sys/types.h>
@@ -29,7 +32,6 @@ enum e_redirections {
 	PIPE = 5,
 };
 
-
 typedef struct s_command
 {
 	char	*name;
@@ -43,12 +45,11 @@ typedef struct s_command
 typedef struct s_pipeline
 {
 	t_command	*commands;
-	e_operators	operator;
+	enum e_operators	operator;
 	int			last_pipeline_status;
-}				t_pipeline
+}				t_pipeline;
 
-
-int		parse_line(t_data *data, char *line);
+int		parse_line(t_pipeline *pipelines, char *line);
 int		is_operator(char *line);
 int		word_len(char *str);
 void	skip_spaces(char **line);
@@ -56,6 +57,8 @@ int		get_options_amount(char *line);
 int		get_arguments_amount(char *line);
 int		get_commands_amount(char *line);
 
-void	free_data(t_data *data);
+void	free_pipelines(t_pipeline *pipelines);
+
+int		hook_signals(void);
 
 #endif
