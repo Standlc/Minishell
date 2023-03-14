@@ -44,9 +44,9 @@ typedef struct s_command
 
 typedef struct s_pipeline
 {
-	t_command	*commands;
+	t_command			*commands;
 	enum e_operators	operator;
-	int			last_pipeline_status;
+	int					last_status;
 }				t_pipeline;
 
 int		parse_line(t_pipeline *pipelines, char *line);

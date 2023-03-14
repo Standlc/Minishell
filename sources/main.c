@@ -10,6 +10,7 @@ int	get_line(t_pipeline *pipelines)
 		if (*line)
 			add_history(line);
 		parse_line(pipelines, line);
+		execution(pipelines);
 		free_pipelines(pipelines);
 		free(line);
 		line = readline(PROMPT);
