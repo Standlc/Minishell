@@ -15,46 +15,37 @@
 # include "get_next_line.h"
 # include "ft_printf.h"
 
-enum operators {
+enum e_operators {
 	NONE = 0,
 	AND = 1,
 	OR = 2,
-	SIMPLE_LEFT = 3,
-	SIMPLE_RIGHT = 4,
-	DOUBLE_LEFT = 5,
-	DOUBLE_RIGHT = 6,
-	PIPE = 7,
 };
+
+enum e_redirections {
+	SIMPLE_LEFT = 1,
+	SIMPLE_RIGHT = 2,
+	DOUBLE_LEFT = 3,
+	DOUBLE_RIGHT = 4,
+	PIPE = 5,
+};
+
 
 typedef struct s_command
 {
-
-	char	*name;			//nom de la commande ex : ls
-
-	char	**options;		//option de la commande ex : "-la" ou "-l -a"
-
-	char	**arguments;	//argument ex : "test1.c test2.c" ou "test*" (les wilcards *)
-
-	char	*input_file;	//fichier d'entree, stdin par defaut ex : "< a", "< a <c <p" -> input_file = "p", "<a < h [cmd] [flags] < u <k" -> input_file = "k", NULL si il n'y a pas de redirection "<" ou "<<", gerer aussi "<&"
-
-	char	*output_file;	//fichier de sortie, stdout par defaut ex : "> a", "> a >c >p" -> input_file = "p", ">a < h [cmd] [flags] > u <k" -> output_file = "u" NULL si il n'y a pas de redirection ">" ou ">>" gerer aussi ">&"
-
-	int		pipe_before;	//PIPE si la commande etait pecedee d'un "|", NONE sinon
-
-	int		pipe_after;		//PIPE si la commande a un "|" a la fin, NONE sinon
-
+	char	*name;
+	char	**arguments;
+	char	*input_file;
+	char	*output_file;
+	int		pipe_before;
+	int		pipe_after;
 }				t_command;
 
-typedef struct s_data
+typedef struct s_pipeline
 {
-
-	t_command	*commands;		//un groupe de commandes du type : "echo -n yes | <a cat <b >&2 >h | rev"
-
-	int			operator_left;	//AND si avant le groupe de commande correspondant se trouvait "&&", de meme OR si "||", NONE si c'est le premier groupe de commandes
-
-	int			last_status;	//status du groupe de commande precedant : 0 si succes, autre si echec (correspondant au status de sortie du groupe de commande)
-
-}				t_data
+	t_command	*commands;
+	e_operators	operator;
+	int			last_pipeline_status;
+}				t_pipeline
 
 
 int		parse_line(t_data *data, char *line);
