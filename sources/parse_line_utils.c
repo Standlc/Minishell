@@ -18,9 +18,7 @@ int	word_len(char *str)
 
 int	is_operator(char *line)
 {
-	return (!ft_strncmp(line, "&&", 2) || !ft_strncmp(line, "||", 2)
-		|| !ft_strncmp(line, "<<", 2) || !ft_strncmp(line, ">>", 2)
-		|| *line == '<' || *line == '>' || *line == '|');
+	return (!ft_strncmp(line, "&&", 2) || !ft_strncmp(line, "||", 2));
 }
 
 int	get_arguments_amount(char *line)

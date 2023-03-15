@@ -2,32 +2,26 @@
 
 void	free_pipelines(t_pipeline *pipelines)
 {
-	// int	i;
-	// int	j;
+	int	i = 0;
+	int	j = 0;
+	int	k = 0;
 
-	// if (!data->commands)
-	// 	return ;
-	// i = 0;
-	// while (data->commands[i].name)
-	// {
-	// 	free(data->commands[i].name);
-	// 	j = 0;
-	// 	while (data->commands[i].options[j])
-	// 	{
-	// 		free(data->commands[i].options[j]);
-	// 		j++;
-	// 	}
-	// 	free(data->commands[i].options[j]);
-	// 	free(data->commands[i].options);
-	// 	j = 0;
-	// 	while (data->commands[i].arguments[j])
-	// 	{
-	// 		free(data->commands[i].arguments[j]);
-	// 		j++;
-	// 	}
-	// 	free(data->commands[i].arguments[j]);
-	// 	free(data->commands[i].arguments);
-	// 	i++;
-	// }
-	// free(data->commands);
+	while (pipelines[i].commands)
+	{
+		j = 0;
+		while (pipelines[i].commands[j].name)
+		{
+			free(pipelines[i].commands[j].name);
+			k = 0;
+			while (pipelines[i].commands[j].arguments[k])
+			{
+				free(pipelines[i].commands[j].arguments[k]);
+				k++;
+			}
+			j++;
+		}
+		free(pipelines[i].commands);
+		i++;
+	}
+	free(pipelines);
 }

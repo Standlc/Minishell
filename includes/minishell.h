@@ -38,18 +38,16 @@ typedef struct s_command
 	char	**arguments;
 	char	*input_file;
 	char	*output_file;
-	int		pipe_before;
-	int		pipe_after;
 }				t_command;
 
 typedef struct s_pipeline
 {
-	t_command	*commands;
+	t_command			*commands;
 	enum e_operators	operator;
-	int			last_pipeline_status;
+	int					last_pipeline_status;
 }				t_pipeline;
 
-int		parse_line(t_pipeline *pipelines, char *line);
+t_pipeline	*parse_line(char *line);
 int		is_operator(char *line);
 int		word_len(char *str);
 void	skip_spaces(char **line);
