@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+int	g_status;
+
 int	get_line(t_pipeline *pipelines)
 {
 	char	*line;
@@ -24,6 +26,7 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
+	g_status = 0;
 	hook_signals();
 	get_line(&pipelines);
 	printf("Exit\n");
