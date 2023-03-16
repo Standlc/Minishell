@@ -1,7 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define PROMPT	"➜  minishell $>"
+# define PROMPT	"➜  minishell $> "
 
 # include <signal.h>
 # include <unistd.h>
@@ -45,6 +45,8 @@ typedef struct s_pipeline
 	t_command			*commands;
 	enum e_operators	operator;
 	int					last_pipeline_status;
+	int					start_priority;
+	int					end_priority;
 }				t_pipeline;
 
 t_pipeline	*parse_line(char *line);
@@ -58,5 +60,7 @@ int		get_commands_amount(char *line);
 void	free_pipelines(t_pipeline *pipelines);
 
 int		hook_signals(void);
+
+void	print_error(char *message);
 
 #endif

@@ -1,6 +1,6 @@
 SRC			=	main.c							parse_line.c \
 				parse_line_utils.c				close_program.c \
-				signals.c						
+				signals.c						print_error.c \
 
 SRCS		=	${addprefix sources/, ${SRC}}
 
