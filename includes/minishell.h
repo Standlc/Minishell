@@ -42,25 +42,29 @@ typedef struct s_command
 
 typedef struct s_pipeline
 {
-	t_command			*commands;
-	enum e_operators	operator;
-	int					last_pipeline_status;
-	int					start_priority;
-	int					end_priority;
+	t_command	*commands;
+	int			operator;
+	int			last_pipeline_status;
+	int			start_priority;
+	int			end_priority;
 }				t_pipeline;
 
 t_pipeline	*parse_line(char *line);
-int		is_operator(char *line);
-int		word_len(char *str);
-void	skip_spaces(char **line);
-int		get_options_amount(char *line);
-int		get_arguments_amount(char *line);
-int		get_commands_amount(char *line);
+char		*copy_line_word(char **line);
+int			is_redirection(char *line);
+int			is_operator(char *line);
+int			word_len(char *str);
+void		skip_spaces(char **line);
+int			get_options_amount(char *line);
+int			get_arguments_amount(char *line);
+int			get_commands_amount(char *line);
 
-void	free_pipelines(t_pipeline *pipelines);
+void		free_pipelines(t_pipeline *pipelines);
 
-int		hook_signals(void);
+int			hook_signals(void);
 
-void	print_error(char *message);
+void		print_error(char *message);
+
+int			get_redirections(char **line, t_command *command);
 
 #endif

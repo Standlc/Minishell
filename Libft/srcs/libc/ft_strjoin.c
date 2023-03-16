@@ -30,9 +30,9 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		str[i] = s1[i];
 		i++;
 	}
-	while (s2[j])
+	while (s2 && s2[j])
 	{
-		str[i] = s2 [j];
+		str[i] = s2[j];
 		i++;
 		j++;
 	}

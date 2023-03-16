@@ -45,8 +45,8 @@ int	get_line(t_pipeline *pipelines)
 		pipelines = parse_line(line);
 		if (pipelines)
 		{
-			// show_data(pipelines);
-			// free_pipelines(pipelines);
+			show_data(pipelines);
+			free_pipelines(pipelines);
 		}
 		free(line);
 		line = readline(PROMPT);
@@ -61,9 +61,9 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	pipelines = NULL;
-	// hook_signals();
+	hook_signals();
 	get_line(pipelines);
 	printf("Exit\n");
-	// rl_clear_history();
+	rl_clear_history();
 	return (0);
 }

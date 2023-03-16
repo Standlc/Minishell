@@ -36,21 +36,6 @@ int	get_arguments_amount(char *line)
 	return (count);
 }
 
-int	get_options_amount(char *line)
-{
-	int	count;
-
-	count = 0;
-	while (*line == '-')
-	{
-		while (*line && *line != ' ')
-			line++;
-		skip_spaces(&line);
-		count++;
-	}
-	return (count);
-}
-
 int	get_commands_amount(char *line)
 {
 	int	count;
