@@ -2,7 +2,21 @@
 
 int	g_status;
 
-int	get_line(t_pipeline *pipelines)
+void	for_env(t_pipeline *pipelines, char **env)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (pipelines[i].commands)
+	{
+		while (pipelines[i].commands[j].name)
+			pipelines[i].commands[j].env = env;
+	}
+}
+
+int	get_line(t_pipeline *pipelines, char **env)
 {
 	char	*line;
 
@@ -12,6 +26,7 @@ int	get_line(t_pipeline *pipelines)
 		if (*line)
 			add_history(line);
 		parse_line(pipelines, line);
+		for_env(pipelines, env);
 		execution(pipelines);
 		free_pipelines(pipelines);
 		free(line);
@@ -28,7 +43,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	g_status = 0;
 	hook_signals();
-	get_line(&pipelines);
+	get_line(&pipelines, env);
 	printf("Exit\n");
 	rl_clear_history();
 	return (0);

@@ -38,6 +38,7 @@ typedef struct s_command
 	char	**arguments;
 	char	*input_file;
 	char	*output_file;
+	char	**env;
 }				t_command;
 
 typedef struct s_pipeline

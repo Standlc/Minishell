@@ -3,7 +3,9 @@
 void	pwd(t_command *command)
 {
 	char	*str;
+	int		fd_out;
 
+	open_files(command, &fd_out);
 	str = getcwd(NULL, 1024);
 	status = errno;
 	if (!str)
@@ -14,7 +16,7 @@ void	pwd(t_command *command)
 			ft_putstr_fd("Memory cannot be allocated for path\n", 2);
 	}
 	else
-		ft_putstr_fd(str, 1);
+		ft_putstr_fd(str, fd_out);
 	free(str);
 	exit(status);
 }

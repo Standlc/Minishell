@@ -11,7 +11,7 @@ int	is_builtin(t_command *command)
 		return (cd(command), 1);
 	if (!strncmp(command->name, "pwd", 4))
 		return (pwd(command), 1);
-	if (!strncmp(command->name, "export", 7))
+	if (!strncmp(command->name, "export", 7) && command->arg)
 		return (export(command), 1);
 	if (!strncmp(command->name, "unset", 6))
 		return (unset(command), 1);
