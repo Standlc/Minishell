@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	env(t_command *command)
+void	env_ms(t_command *command)
 {
 	int	i;
 	int	fd_out;

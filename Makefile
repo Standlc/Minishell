@@ -1,6 +1,8 @@
-SRC			=	main.c							parse_line.c \
-				parse_line_utils.c				close_program.c \
-				signals.c						
+SRC			=	main.c	\
+				execution/execution.c execution/for_env.c execution/parenthesis.c \
+				builtins/cd.c builtins/echo.c builtins/env.c builtins/exit.c \
+				builtins/pwd.c builtins/unset.c builtins/export/export.c \
+				builtins/export/complete_env.c						
 
 SRCS		=	${addprefix sources/, ${SRC}}
 

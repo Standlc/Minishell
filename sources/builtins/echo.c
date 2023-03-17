@@ -25,7 +25,7 @@ void	close_files(int *fd_out)
 		exit(g_status);
 }
 
-void	echo(t_command *command, int option)
+void	echo_ms(t_command *command, int option)
 {
 	int	i;
 	int	fd_out;

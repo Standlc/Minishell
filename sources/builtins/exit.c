@@ -90,7 +90,7 @@ long	ft_atoi_exit(char *str)
 	return (result);
 }
 
-void	exit(t_command *command)
+void	exit_ms(t_command *command)
 {
 	long	value;
 	int		i;

@@ -57,7 +57,7 @@ char	**new_env(char **env, char **arguments)
 	return (new);
 }
 
-void	export(t_command *command)
+void	export_ms(t_command *command)
 {
 	int		i;
 	char	**tmp;

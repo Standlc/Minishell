@@ -4,21 +4,21 @@ int	is_builtin(t_command *command)
 {
 	if (!strncmp(command->name, "echo", 5)
 		&& !strncmp(command->arguments[0], "-n", 3))
-		return (echo(command, 0), 1);
+		return (echo_ms(command, 0), 1);
 	if (!strncmp(command->name, "echo", 5))
-		return (echo(command, 1), 1);
+		return (echo_ms(command, 1), 1);
 	if (!strncmp(command->name, "cd", 3))
-		return (cd(command), 1);
+		return (cd_ms(command), 1);
 	if (!strncmp(command->name, "pwd", 4))
-		return (pwd(command), 1);
+		return (pwd_ms(command), 1);
 	if (!strncmp(command->name, "export", 7) && command->arg)
-		return (export(command), 1);
+		return (export_ms(command), 1);
 	if (!strncmp(command->name, "unset", 6))
-		return (unset(command), 1);
+		return (unset_ms(command), 1);
 	if (!strncmp(command->name, "env", 4))
-		return (env(command), 1);
+		return (env_ms(command), 1);
 	if (!strncmp(command->name, "exit", 5))
-		return (exit(command), 1);
+		return (exit_ms(command), 1);
 	return (0);
 }
 

@@ -2,28 +2,16 @@
 
 int	g_status;
 
-void	for_env(t_pipeline *pipelines, char **env)
+void	test(t_pipeline *pipelines)
 {
-	static int call = 0;
-	char	**env_dup;
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	if (call != 0)
-		return ;
-	call++;
-	env_dup = 
-	while (env[i])
-	{
-
-	}
-	while (pipelines[i].commands)
-	{
-		while (pipelines[i].commands[j].name)
-			pipelines[i].commands[j].env = env;
-	}
+	pipelines->start_priority = NONE;
+	pipelines->end_priority = NONE;
+	pipelines->operator = NONE;
+	pipelines->commands->name = "echo";
+	pipelines->commands->arguments[0] = "hello world";
+	pipelines->commands->arguments[1] = NULL;
+	pipelines->commands->input_file = NULL;
+	pipelines->commands->output_file = NULL;
 }
 
 int	get_line(t_pipeline *pipelines, char **env)
@@ -36,10 +24,11 @@ int	get_line(t_pipeline *pipelines, char **env)
 	{
 		if (*line)
 			add_history(line);
-		parse_line(pipelines, line);
+		//parse_line(pipelines, line);
+		test(pipelines);
 		for_env(pipelines, env);
-		execution(pipelines);
-		free_pipelines(pipelines);
+		execution_global(pipelines);
+		//free_pipelines(pipelines);
 		free(line);
 		line = readline(PROMPT);
 	}
@@ -53,9 +42,9 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	g_status = 0;
-	hook_signals();
+	//hook_signals();
 	get_line(&pipelines, env);
-	printf("Exit\n");
-	rl_clear_history();
+	//printf("Exit\n");
+	//rl_clear_history();
 	return (0);
 }

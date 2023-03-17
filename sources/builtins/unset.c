@@ -62,7 +62,7 @@ void	delete_env(t_command *command, int i)
 	}
 }
 
-void	unset(t_command *command)
+void	unset_ms(t_command *command)
 {
 	int	i;
 

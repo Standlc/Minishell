@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	pwd(t_command *command)
+void	pwd_ms(t_command *command)
 {
 	char	*str;
 	int		fd_out;

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	cd(t_command *command)
+void	cd_ms(t_command *command)
 {
 	char	*str;
 
