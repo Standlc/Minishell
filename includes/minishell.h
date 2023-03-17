@@ -18,6 +18,12 @@
 # include "get_next_line.h"
 # include "ft_printf.h"
 
+enum e_data_types {
+	PIPELINE = 0,
+	COMMAND = 1,
+	CHAR = 2,
+};
+
 enum e_operators {
 	NONE = 0,
 	AND = 1,

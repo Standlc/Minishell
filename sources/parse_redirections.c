@@ -17,7 +17,6 @@ int	handle_simple_right_redirection(t_command *command, char *file)
 {
 	int		fd;
 
-
 	if (command->output_file)
 		free(command->output_file);
 	command->output_file = file;
@@ -61,37 +60,39 @@ int	get_redirection_type(char **line)
 		return (DOUBLE_RIGHT);
 	else if (**line == '<' && *(*line + 1) != '<')
 		return (SIMPLE_LEFT);
-	else if (**line == '>' && *(*line + 1) != '>')
-		return (SIMPLE_RIGHT);
-	return (0);
+	return (SIMPLE_RIGHT);
+}
+
+int	handle_redirection_type(t_command *command, int redirection_type, char *file)
+{
+	int	return_status;
+
+	if (redirection_type == DOUBLE_LEFT)
+		return_status = handle_double_left_redirection(command, file);
+	else if (redirection_type == DOUBLE_RIGHT)
+		return_status = handle_double_right_redirection(command, file);
+	else if (redirection_type == SIMPLE_LEFT)
+		return_status = handle_simple_left_redirection(command, file);
+	else
+		return_status = handle_simple_right_redirection(command, file);
+	return (return_status);
 }
 
 int	get_redirections(char **line, t_command *command)
 {
 	int		redirection_type;
 	char	*file;
-	int		return_status;
 
 	while (is_redirection(*line))
 	{
 		redirection_type = get_redirection_type(line);
-		if (redirection_type == SIMPLE_LEFT || redirection_type == SIMPLE_RIGHT)
-			*line += 1;
-		else
-			*line += 2;
+		*line += 1;
+		*line += redirection_type == DOUBLE_LEFT || redirection_type == DOUBLE_RIGHT;
 		skip_spaces(line);
 		file = copy_line_word(line);
 		if (!file)
 			return (1);
-		if (redirection_type == DOUBLE_LEFT)
-			return_status = handle_double_left_redirection(command, file);
-		else if (redirection_type == DOUBLE_RIGHT)
-			return_status = handle_double_right_redirection(command, file);
-		else if (redirection_type == SIMPLE_LEFT)
-			return_status = handle_simple_left_redirection(command, file);
-		else if (redirection_type == SIMPLE_RIGHT)
-			return_status = handle_simple_right_redirection(command, file);
-		if (return_status == -1)
+		if (handle_redirection_type(command, redirection_type, file) == -1)
 			return (1);
 		skip_spaces(line);
 	}
