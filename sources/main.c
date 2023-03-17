@@ -4,11 +4,21 @@ int	g_status;
 
 void	for_env(t_pipeline *pipelines, char **env)
 {
+	static int call = 0;
+	char	**env_dup;
 	int	i;
 	int	j;
 
 	i = 0;
 	j = 0;
+	if (call != 0)
+		return ;
+	call++;
+	env_dup = 
+	while (env[i])
+	{
+
+	}
 	while (pipelines[i].commands)
 	{
 		while (pipelines[i].commands[j].name)
@@ -21,6 +31,7 @@ int	get_line(t_pipeline *pipelines, char **env)
 	char	*line;
 
 	line = readline(PROMPT);
+	env = duplicate_env(env);
 	while (line)
 	{
 		if (*line)

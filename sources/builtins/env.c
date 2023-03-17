@@ -8,7 +8,8 @@ void	env(t_command *command)
 	i = -1;
 	open_files(command, &fd_out);
 	if (!command->env)
-		return (ft_putstr_fd("minishell haven't environment\n", 2));
+		return ;
 	while (command->env[++i])
 		ft_putstr_fd(command->env, fd_out);
+	close_files(&fd_out);
 }

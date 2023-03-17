@@ -2,7 +2,7 @@
 
 void	open_files(t_command *command, int *fd_out)
 {
-	if (command->output_file != NULL && command->output_file != 2)
+	if (command->output_file != NULL && command->output_file != 2 && command->output_file != 0)
 	{
 		*fd_out = open(command->output_file, O_WRONLY
 				| O_CREATE | O_TRUNC, 0664);
@@ -11,8 +11,18 @@ void	open_files(t_command *command, int *fd_out)
 	}
 	else if (command->output_file == 2)
 		*fd_out = 2;
+	else if (command->output_file == 0)
+		*fd_out = 0;
 	else
 		*fd_out = 1;
+}
+
+void	close_files(int *fd_out)
+{
+	if (*fd_out == 1 || *fd_out == 2 || *fd_out == 0)
+		return ;
+	else (close(*fd_out) == -1)
+		exit(g_status);
 }
 
 void	echo(t_command *command, int option)
@@ -32,4 +42,5 @@ void	echo(t_command *command, int option)
 	}
 	if (option == 1)
 		ft_putchar_fd('\n', fd_out);
+	close_files(&fd_out);
 }

@@ -37,6 +37,8 @@ void	execution_pipeline(t_pipeline *pipeline)
 	i = 0;
 	while (pipeline->commands[i].name)
 	{
+		if (i > 0)
+			pipeline->commands[i].env = pipeline->commands[i - 1].env;
 		execution_command(&(pipeline->commands[i]));
 		i++;
 	}
@@ -68,6 +70,7 @@ void	execution_global(t_pipeline *pipelines)
 	i = 0;
 	while (pipelines[i].commands)
 	{
+		for_env(pipelines, env);
 		if (i == 0 || (i != 0 && !check_last_status(pipeline[i])))
 			execution_pipeline(&pipelines[i]);
 		else if (pipelines[i + 1].commands && pipelines[i + 1].start_priority)

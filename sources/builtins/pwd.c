@@ -18,5 +18,5 @@ void	pwd(t_command *command)
 	else
 		ft_putstr_fd(str, fd_out);
 	free(str);
-	exit(status);
+	close_files(&fd_out);
 }
