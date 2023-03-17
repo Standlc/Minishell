@@ -26,7 +26,7 @@ int	handle_simple_right_redirection(t_command *command, char *file)
 	return (fd);
 }
 
-int	handle_double_left_redirection(t_command *command, char *file)
+int	handle_heredoc(t_command *command, char *file)
 {
 	int		fd;
 
@@ -68,7 +68,7 @@ int	handle_redirection_type(t_command *command, int redirection_type, char *file
 	int	return_status;
 
 	if (redirection_type == DOUBLE_LEFT)
-		return_status = handle_double_left_redirection(command, file);
+		return_status = handle_heredoc(command, file);
 	else if (redirection_type == DOUBLE_RIGHT)
 		return_status = handle_double_right_redirection(command, file);
 	else if (redirection_type == SIMPLE_LEFT)

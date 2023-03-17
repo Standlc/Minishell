@@ -52,8 +52,6 @@ void	*ft_realloc_commands(t_command *ptr, int nmemb, int size)
 		res[i] = ptr[i];
 		i++;
 	}
-	res[i].name = NULL;
-	res[i].name = NULL;
 	free(ptr);
 	return (res);
 }
@@ -70,6 +68,7 @@ void	*ft_realloc(t_pipeline *ptr, int nmemb, int size)
 	while (i < nmemb - 1)
 	{
 		res[i] = ptr[i];
+		// *(char *)(res + i) = *(char *)(ptr + i);
 		i++;
 	}
 	free(ptr);
@@ -194,12 +193,12 @@ int	get_arguments(char **line, t_command *command)
 {
 	int	i;
 
-	command->arguments = ft_calloc( (10 + 1), sizeof(char *));
-	if (!command->arguments)
-		return (1);
 	i = 0;
 	while (**line && !is_operator(*line) && !is_pipe(*line) && **line != '&')
 	{
+		command->arguments = ft_realloc_args(command->arguments, (i + 2), sizeof(char *));
+		if (!command->arguments)
+			return (1);
 		if (get_redirections(line, command))
 			return (1);
 		command->arguments[i] = copy_line_word(line);
@@ -232,11 +231,10 @@ int	get_pipeline(char **line, t_pipeline *pipeline)
 	int	i;
 
 	get_operator(line, pipeline);
-	pipeline->commands = NULL;
 	i = 0;
 	while (**line && !is_operator(*line))
 	{
-		pipeline->commands = ft_realloc_commands(pipeline->commands, (i + 1), sizeof(t_command));
+		pipeline->commands = ft_realloc_commands(pipeline->commands, (i + 2), sizeof(t_command));
 		if (!pipeline->commands)
 			return (1);
 		if (get_command(line, pipeline->commands + i))
@@ -257,7 +255,7 @@ t_pipeline	*parse_line(char *line)
 	i = 0;
 	while (*line)
 	{
-		pipelines = ft_realloc(pipelines, i + 1, sizeof(t_pipeline));
+		pipelines = ft_realloc(pipelines, i + 2, sizeof(t_pipeline));
 		if (!pipelines)
 			return (NULL);
 		if (get_pipeline(&line, pipelines + i))

@@ -46,7 +46,7 @@ int	get_line(t_pipeline *pipelines)
 		if (pipelines)
 		{
 			show_data(pipelines);
-			// free_pipelines(pipelines);
+			free_pipelines(pipelines);
 		}
 		free(line);
 		line = readline(PROMPT);
