@@ -2,7 +2,7 @@ SRC			=	main.c	\
 				execution/execution.c execution/for_env.c execution/parenthesis.c \
 				builtins/cd.c builtins/echo.c builtins/env.c builtins/exit.c \
 				builtins/pwd.c builtins/unset.c builtins/export/export.c \
-				builtins/export/complete_env.c						
+				builtins/export/complete_env.c					
 
 SRCS		=	${addprefix sources/, ${SRC}}
 
@@ -25,6 +25,7 @@ RM			=	rm -f
 MAKEFLAGS 	+= --no-print-directory
 
 binaries/%.o : sources/%.c ${HEADER} Libft/libft.a Makefile | binaries
+		@mkdir -p $(@D)
 		$(CC) $(CFLAGS) -c $< -o $@ ${addprefix -I, ${INCLUDES}} 
 
 ${NAME}: ${OBJS}

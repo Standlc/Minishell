@@ -25,12 +25,11 @@ int	parentesis_number(t_pipeline *pipelines)
 
 void	parenthesis(t_pipeline *pipelines, int *index)
 {
-	int	i;
 	int	number;
-	int	end;
+	int	i;
 
-	number = parenthesis_number(pipelines);
 	i = 0;
+	number = parenthesis_number(pipelines);
 	if (pipelines[i].start_priority)
 	{
 		while (number != 0)

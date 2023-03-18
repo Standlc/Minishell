@@ -2,6 +2,13 @@
 
 int	g_status;
 
+char	***environnement(void)
+{
+	static char	**env;
+
+	return (&env);
+}
+
 void	test(t_pipeline *pipelines)
 {
 	pipelines->start_priority = NONE;
@@ -17,16 +24,17 @@ void	test(t_pipeline *pipelines)
 int	get_line(t_pipeline *pipelines, char **env)
 {
 	char	*line;
+	char	**new_env;
 
 	line = readline(PROMPT);
-	env = duplicate_env(env);
+	new_env = *(environnement());
+	new_env = duplicate_env(env);
 	while (line)
 	{
 		if (*line)
 			add_history(line);
 		//parse_line(pipelines, line);
 		test(pipelines);
-		for_env(pipelines, env);
 		execution_global(pipelines);
 		//free_pipelines(pipelines);
 		free(line);

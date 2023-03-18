@@ -38,7 +38,6 @@ typedef struct s_command
 	char	**arguments;
 	char	*input_file;
 	char	*output_file;
-	char	**env;
 }				t_command;
 
 typedef struct s_pipeline
@@ -88,12 +87,16 @@ void	pwd_ms(t_command *command);
 
 void	cd_ms(t_command *command);
 
+int		validate_option(t_command *command, int *i);
+void	validate_n(t_command *command, int *i);
 void	open_files(t_command *command, int *fd_out);
 void	close_files(int *fd_out);
-void	echo_ms(t_command *command, int option);
+void	echo_ms(t_command *command);
 
-int		parentesis_number(t_pipeline *pipelines);
+int		parenthesis_number(t_pipeline *pipelines);
 void	parenthesis(t_pipeline *pipelines, int *index);
+
+
 
 int		is_builtin(t_command *command);
 void	execution_command(t_command *command);
@@ -103,7 +106,7 @@ void	execution_global(t_pipeline *pipelines);
 
 void	free_dup(char **env_dup);
 char	**duplicate_env(char **env);
-void	for_env(t_pipeline *pipelines, char **env);
+void	for_env(t_pipeline *pipelines);
 
 void	test(t_pipeline *pipelines);
 int		get_line(t_pipeline *pipelines, char **env);

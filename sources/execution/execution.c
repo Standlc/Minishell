@@ -1,17 +1,16 @@
 #include "minishell.h"
 
+extern int	g_status;
+
 int	is_builtin(t_command *command)
 {
-	if (!strncmp(command->name, "echo", 5)
-		&& !strncmp(command->arguments[0], "-n", 3))
-		return (echo_ms(command, 0), 1);
 	if (!strncmp(command->name, "echo", 5))
-		return (echo_ms(command, 1), 1);
+		return (echo_ms(command), 1);
 	if (!strncmp(command->name, "cd", 3))
 		return (cd_ms(command), 1);
 	if (!strncmp(command->name, "pwd", 4))
 		return (pwd_ms(command), 1);
-	if (!strncmp(command->name, "export", 7) && command->arg)
+	if (!strncmp(command->name, "export", 7) && command->arguments[0])
 		return (export_ms(command), 1);
 	if (!strncmp(command->name, "unset", 6))
 		return (unset_ms(command), 1);
@@ -26,8 +25,8 @@ void	execution_command(t_command *command)
 {
 	if (is_builtin(command))
 		;
-	else
-		another_command(command);
+	//else
+	//	another_command(command);
 }
 
 void	execution_pipeline(t_pipeline *pipeline)
@@ -37,8 +36,6 @@ void	execution_pipeline(t_pipeline *pipeline)
 	i = 0;
 	while (pipeline->commands[i].name)
 	{
-		if (i > 0)
-			pipeline->commands[i].env = pipeline->commands[i - 1].env;
 		execution_command(&(pipeline->commands[i]));
 		i++;
 	}
@@ -70,11 +67,12 @@ void	execution_global(t_pipeline *pipelines)
 	i = 0;
 	while (pipelines[i].commands)
 	{
-		for_env(pipelines, env);
-		if (i == 0 || (i != 0 && !check_last_status(pipeline[i])))
+		if (i == 0 || (i != 0 && !check_last_status(pipelines[i])))
 			execution_pipeline(&pipelines[i]);
 		else if (pipelines[i + 1].commands && pipelines[i + 1].start_priority)
-			parenthesis(&pipelines[i], &(i++));
-		i++;
+		{
+			parenthesis(&pipelines[i], &i);
+			i++;
+		}
 	}
 }
