@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+extern int	g_status;
+
 void	replace_variable(char *new, char *argument)
 {
 	char	*tmp;

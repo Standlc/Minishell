@@ -24,7 +24,9 @@ int	is_builtin(t_command *command)
 void	execution_command(t_command *command)
 {
 	if (is_builtin(command))
+	{
 		;
+	}
 	//else
 	//	another_command(command);
 }

@@ -1,13 +1,13 @@
 #include "minishell.h"
 
+extern int	g_status;
+
 void	pwd_ms(t_command *command)
 {
 	char	*str;
-	int		fd_out;
 
-	open_files(command, &fd_out);
 	str = getcwd(NULL, 1024);
-	status = errno;
+	g_status = errno;
 	if (!str)
 	{
 		if (errno == ERANGE)
@@ -16,7 +16,7 @@ void	pwd_ms(t_command *command)
 			ft_putstr_fd("Memory cannot be allocated for path\n", 2);
 	}
 	else
-		ft_putstr_fd(str, fd_out);
+		ft_putstr_fd(str, command->output_file);
 	free(str);
-	close_files(&fd_out);
+	close_files(command->output_file);
 }

@@ -1,13 +1,15 @@
 #include "minishell.h"
 
-void	delete_variable(char **env, char *arg, int j)
+extern int	g_status;
+
+void	delete_variable(char **env, int j)
 {
 	char	**new;
 	char	**tmp;
 	int		i;
 
 	i = 0;
-	new = malloc(sizeof(char *) * (ft_strlen(env)));
+	new = malloc(sizeof(char *) * (ft_strlen((char *)env)));
 	if (!new)
 		return (ft_putstr_fd("Cannot allocate memory\n", 2));
 	while (env[i])
@@ -26,7 +28,7 @@ void	delete_variable(char **env, char *arg, int j)
 	free_dup(tmp);
 }
 
-int	valide_delete(char *argument)
+int	valid_delete(char *argument)
 {
 	int	i;
 
@@ -49,15 +51,17 @@ void	delete_env(t_command *command, int i)
 {
 	int	j;
 	int	size_arg;
+	char	**new_env;
 
 	j = 0;
 	size_arg = 0;
+	new_env = *(environnement());
 	while (command->arguments[i][size_arg])
 		size_arg++;
-	while (command->env[j])
+	while (new_env[j])
 	{
-		if (strncmp(command->env[j], command->arguments[i], size_arg) == 61)
-			delete_variable(command->env, command->arguments[i], j);
+		if (ft_strncmp(new_env[j], command->arguments[i], size_arg) == '=')
+			delete_variable(new_env, j);
 		j++;
 	}
 }

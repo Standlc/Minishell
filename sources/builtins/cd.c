@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+extern int	g_status;
+
 void	cd_ms(t_command *command)
 {
 	char	*str;

@@ -36,8 +36,8 @@ typedef struct s_command
 {
 	char	*name;
 	char	**arguments;
-	char	*input_file;
-	char	*output_file;
+	int		input_file;
+	int		output_file;
 }				t_command;
 
 typedef struct s_pipeline
@@ -70,8 +70,8 @@ void	exit_ms(t_command *command);
 
 void	env_ms(t_command *command);
 
-void	delete_variable(char **env, char *arg, int j);
-int		valide_delete(char *argument);
+void	delete_variable(char **env, int j);
+int		valid_delete(char *argument);
 void	delete_env(t_command *command, int i);
 void	unset_ms(t_command *command);
 
@@ -89,14 +89,11 @@ void	cd_ms(t_command *command);
 
 int		validate_option(t_command *command, int *i);
 void	validate_n(t_command *command, int *i);
-void	open_files(t_command *command, int *fd_out);
-void	close_files(int *fd_out);
+void	close_files(int fd_out);
 void	echo_ms(t_command *command);
 
 int		parenthesis_number(t_pipeline *pipelines);
 void	parenthesis(t_pipeline *pipelines, int *index);
-
-
 
 int		is_builtin(t_command *command);
 void	execution_command(t_command *command);
@@ -108,6 +105,7 @@ void	free_dup(char **env_dup);
 char	**duplicate_env(char **env);
 void	for_env(t_pipeline *pipelines);
 
+char	***environnement(void);
 void	test(t_pipeline *pipelines);
 int		get_line(t_pipeline *pipelines, char **env);
 int		main(int argc, char **argv, char **env);

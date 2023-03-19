@@ -39,51 +39,31 @@ void	validate_n(t_command *command, int *i)
 	}
 }
 
-
-void	open_files(t_command *command, int *fd_out)
+void	close_files(int fd_out)
 {
-	if (command->output_file != NULL && strncmp(command->output_file) != 2 && command->output_file != 0)
-	{
-		*fd_out = open(command->output_file, O_WRONLY
-				| O_CREAT | O_TRUNC, 0664);
-		if (*fd_out == -1)
-			exit(g_status);
-	}
-	else if (command->output_file == 2)
-		*fd_out = 2;
-	else if (command->output_file == 0)
-		*fd_out = 0;
-	else
-		*fd_out = 1;
-}
-
-void	close_files(int *fd_out)
-{
-	if (*fd_out == 1 || *fd_out == 2 || *fd_out == 0)
+	if (fd_out == 1 || fd_out == 2 || fd_out == 0)
 		return ;
-	else if (close(*fd_out) == -1)
+	if (close(fd_out) == -1)
 		exit(g_status);
 }
 
 void	echo_ms(t_command *command)
 {
 	int	i;
-	int	fd_out;
 	int	option;
 
 	i = 0;
-	open_files(command, &fd_out);
-	option = validate_option(command, &i);
+	option = validate_flag(command, &i);
 	if (option == 1)
 		validate_n(command, &i);
 	while (command->arguments[i])
 	{
-		ft_putstr_fd(command->arguments[i], fd_out);
+		ft_putstr_fd(command->arguments[i], command->output_file);
 		if (command->arguments[i + 1])
-			ft_putchar_fd(' ', fd_out);
+			ft_putchar_fd(' ', command->output_file);
 		i++;
 	}
 	if (option == 1)
-		ft_putchar_fd('\n', fd_out);
-	close_files(&fd_out);
+		ft_putchar_fd('\n', command->output_file);
+	close_files(command->output_file);
 }

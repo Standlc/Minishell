@@ -1,15 +1,17 @@
 #include "minishell.h"
 
+extern int	g_status;
+
 void	env_ms(t_command *command)
 {
-	int	i;
-	int	fd_out;
+	int		i;
+	char	**new_env;
 
 	i = -1;
-	open_files(command, &fd_out);
-	if (!command->env)
+	new_env = *(environnement());
+	if (!new_env)
 		return ;
-	while (command->env[++i])
-		ft_putstr_fd(command->env, fd_out);
-	close_files(&fd_out);
+	while (new_env[++i])
+		ft_putstr_fd(new_env[i], command->output_file);
+	close_files(command->output_file);
 }

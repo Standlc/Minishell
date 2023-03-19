@@ -1,5 +1,7 @@
 #include <minishell.h>
 
+extern int	g_status;
+
 int	exit_max(char *value, char *max)
 {
 	int	i;
@@ -78,7 +80,7 @@ long	ft_atoi_exit(char *str)
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i] == '-')
-			signe *= -1;
+			sign *= -1;
 		i++;
 	}
 	while (str[i] >= '0' && str[i] <= '9')
@@ -101,14 +103,14 @@ void	exit_ms(t_command *command)
 		i++;
 	if (i > 0)
 	{
-		value = strcmp_for_exit(command->argument[i], "-9223372036854775808", "9223372036854775807");
+		value = strcmp_for_exit(command->arguments[i], "-9223372036854775808", "9223372036854775807");
 		if (value == 0)
-			(value = ft_atoi_exit(command->argument[i]));
+			(value = ft_atoi_exit(command->arguments[i]));
 		else
-			(ft_putstr_fd("numeric argument required", 2), errno = 2, exit(g_status));
+			(ft_putstr_fd("numeric argument required", command->output_file), errno = 2, exit(g_status));
 	}
 	if (i > 1)
-		return (ft_putstr_fd("too many arguments", 2), errno = 127);
+		return (ft_putstr_fd("too many arguments", command->output_file), errno = 127, (void)0);
 	errno = value % 256;
 	exit(g_status);
 }

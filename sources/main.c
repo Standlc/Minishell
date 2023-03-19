@@ -17,8 +17,8 @@ void	test(t_pipeline *pipelines)
 	pipelines->commands->name = "echo";
 	pipelines->commands->arguments[0] = "hello world";
 	pipelines->commands->arguments[1] = NULL;
-	pipelines->commands->input_file = NULL;
-	pipelines->commands->output_file = NULL;
+	pipelines->commands->input_file = 0;
+	pipelines->commands->output_file = 1;
 }
 
 int	get_line(t_pipeline *pipelines, char **env)
@@ -29,6 +29,7 @@ int	get_line(t_pipeline *pipelines, char **env)
 	line = readline(PROMPT);
 	new_env = *(environnement());
 	new_env = duplicate_env(env);
+	(void)new_env;
 	while (line)
 	{
 		if (*line)

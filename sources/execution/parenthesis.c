@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-int	parentesis_number(t_pipeline *pipelines)
+int	parenthesis_number(t_pipeline *pipelines)
 {
 	int	i;
 	int	count;

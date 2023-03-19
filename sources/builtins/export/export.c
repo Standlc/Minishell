@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+extern int	g_status;
+
 int	validate_variable(char *argument)
 {
 	int	i;
@@ -31,7 +33,7 @@ int	variable_count(char **arguments)
 		if (validate_variable(arguments[i]))
 			count++;
 		else
-			arguments[i][0] = "\0";        // leak?
+			arguments[i][0] = '\0';        // leak?
 		i++;
 	}
 	return (count);
@@ -43,7 +45,7 @@ char	**new_env(char **env, char **arguments)
 	int		i;
 
 	i = 0;
-	new = malloc(sizeof(char *) * (ft_strlen(env) + variable_count(arguments) + 1));
+	new = malloc(sizeof(char *) * (ft_strlen((char *)env) + variable_count(arguments) + 1));
 	if (!new)
 		return (NULL);
 	while (env[i])
@@ -62,17 +64,19 @@ void	export_ms(t_command *command)
 	int		i;
 	char	**tmp;
 	char	**new;
+	char	**env;
 
 	i = 0;
-	while (command->env[i])
+	env = *((char ***)environnement());
+	while (env[i])
 		i++;
-	new = new_env(command->env, command->arguments);
+	new = new_env(env, command->arguments);
 	if (!new)
 		(ft_putstr_fd("Cannot allocate memory\n", 2), exit(errno));
 	complete_env(new, command->arguments, i);
 	if (!new)
 		(ft_putstr_fd("Cannot allocate memory\n", 2), exit(errno));
-	tmp = command->env;
-	command->env = new;
+	tmp = env;
+	env = new;
 	free_dup(tmp);
 }
