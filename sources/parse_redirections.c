@@ -2,54 +2,34 @@
 
 int	handle_simple_left_redirection(t_command *command, char *file)
 {
-	int		fd;
-
-	if (command->input_file)
-		free(command->input_file);
-	command->input_file = file;
-	fd = open(command->input_file, O_WRONLY | O_TRUNC);
-	if (fd == -1)
+	command->input_file = open(file, O_WRONLY | O_TRUNC, 0644);
+	if (command->output_file == -1)
 		printf("minishell: %s: no such file or directory\n", file);
-	return (fd);
+	return (command->output_file);
 }
 
 int	handle_simple_right_redirection(t_command *command, char *file)
 {
-	int		fd;
-
-	if (command->output_file)
-		free(command->output_file);
-	command->output_file = file;
-	fd = open(command->output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
+	command->output_file = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (command->output_file == -1)
 		printf("minishell: %s: could not open file\n", file);
-	return (fd);
+	return (command->output_file);
 }
 
 int	handle_heredoc(t_command *command, char *file)
 {
-	int		fd;
-
-	if (command->input_file)
-		free(command->input_file);
-	command->input_file = file;
-	fd = open(command->input_file, O_WRONLY);
-	if (fd == -1)
+	command->input_file = open(file, O_WRONLY, 0644);
+	if (command->output_file == -1)
 		printf("minishell: %s: no such file or directory\n", file);
-	return (fd);
+	return (command->output_file);
 }
 
 int	handle_double_right_redirection(t_command *command, char *file)
 {
-	int		fd;
-
-	if (command->output_file)
-		free(command->output_file);
-	command->output_file = file;
-	fd = open(command->output_file, O_WRONLY | O_CREAT, 0644);
-	if (fd == -1)
+	command->output_file = open(file, O_WRONLY | O_CREAT, 0644);
+	if (command->output_file == -1)
 		printf("minishell: %s: could not open file\n", file);
-	return (fd);
+	return (command->output_file);
 }
 
 int	get_redirection_type(char **line)
@@ -81,7 +61,7 @@ int	handle_redirection_type(t_command *command, int redirection_type, char *file
 int	get_redirections(char **line, t_command *command)
 {
 	int		redirection_type;
-	char	*file;
+	char	*file_name;
 
 	while (is_redirection(*line))
 	{
@@ -89,11 +69,11 @@ int	get_redirections(char **line, t_command *command)
 		*line += 1;
 		*line += redirection_type == DOUBLE_LEFT || redirection_type == DOUBLE_RIGHT;
 		skip_spaces(line);
-		file = copy_line_word(line);
-		if (!file)
+		file_name = copy_line_word(line);
+		if (!file_name)
 			return (1);
-		if (handle_redirection_type(command, redirection_type, file) == -1)
-			return (1);
+		if (handle_redirection_type(command, redirection_type, file_name) == -1)
+			return (free(file_name), 1);
 		skip_spaces(line);
 	}
 	return (0);

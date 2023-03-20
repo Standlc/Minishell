@@ -42,15 +42,15 @@ typedef struct s_command
 {
 	char	*name;
 	char	**arguments;
-	char	*input_file;
-	char	*output_file;
+	int		input_file;
+	int		output_file;
 }				t_command;
 
 typedef struct s_pipeline
 {
 	t_command	*commands;
 	int			operator;
-	int			last_pipeline_status;
+	int			status;
 	int			start_priority;
 	int			end_priority;
 }				t_pipeline;
@@ -61,15 +61,20 @@ int			is_redirection(char *line);
 int			is_operator(char *line);
 int			word_len(char *str);
 void		skip_spaces(char **line);
-int			get_options_amount(char *line);
-int			get_arguments_amount(char *line);
-int			get_commands_amount(char *line);
+
+int			is_quote(char c);
+int			is_pipe(char *line);
+int			is_redirection(char *line);
+int			is_parenthesis(char *line);
+int			is_env_var(char *line, char quote_type);
 
 void		free_pipelines(t_pipeline *pipelines);
 
 int			hook_signals(void);
 
-void		print_error(char *message);
+int			check_syntax(char *line);
+
+void		print_error(char *message, void (*f)(char *), char *line);
 
 int			get_redirections(char **line, t_command *command);
 

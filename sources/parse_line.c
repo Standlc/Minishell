@@ -7,12 +7,21 @@ int	is_quote(char c)
 
 int	is_pipe(char *line)
 {
-	return (*line == '|');
+	return (*line == '|' && *(line + 1) != '|');
 }
 
 int	is_redirection(char *line)
 {
-	return (*line == '<' || *line == '>');
+	if (!ft_strncmp(line, "<<", 2) || !ft_strncmp(line, ">>", 2))
+		return (2);
+	if (*line == '<' || *line == '>')
+		return (1);
+	return (0);
+}
+
+int	is_parenthesis(char *line)
+{
+	return (*line == '(' || *line == ')');
 }
 
 int	is_env_var(char *line, char quote_type)
@@ -146,8 +155,6 @@ char *handle_quotes_copy(char **line, char *str, char quote_type)
 		(*line)++;
 		i++;
 	}
-	if (**line != quote_type)
-		return (print_error("missing closing quote"), NULL);
 	*line += 1;
 	return (str);
 }
@@ -194,17 +201,23 @@ int	get_arguments(char **line, t_command *command)
 	int	i;
 
 	i = 0;
-	while (**line && !is_operator(*line) && !is_pipe(*line) && **line != '&')
+	while (**line && !is_operator(*line) && !is_pipe(*line) && **line != '&' && !is_parenthesis(*line))
 	{
 		command->arguments = ft_realloc_args(command->arguments, (i + 2), sizeof(char *));
 		if (!command->arguments)
 			return (1);
-		if (get_redirections(line, command))
-			return (1);
-		command->arguments[i] = copy_line_word(line);
-		if (!command->arguments[i])
-			return (1);
-		i++;
+		if (is_redirection(*line))
+		{
+			if (get_redirections(line, command))
+				return (1);
+		}
+		else
+		{
+			command->arguments[i] = copy_line_word(line);
+			if (!command->arguments[i])
+				return (1);
+			i++;
+		}
 		skip_spaces(line);
 	}
 	return (0);
@@ -212,8 +225,6 @@ int	get_arguments(char **line, t_command *command)
 
 int	get_command(char **line, t_command *command)
 {
-	if (is_pipe(*line) || **line == '&')
-		return (printf("minishell: syntax error unexpected token '%c'\n", **line), 1);
 	if (get_redirections(line, command))
 		return (1);
 	command->name = copy_line_word(line);
@@ -221,7 +232,7 @@ int	get_command(char **line, t_command *command)
 		return (1);
 	if (get_arguments(line, command))
 		return (1);
-	*line += **line == '|' && !is_operator(*line);
+	*line += **line == '|';
 	skip_spaces(line);
 	return (0);
 }
@@ -251,6 +262,9 @@ t_pipeline	*parse_line(char *line)
 
 	if (!line)
 		return (NULL);
+	if (check_syntax(line))
+		return (printf("ERROR\n"), NULL);
+	return (NULL);
 	pipelines = NULL;
 	i = 0;
 	while (*line)
