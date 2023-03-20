@@ -72,7 +72,7 @@ void		free_pipelines(t_pipeline *pipelines);
 
 int			hook_signals(void);
 
-int			check_syntax(char *line);
+int	check_syntax(char *line);
 
 void		print_error(char *message, void (*f)(char *), char *line);
 

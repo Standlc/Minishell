@@ -22,10 +22,6 @@ void	free_pipelines(t_pipeline *pipelines)
 				free(pipelines[i].commands[j].arguments);
 			j++;
 		}
-		if (pipelines[i].commands[j].input_file)
-			free(pipelines[i].commands[j].input_file);
-		if (pipelines[i].commands[j].output_file)
-			free(pipelines[i].commands[j].output_file);
 		free(pipelines[i].commands);
 		i++;
 	}

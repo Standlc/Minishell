@@ -22,8 +22,8 @@ void	show_data(t_pipeline *pipelines)
 				k++;
 			}
 			printf("]\n");
-			printf("\t\tinput: %s\n", pipelines[i].commands[j].input_file);
-			printf("\t\touput: %s\n", pipelines[i].commands[j].output_file);
+			printf("\t\tinput: %d\n", pipelines[i].commands[j].input_file);
+			printf("\t\touput: %d\n", pipelines[i].commands[j].output_file);
 			printf("\t}\n");
 			j++;
 		}
@@ -64,6 +64,6 @@ int	main(int argc, char **argv, char **env)
 	// hook_signals();
 	get_line(pipelines);
 	printf("Exit\n");
-	// rl_clear_history();
+	rl_clear_history();
 	return (0);
 }
