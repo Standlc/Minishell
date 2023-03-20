@@ -33,6 +33,7 @@ char	**duplicate_env(char **env)
 		dup_env[i] = ft_strdup(env[i]);
 		if (!dup_env[i])
 			(free_dup(dup_env), ft_putstr_fd("Cannot allocate memory\n", 2), exit(errno));
+		i++;
 	}
 	dup_env[i] = NULL;
 	return (dup_env);

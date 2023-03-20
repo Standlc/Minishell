@@ -4,6 +4,11 @@ extern int	g_status;
 
 int	is_builtin(t_command *command)
 {
+	printf("test\n");
+	printf(" %s\n", command->name);
+	printf("test\n");
+	if (!command->name)
+		return (1);
 	if (!strncmp(command->name, "echo", 5))
 		return (echo_ms(command), 1);
 	if (!strncmp(command->name, "cd", 3))
@@ -73,8 +78,11 @@ void	execution_global(t_pipeline *pipelines)
 			execution_pipeline(&pipelines[i]);
 		else if (pipelines[i + 1].commands && pipelines[i + 1].start_priority)
 		{
+			
 			parenthesis(&pipelines[i], &i);
 			i++;
 		}
+		i++;
+		
 	}
 }

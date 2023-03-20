@@ -9,6 +9,7 @@ int	validate_flag(t_command *command, int *i)
 	j = 0;
 	if (!strncmp(command->arguments[*i], "-n", 2))
 	{
+		
 		while (command->arguments[*i][j] && command->arguments[*i][j] == 'n')
 			j++;
 		if (command->arguments[*i][j] != '\0')
