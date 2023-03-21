@@ -63,14 +63,14 @@ int	check_redirection_error(char **line)
 	return ((is_special_symbol(*line) && !is_quote(**line)) || !**line);
 }
 
-int	check_operator_before_parenthesis(char *line)
+int	check_operator_before_parenthesis(char *line, char *ptr)
 {
-	line--;
-	while (*line && *line == ' ')
+	line -= line != ptr;
+	while (line != ptr && *line == ' ')
 		line--;
 	if (*line == '(')
 		return (0);
-	line -= *(line - 1) != '\0';
+	line -= line != ptr;
 	return (!is_operator(line) && *line);
 }
 
@@ -102,28 +102,6 @@ int	check_empty_parenthesis(char **line)
 	return (**line == ')');
 }
 
-int	check_parenthesis_error(char **line, int is_inside_parenthesis);
-
-int	check_inside_parenthesis_syntax(char *line)
-{
-	skip_spaces(&line);
-	if ((is_operator(line) || is_pipe(line)))
-		return (print_error("unexpected token error: ", line), 1);
-	while (*line && *line != ')')
-	{
-		if (check_missing_quotes(&line))
-			return (print_error("20 syntax error: missing quote", NULL), 1);
-		if (check_operator_error(&line))
-			return (print_error("21 unexpected token error: ", line), 1);
-		if (check_redirection_error(&line))
-			return (print_error("22 unexpected token error: ", line), 1);
-		if (check_parenthesis_error(&line, 1))
-			return (1);
-		line += (*line && !is_special_symbol(line));
-	}
-	return (0);
-}
-
 int	check_embeded_parenthesis(char *line)
 {
 	while (*line && !is_parenthesis(line) && !is_operator(line))
@@ -144,18 +122,18 @@ int	check_embeded_parenthesis(char *line)
 	return (0);
 }
 
-int	check_parenthesis_error(char **line, int is_inside_parenthesis)
+int	check_parenthesis_error(char **line, char *ptr, int is_inside_parenthesis)
 {
 	if (!is_inside_parenthesis && **line == ')')
 		return (print_error("0 unexpected token error: ", *line), 1);
 	if (**line == '(')
 	{
-		if (check_operator_before_parenthesis(*line))
+		if (check_operator_before_parenthesis(*line, ptr))
 			return (print_error("1 unexpected token error: ", *line), 1);
 		*line += 1;
 		if (check_empty_parenthesis(line))
 			return (print_error("2 unexpected token error: ", *line), 1);
-		if (check_inside_parenthesis_syntax(*line))
+		if (check_syntax(*line, 1))
 			return (1);
 		if (check_embeded_parenthesis(*line))
 			return (print_error("embeded parenthesis error", NULL), 1);
@@ -167,13 +145,12 @@ int	check_parenthesis_error(char **line, int is_inside_parenthesis)
 	return (0);
 }
 
-int	check_syntax(char *line)
+int	check_syntax(char *line, int is_inside_parenthesis)
 {
-	*(line - 1) = '\0';
 	skip_spaces(&line);
 	if ((is_operator(line) || is_pipe(line)))
 		return (print_error("unexpected token error: ", line), 1);
-	while (*line)
+	while (*line && (*line != ')' || !is_inside_parenthesis))
 	{
 		if (check_missing_quotes(&line))
 			return (print_error("10 syntax error: missing quote", NULL), 1);
@@ -181,7 +158,7 @@ int	check_syntax(char *line)
 			return (print_error("11 unexpected token error: ", line), 1);
 		if (check_redirection_error(&line))
 			return (print_error("12 unexpected token error: ", line), 1);
-		if (check_parenthesis_error(&line, 0))
+		if (check_parenthesis_error(&line, line, is_inside_parenthesis))
 			return (1);
 		line += (*line && !is_special_symbol(line));
 	}

@@ -21,7 +21,6 @@
 enum e_data_types {
 	PIPELINE = 0,
 	COMMAND = 1,
-	CHAR = 2,
 };
 
 enum e_operators {
@@ -44,6 +43,7 @@ typedef struct s_command
 	char	**arguments;
 	int		input_file;
 	int		output_file;
+	char	*heredoc_limit;
 }				t_command;
 
 typedef struct s_pipeline
@@ -51,8 +51,7 @@ typedef struct s_pipeline
 	t_command	*commands;
 	int			operator;
 	int			status;
-	int			start_priority;
-	int			end_priority;
+	int			parenthesis;
 }				t_pipeline;
 
 t_pipeline	*parse_line(char *line);
@@ -72,7 +71,7 @@ void		free_pipelines(t_pipeline *pipelines);
 
 int			hook_signals(void);
 
-int			check_syntax(char *line);
+int			check_syntax(char *line, int is_inside_parenthesis);
 int			is_special_symbol(char *line);
 
 void		print_error(char *message, char *line);

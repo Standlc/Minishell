@@ -24,9 +24,11 @@ void	show_data(t_pipeline *pipelines)
 			printf("]\n");
 			printf("\t\tinput: %d\n", pipelines[i].commands[j].input_file);
 			printf("\t\touput: %d\n", pipelines[i].commands[j].output_file);
+			printf("\t\theredoc limit: %s\n", pipelines[i].commands[j].heredoc_limit);
 			printf("\t}\n");
 			j++;
 		}
+		printf("\tparenthesis: %d\n", pipelines[i].parenthesis);
 		printf("\toperator: %d\n", pipelines[i].operator);
 		printf("]\n");
 		i++;
@@ -64,6 +66,6 @@ int	main(int argc, char **argv, char **env)
 	// hook_signals();
 	get_line(pipelines);
 	printf("Exit\n");
-	// rl_clear_history();
+	rl_clear_history();
 	return (0);
 }
