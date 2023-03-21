@@ -232,7 +232,7 @@ int	get_command(char **line, t_command *command)
 		return (1);
 	if (get_arguments(line, command))
 		return (1);
-	*line += **line == '|';
+	*line += is_pipe(*line);
 	skip_spaces(line);
 	return (0);
 }
@@ -242,6 +242,12 @@ int	get_pipeline(char **line, t_pipeline *pipeline)
 	int	i;
 
 	get_operator(line, pipeline);
+	// if (**line == '(')
+	// {
+	// 	while (**line == '(')
+	// 		*line += 1;
+	// 	pipeline->start_priority = 1;
+	// }
 	i = 0;
 	while (**line && !is_operator(*line))
 	{
@@ -260,11 +266,8 @@ t_pipeline	*parse_line(char *line)
 	t_pipeline	*pipelines;
 	int			i;
 
-	if (!line)
+	if (!line || check_syntax(line))
 		return (NULL);
-	if (check_syntax(line))
-		return (printf("ERROR\n"), NULL);
-	return (NULL);
 	pipelines = NULL;
 	i = 0;
 	while (*line)
@@ -278,6 +281,9 @@ t_pipeline	*parse_line(char *line)
 	}
 	return (pipelines);
 }
+
+// cat a || (cat a && (cat b || cat a) || cat b)
+// cat a || (cat a || ((cat b && cat a) || cat b))
 
 // > "file" > "file" "command" arg < file arg | command " arg < file arg" && "command" arg arg > file | command " arg arg"
 // rev | < a cat > b < 6.c > c | rev &&  < a echo yo > b > a | cat || ls

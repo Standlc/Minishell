@@ -72,9 +72,10 @@ void		free_pipelines(t_pipeline *pipelines);
 
 int			hook_signals(void);
 
-int	check_syntax(char *line);
+int			check_syntax(char *line);
+int			is_special_symbol(char *line);
 
-void		print_error(char *message, void (*f)(char *), char *line);
+void		print_error(char *message, char *line);
 
 int			get_redirections(char **line, t_command *command);
 
