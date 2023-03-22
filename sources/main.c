@@ -63,7 +63,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	pipelines = NULL;
-	// hook_signals();
+	hook_signals();
 	get_line(pipelines);
 	printf("Exit\n");
 	rl_clear_history();

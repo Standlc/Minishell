@@ -1,7 +1,7 @@
-SRC			=	main.c							parse_line.c \
-				parse_line_utils.c				close_program.c \
-				signals.c						print_error.c \
-				parse_redirections.c			parse_syntax.c \
+SRC			=	main.c							parsing/parse_line.c \
+				parsing/parse_line_utils.c				close_program.c \
+				signals.c						parsing/print_error.c \
+				parsing/parse_redirections.c			parsing/syntax_check/syntax_check.c \
 
 SRCS		=	${addprefix sources/, ${SRC}}
 
@@ -24,6 +24,7 @@ RM			=	rm -f
 MAKEFLAGS 	+= --no-print-directory
 
 binaries/%.o : sources/%.c ${HEADER} Libft/libft.a Makefile | binaries
+		@mkdir -p $(@D)
 		$(CC) $(CFLAGS) -c $< -o $@ ${addprefix -I, ${INCLUDES}} 
 
 ${NAME}: ${OBJS}

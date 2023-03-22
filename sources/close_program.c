@@ -20,9 +20,9 @@ void	free_pipelines(t_pipeline *pipelines)
 			}
 			if (pipelines[i].commands[j].arguments)
 				free(pipelines[i].commands[j].arguments);
-			if (pipelines[i].commands[j].input_file)
+			if (pipelines[i].commands[j].input_file > 2)
 				close(pipelines[i].commands[j].input_file);
-			if (pipelines[i].commands[j].output_file)
+			if (pipelines[i].commands[j].output_file > 2)
 				close(pipelines[i].commands[j].output_file);
 			if (pipelines[i].commands[j].heredoc_limit)
 				free(pipelines[i].commands[j].heredoc_limit);

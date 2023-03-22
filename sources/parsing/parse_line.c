@@ -96,22 +96,45 @@ void	get_operator(char **line, t_pipeline *pipeline)
 	skip_spaces(line);
 }
 
-char	*get_env_var_name(char **line)
+int	add_char(char **line, char **str)
 {
 	int		i;
-	char	*env_var_name;
+	int		size;
+	char	*res;
 
-	env_var_name = malloc(10 + 1);
-	if (!env_var_name)
-		return (NULL);
+	size = ft_strlen(*str) + 2;
+	res = ft_calloc(size, sizeof(char));
+	if (!res)
+		return (free(str), 1);
 	i = 0;
-	while (**line && **line != '$' && !is_quote(**line) && **line != ' ')
+	while (*str && i < size - 2)
 	{
-		env_var_name[i] = **line;
+		res[i] = (*str)[i];
 		i++;
+	}
+	if (line)
+	{
+		res[i] = **line;
 		*line += 1;
 	}
-	env_var_name[i] = '\0';
+	else
+		res[i] = '\0';
+	if (*str)
+		free(*str);
+	*str = res;
+	return (0);
+}
+
+char	*get_env_var_name(char **line)
+{
+	char	*env_var_name;
+
+	env_var_name = NULL;
+	while (**line && **line != '$' && !is_quote(**line) && **line != ' ')
+	{
+		if (add_char(line, &env_var_name))
+			return (NULL);
+	}
 	return (env_var_name);
 }
 
@@ -123,6 +146,8 @@ char	*handle_env_var(char **line, char *str)
 
 	*line += 1;
 	env_var_name = get_env_var_name(line);
+	if (!env_var_name)
+		return (NULL);
 	env_var_value = getenv(env_var_name);
 	res = ft_strjoin(str, env_var_value);
 	free(env_var_name);
@@ -132,33 +157,11 @@ char	*handle_env_var(char **line, char *str)
 	return (res);
 }
 
-int	add_char(char **line, char **str)
-{
-	int		i;
-	int		size;
-	char	*res;
-
-	size = ft_strlen(*str) + 2;
-	res = ft_calloc(size, sizeof(char));
-	if (!res)
-		return (1);
-	i = 0;
-	while (*str && i < size - 2)
-	{
-		res[i] = (*str)[i];
-		i++;
-	}
-	res[i] = **line;
-	if (*str)
-		free(*str);
-	*str = res;
-	*line += 1;
-	return (0);
-}
-
 int	handle_quotes_copy(char **line, char **str, char quote_type)
 {
 	*line += 1;
+	if (add_char(NULL, str))
+		return (1);
 	while (**line && **line != quote_type)
 	{
 		if (is_env_var(*line, quote_type))
@@ -191,7 +194,7 @@ char	*copy_line_word(char **line)
 		else if (is_quote(**line))
 		{
 			if (handle_quotes_copy(line, &str, **line))
-				return (free(str), NULL);
+				return (NULL);
 		}
 		else if (add_char(line, &str))
 			return (NULL);
@@ -213,13 +216,13 @@ int	get_arguments(char **line, t_command *command)
 		if (is_redirection(*line))
 		{
 			if (get_redirections(line, command))
-				return (1);
+				return (write(1, "6\n", 2),1);
 		}
 		else
 		{
 			command->arguments[i] = copy_line_word(line);
 			if (!command->arguments[i])
-				return (1);
+				return (write(1, "7\n", 2),1);
 			i++;
 		}
 		skip_spaces(line);
@@ -230,12 +233,12 @@ int	get_arguments(char **line, t_command *command)
 int	get_command(char **line, t_command *command)
 {
 	if (get_redirections(line, command))
-		return (1);
+		return (write(1, "3\n", 2), 1);
 	command->name = copy_line_word(line);
 	if (!command->name)
-		return (1);
+		return (write(1, "4\n", 2), 1);
 	if (get_arguments(line, command))
-		return (1);
+		return (write(1, "5\n", 2), 1);
 	*line += is_pipe(*line);
 	skip_spaces(line);
 	return (0);
@@ -266,9 +269,9 @@ int	get_pipeline(char **line, t_pipeline *pipeline)
 	{
 		pipeline->commands = realloc_commands(pipeline->commands, (i + 2), sizeof(t_command));
 		if (!pipeline->commands)
-			return (1);
+			return (write(1, "1\n", 2), 1);
 		if (get_command(line, pipeline->commands + i))
-			return (1);
+			return (write(1, "2\n", 2), 1);
 		handle_parenthesis(line, pipeline, ')', -1);
 		i++;
 	}
