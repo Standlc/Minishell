@@ -10,9 +10,9 @@ char	**duplicate_for_execve(t_command *command)
 	if (!cmd)
 		(ft_putstr_fd("Cannot allocate memory\n", 2), exit(errno));
 	cmd[0] = ft_strdup(command->name);
-	while (command->arguments[i])
+	while (command->arguments[i - 1])
 	{
-		cmd[i] = ft_strdup(command->arguments[i]);
+		cmd[i] = ft_strdup(command->arguments[i - 1]);
 		if (!cmd[i])
 			(free_dup(cmd), ft_putstr_fd("Cannot allocate memory\n", 2), exit(errno));
 		i++;

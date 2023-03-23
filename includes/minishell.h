@@ -106,7 +106,6 @@ void	another_command(t_command *command);
 int		parenthesis_number(t_pipeline *pipelines);
 void	parenthesis(t_pipeline *pipelines, int *index);
 
-int		is_builtin(t_command *command);
 void	execution_command(t_command *command);
 void	execution_pipeline(t_pipeline *pipeline);
 int		check_last_status(t_pipeline last);

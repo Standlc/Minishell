@@ -37,8 +37,8 @@ t_pipeline	*test(t_pipeline *pipelines)
 	pipelines->commands->input_file = 0;
 	pipelines->commands->output_file = 1;
 	pipelines->commands[1].name = "ls";
-	pipelines->commands[1].arguments[0] = NULL;
-	pipelines->commands[1].arguments[1] = NULL;
+	pipelines->commands[1].arguments[0] = "-la";
+	pipelines->commands[1].arguments[1] = "R";
 	pipelines->commands[1].arguments[2] = NULL;
 	pipelines->commands[1].input_file = 0;
 	pipelines->commands[1].output_file = 1;
