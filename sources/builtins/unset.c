@@ -7,24 +7,27 @@ void	delete_variable(char **env, int j)
 	char	**new;
 	char	**tmp;
 	int		i;
+	int		index_new;
 
 	i = 0;
-	new = malloc(sizeof(char *) * (ft_strlen((char *)env)));
+	index_new = 0;
+	new = malloc(sizeof(char *) * bigarray_len(env));
 	if (!new)
 		return (ft_putstr_fd("Cannot allocate memory\n", 2));
 	while (env[i])
 	{
 		if (i != j)
 		{
-			new[i] = ft_strdup(env[i]);
+			new[index_new] = ft_strdup(env[i]);
 			if (!new)
 				return (ft_putstr_fd("Cannot allocate memory\n", 2));
+			index_new++;
 		}
 		i++;
 	}
 	new[i] = NULL;
 	tmp = env;
-	env = new;
+	(void)environnement(new);
 	free_dup(tmp);
 }
 
@@ -33,7 +36,7 @@ int	valid_delete(char *argument)
 	int	i;
 
 	i = 0;
-	if (!ft_isalpha(argument[i]) || argument[i] != '_')
+	if (!ft_isalpha(argument[i]) && argument[i] != '_')
 		return (0);
 	i++;
 	while (argument[i] && argument[i] != '=')
@@ -55,9 +58,10 @@ void	delete_env(t_command *command, int i)
 
 	j = 0;
 	size_arg = 0;
-	new_env = *(environnement());
+	new_env = *(environnement(NULL));
 	while (command->arguments[i][size_arg])
 		size_arg++;
+	size_arg++;
 	while (new_env[j])
 	{
 		if (ft_strncmp(new_env[j], command->arguments[i], size_arg) == '=')

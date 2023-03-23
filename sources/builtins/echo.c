@@ -9,7 +9,7 @@ int	validate_flag(t_command *command, int *i)
 	j = 0;
 	if (!strncmp(command->arguments[*i], "-n", 2))
 	{
-		
+		j++;
 		while (command->arguments[*i][j] && command->arguments[*i][j] == 'n')
 			j++;
 		if (command->arguments[*i][j] != '\0')
@@ -29,6 +29,7 @@ void	validate_n(t_command *command, int *i)
 		j = 0;
 		if (!strncmp(command->arguments[*i], "-n", 2))
 		{
+			j++;
 			while (command->arguments[*i][j] && command->arguments[*i][j] == 'n')
 				j++;
 			if (command->arguments[*i][j] != '\0')
@@ -64,7 +65,7 @@ void	echo_ms(t_command *command)
 			ft_putchar_fd(' ', command->output_file);
 		i++;
 	}
-	if (option == 1)
+	if (option == 0)
 		ft_putchar_fd('\n', command->output_file);
 	close_files(command->output_file);
 }

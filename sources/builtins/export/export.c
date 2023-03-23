@@ -7,13 +7,13 @@ int	validate_variable(char *argument)
 	int	i;
 
 	i = 0;
-	if (!ft_isalpha(argument[i]) || argument[i] != '_')
-		return (0);
+	if (!ft_isalpha(argument[i]) && argument[i] != '_')
+		return (ft_putstr_fd("not a valid identifier\n", 2), 0);
 	i++;
 	while (argument[i] && argument[i] != '=')
 	{
 		if (!ft_isalnum(argument[i]))
-			return (0);
+			return (ft_putstr_fd("not a valid identifier\n", 2), 0);
 		i++;
 	}
 	if (argument[i] == '\0')
@@ -33,7 +33,7 @@ int	variable_count(char **arguments)
 		if (validate_variable(arguments[i]))
 			count++;
 		else
-			arguments[i][0] = '\0';        // leak?
+			arguments[i] = "\0";    //leak ?
 		i++;
 	}
 	return (count);
@@ -45,7 +45,7 @@ char	**new_env(char **env, char **arguments)
 	int		i;
 
 	i = 0;
-	new = malloc(sizeof(char *) * (ft_strlen((char *)env) + variable_count(arguments) + 1));
+	new = malloc(sizeof(char *) * (bigarray_len(env) + variable_count(arguments) + 1));
 	if (!new)
 		return (NULL);
 	while (env[i])
@@ -67,7 +67,7 @@ void	export_ms(t_command *command)
 	char	**env;
 
 	i = 0;
-	env = *((char ***)environnement());
+	env = *(environnement(NULL));
 	while (env[i])
 		i++;
 	new = new_env(env, command->arguments);
@@ -77,6 +77,6 @@ void	export_ms(t_command *command)
 	if (!new)
 		(ft_putstr_fd("Cannot allocate memory\n", 2), exit(errno));
 	tmp = env;
-	env = new;
+	(void)environnement(new);
 	free_dup(tmp);
 }

@@ -1,5 +1,15 @@
 #include <minishell.h>
 
+int	bigarray_len(char **bigarray)
+{
+	int	i;
+
+	i = 0;
+	while (bigarray[i])
+		i++;
+	return (i);
+}
+
 void	free_dup(char **env_dup)
 {
 	int	i;
@@ -22,7 +32,7 @@ char	**duplicate_env(char **env)
 	int		i;
 
 	i = 0;
-	dup_env = malloc(sizeof(char *) * (ft_strlen((const char *)env) + 1));
+	dup_env = malloc(sizeof(char *) * (bigarray_len(env) + 1));
 	if (!dup_env)
 		(ft_putstr_fd("Cannot allocate memory\n", 2), exit(errno));
 	while (env[i])

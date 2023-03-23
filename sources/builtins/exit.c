@@ -52,11 +52,22 @@ int	exit_min(char *value, char *min)
 int	strcmp_for_exit(char *value, char *min, char *max)
 {
 	int	i;
+	int check;
 	int	return_value;
 
 	i = 0;
 	while ((value[i] >= 9 && value[i] <= 13) || value[i] == ' ')
 		i++;
+	if (!(ft_isdigit(value[i]) || value[i] == '-'))
+		return (1);
+	if (value[i] == '-')
+		if (!ft_isdigit(value[i + 1]))
+			return (1);
+	check = i + 1;
+	while (value[check] && ft_isdigit(value[check]))
+		check++;
+	if (value[check] != '\0')
+		return (1);
 	if (value[i] == '-')
 		return_value = exit_min(value, min);
 	else
@@ -98,19 +109,21 @@ void	exit_ms(t_command *command)
 	int		i;
 
 	i = 0;
-	ft_putstr_fd("exit", 1);
+	ft_putstr_fd("exit\n", 1);
 	while (command->arguments[i])
 		i++;
 	if (i > 0)
 	{
-		value = strcmp_for_exit(command->arguments[i], "-9223372036854775808", "9223372036854775807");
+		value = strcmp_for_exit(command->arguments[0], "-9223372036854775808", "9223372036854775807");
 		if (value == 0)
-			(value = ft_atoi_exit(command->arguments[i]));
+			(value = ft_atoi_exit(command->arguments[0]));
 		else
-			(ft_putstr_fd("numeric argument required", command->output_file), errno = 2, exit(g_status));
+			(ft_putstr_fd("numeric argument required\n", command->output_file), errno = 2, exit(errno));
 	}
-	if (i > 1)
-		return (ft_putstr_fd("too many arguments", command->output_file), errno = 127, (void)0);
-	errno = value % 256;
-	exit(g_status);
+	if (i == 2)
+		return (ft_putstr_fd("too many arguments\n", command->output_file), errno = 1, (void)0);
+	if (i > 2)
+		return (ft_putstr_fd("too many arguments\n", command->output_file), errno = 127, (void)0);
+	errno = value;
+	exit(errno);
 }

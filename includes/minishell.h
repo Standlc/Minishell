@@ -12,6 +12,7 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <errno.h>
+# include <dirent.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
@@ -68,6 +69,7 @@ int		strcmp_for_exit(char *value, char *min, char *max);
 long	ft_atoi_exit(char *str);
 void	exit_ms(t_command *command);
 
+int		directory_exist(char *dir);
 void	env_ms(t_command *command);
 
 void	delete_variable(char **env, int j);
@@ -75,7 +77,7 @@ int		valid_delete(char *argument);
 void	delete_env(t_command *command, int i);
 void	unset_ms(t_command *command);
 
-void	replace_variable(char *new, char *argument);
+void	replace_variable(char **new, char *argument, int lign);
 int		is_variable(char **new, char *argument);
 void	complete_env(char **new, char **arguments, int i);
 int		validate_variable(char *argument);
@@ -101,12 +103,13 @@ void	execution_pipeline(t_pipeline *pipeline);
 int		check_last_status(t_pipeline last);
 void	execution_global(t_pipeline *pipelines);
 
+int		bigarray_len(char **bigarray);
 void	free_dup(char **env_dup);
 char	**duplicate_env(char **env);
 void	for_env(t_pipeline *pipelines);
 
-char	***environnement(void);
-void	test(t_pipeline *pipelines);
+char	***environnement(char **first);
+t_pipeline	*test(t_pipeline *pipelines);
 int		get_line(t_pipeline *pipelines, char **env);
 int		main(int argc, char **argv, char **env);
 
