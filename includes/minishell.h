@@ -94,6 +94,15 @@ void	validate_n(t_command *command, int *i);
 void	close_files(int fd_out);
 void	echo_ms(t_command *command);
 
+void	free_split(char **split);
+void	*free_path(char **paths, char *fill_path, char *final_path);
+char	*good_path(char **paths, char *fill_path, char *final_path, char *cmd);
+char	*find_path(char	*env, char *cmd);
+char	*path_for_execve(char **env, char *cmd);
+
+char	**duplicate_for_execve(t_command *command);
+void	another_command(t_command *command);
+
 int		parenthesis_number(t_pipeline *pipelines);
 void	parenthesis(t_pipeline *pipelines, int *index);
 
@@ -104,11 +113,10 @@ int		check_last_status(t_pipeline last);
 void	execution_global(t_pipeline *pipelines);
 
 int		bigarray_len(char **bigarray);
-void	free_dup(char **env_dup);
-char	**duplicate_env(char **env);
-void	for_env(t_pipeline *pipelines);
+void	free_dup(char **dup_bigarray);
+char	**duplicate_bigarray(char **bigarray);
 
-char	***environnement(char **first);
+char	***environnement(char **new_env);
 t_pipeline	*test(t_pipeline *pipelines);
 int		get_line(t_pipeline *pipelines, char **env);
 int		main(int argc, char **argv, char **env);

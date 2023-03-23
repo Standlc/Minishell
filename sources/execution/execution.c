@@ -27,10 +27,7 @@ int	is_builtin(t_command *command)
 void	execution_command(t_command *command)
 {
 	if (!is_builtin(command))
-	{
-		printf("je passe\n");
-		;	//	another_command(command);
-	}
+		another_command(command);
 }
 
 void	execution_pipeline(t_pipeline *pipeline)

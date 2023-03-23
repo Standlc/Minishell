@@ -2,12 +2,12 @@
 
 int	g_status;
 
-char	***environnement(char **first)
+char	***environnement(char **new_env)
 {
 	static char	**env = NULL;
 
-	if (first)
-		env = first;
+	if (new_env)
+		env = new_env;
 	return (&env);
 }
 
@@ -36,9 +36,9 @@ t_pipeline	*test(t_pipeline *pipelines)
 	pipelines->commands->arguments[3] = NULL;
 	pipelines->commands->input_file = 0;
 	pipelines->commands->output_file = 1;
-	pipelines->commands[1].name = "env";
+	pipelines->commands[1].name = "ls";
 	pipelines->commands[1].arguments[0] = NULL;
-	pipelines->commands[1].arguments[1] = "arrah";
+	pipelines->commands[1].arguments[1] = NULL;
 	pipelines->commands[1].arguments[2] = NULL;
 	pipelines->commands[1].input_file = 0;
 	pipelines->commands[1].output_file = 1;
@@ -53,7 +53,7 @@ int	get_line(t_pipeline *pipelines, char **env)
 	char	**new_env;
 
 	line = readline(PROMPT);
-	new_env = duplicate_env(env);
+	new_env = duplicate_bigarray(env);
 	(void)environnement(new_env);
 	while (line)
 	{

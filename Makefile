@@ -1,5 +1,6 @@
 SRC			=	main.c	\
-				execution/execution.c execution/for_env.c execution/parenthesis.c \
+				execution/execution.c execution/for_dup.c execution/parenthesis.c \
+				execution/another.c execution/path.c \
 				builtins/cd.c builtins/echo.c builtins/env.c builtins/exit.c \
 				builtins/pwd.c builtins/unset.c builtins/export/export.c \
 				builtins/export/complete_env.c					
