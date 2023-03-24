@@ -2,10 +2,10 @@
 
 extern int	g_status;
 
-void	execution_command(t_command *command)
+void	execution_command(t_command *command, int fd[2])
 {
 	if (!command->name)
-		return (1);
+		return ;
 	if (!strncmp(command->name, "echo", 5))
 		return (echo_ms(command));
 	if (!strncmp(command->name, "cd", 3))
@@ -20,37 +20,57 @@ void	execution_command(t_command *command)
 		return (env_ms(command));
 	if (!strncmp(command->name, "exit", 5))
 		return (exit_ms(command));
-	another_command(command);
+	another_command(command, fd);
 }
 
-// void	set_pipe(t_pipeline *pipeline, int fd[2], int i)
-// {
-// 	if (i == 0 && pipeline->output_file == 1)
-// 		pipeline->output_file = fd[1];
-// 	if (!pipeline->command[i + 1]->name && pipeline->input_file == 0)
-// 		pipeline->input_file = fd[0];
-// }
+void	set_pipe(t_command *command, int fd[2])
+{
+	int	i;
 
-void	execution_pipeline(t_pipeline *pipeline)
+	i = -1;
+	while (command[++i].name)
+		command[i].position = 0;
+	command->position = -1;
+	while (command[i].name)
+	{
+		if (i != 0 && command[i].input_file == 0)
+			command[i].input_file = fd[0];
+		if (command[i + 1].name && command[i].output_file == 1)
+			command[i].output_file = fd[1];
+		i++;
+	}
+	i--;
+	command[i].position = 1;
+}
+
+void	execution_pipeline(t_command *commands)
 {
 	int		i;
 	pid_t	pid;
 	int		fd[2];
 
 	i = 0;
-	if (pipeline->command[1]->name)
+	if (commands[1].name)
+	{
 		if (pipe(fd) == -1)
 			ft_putstr_fd("pipe failed\n", 2);
-	while (pipeline->commands[i].name)
+		set_pipe(commands, fd);
+	}
+	while (commands[i].name)
 	{
-		//set_pipe(pipeline, fd, i);
 		pid = fork();
 		if (pid == -1)
 			ft_putstr_fd("fork failed\n", 2);
 		if (pid == 0)
-			execution_command(&(pipeline->commands[i]));
+			execution_command(&(commands[i]), fd);
 		i++;
 	}
+	i = -1;
+	if (close(fd[0]) == -1 || close(fd[1]) == -1)
+		return (ft_putstr_fd("error close\n", 2));
+	while (commands[++i].name)
+		if (waitpid(-1, NULL, 0) == -1)
+			ft_putstr_fd("error waitpid\n", 2);
 }
 
 int	check_last_status(t_pipeline last)
@@ -80,7 +100,7 @@ void	execution_global(t_pipeline *pipelines)
 	while (pipelines[i].commands)
 	{
 		if (i == 0 || (i != 0 && !check_last_status(pipelines[i])))
-			execution_pipeline(&pipelines[i]);
+			execution_pipeline(pipelines[i].commands);
 		else if (pipelines[i + 1].commands && pipelines[i + 1].start_priority)
 		{
 			parenthesis(&pipelines[i], &i);
