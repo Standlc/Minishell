@@ -9,9 +9,8 @@ void	free_pipelines(t_pipeline *pipelines)
 	while (pipelines[i].commands)
 	{
 		j = 0;
-		while (pipelines[i].commands[j].name)
+		while (pipelines[i].commands[j].is_end)
 		{
-			free(pipelines[i].commands[j].name);
 			k = 0;
 			while (pipelines[i].commands[j].arguments && pipelines[i].commands[j].arguments[k])
 			{

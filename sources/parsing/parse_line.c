@@ -1,206 +1,29 @@
 #include "minishell.h"
 
-int	is_quote(char c)
+int	is_wildcard(char *line)
 {
-	return (c == '"' || c == '\'');
-}
-
-int	is_pipe(char *line)
-{
-	return (*line == '|' && *(line + 1) != '|');
-}
-
-int	is_redirection(char *line)
-{
-	if (!ft_strncmp(line, "<<", 2) || !ft_strncmp(line, ">>", 2))
-		return (2);
-	if (*line == '<' || *line == '>')
-		return (1);
-	return (0);
-}
-
-int	is_parenthesis(char *line)
-{
-	return (*line == '(' || *line == ')');
-}
-
-int	is_env_var(char *line, char quote_type)
-{
-	return (*line == '$' && *(line + 1) && *(line + 1) != ' ' && *(line + 1) != '"' && quote_type != '\'');
-}
-
-void	*realloc_args(char **ptr, int nmemb, int size)
-{
-	char	**res;
-	int		i;
-
-	res = ft_calloc(nmemb, size);
-	if (!res || !ptr)
-		return (res);
-	i = 0;
-	while (i < nmemb - 1)
+	if (!ft_strncmp(line, "./", 2))
+		line += 2;
+	while (*line && *line != ' ' && !is_pipe(line) && !is_operator(line) && !is_redirection(line))
 	{
-		res[i] = ptr[i];
-		i++;
-	}
-	free(ptr);
-	return (res);
-}
-
-void	*realloc_commands(t_command *ptr, int nmemb, int size)
-{
-	t_command	*res;
-	int			i;
-
-	res = ft_calloc(nmemb, size);
-	if (!res || !ptr)
-		return (res);
-	i = 0;
-	while (i < nmemb - 1)
-	{
-		res[i] = ptr[i];
-		i++;
-	}
-	free(ptr);
-	return (res);
-}
-
-void	*realloc_pipelines(t_pipeline *ptr, int nmemb, int size)
-{
-	t_pipeline	*res;
-	int			i;
-
-	res = ft_calloc(nmemb, size);
-	if (!res || !ptr)
-		return (res);
-	i = 0;
-	while (i < nmemb - 1)
-	{
-		res[i] = ptr[i];
-		i++;
-	}
-	free(ptr);
-	return (res);
-}
-
-void	get_operator(char **line, t_pipeline *pipeline)
-{
-	skip_spaces(line);
-	if (!is_operator(*line))
-		return ;
-	if (!ft_strncmp(*line, "&&", 2))
-		pipeline->operator = AND;
-	else if (!ft_strncmp(*line, "||", 2))
-		pipeline->operator = OR;
-	*line += 2;
-	skip_spaces(line);
-}
-
-int	add_char(char **line, char **str)
-{
-	int		i;
-	int		size;
-	char	*res;
-
-	size = ft_strlen(*str) + 2;
-	res = ft_calloc(size, sizeof(char));
-	if (!res)
-		return (free(str), 1);
-	i = 0;
-	while (*str && i < size - 2)
-	{
-		res[i] = (*str)[i];
-		i++;
-	}
-	if (line)
-	{
-		res[i] = **line;
-		*line += 1;
-	}
-	else
-		res[i] = '\0';
-	if (*str)
-		free(*str);
-	*str = res;
-	return (0);
-}
-
-char	*get_env_var_name(char **line)
-{
-	char	*env_var_name;
-
-	env_var_name = NULL;
-	while (**line && **line != '$' && !is_quote(**line) && **line != ' ')
-	{
-		if (add_char(line, &env_var_name))
-			return (NULL);
-	}
-	return (env_var_name);
-}
-
-char	*handle_env_var(char **line, char *str)
-{
-	char	*env_var_value;
-	char	*env_var_name;
-	char	*res;
-
-	*line += 1;
-	env_var_name = get_env_var_name(line);
-	if (!env_var_name)
-		return (NULL);
-	env_var_value = getenv(env_var_name);
-	res = ft_strjoin(str, env_var_value);
-	free(env_var_name);
-	free(str);
-	if (!res)
-		return (NULL);
-	return (res);
-}
-
-int	handle_quotes_copy(char **line, char **str, char quote_type)
-{
-	*line += 1;
-	if (add_char(NULL, str))
-		return (1);
-	while (**line && **line != quote_type)
-	{
-		if (is_env_var(*line, quote_type))
-		{
-			*str = handle_env_var(line, *str);
-			if (!*str)
-				return (1);
-		}
-		else if (add_char(line, str))
+		if (*line == '*')
 			return (1);
+		line++;
 	}
-	*line += 1;
 	return (0);
 }
 
-char	*copy_line_word(char **line)
+int	handle_wild_card(char **line, t_command *command, int index)
 {
-	char	*str;
+	char	*wildcard;
 
-	skip_spaces(line);
-	str = NULL;
-	while (**line && **line != ' ' && (!is_special_symbol(*line) || is_quote(**line)))
-	{
-		if (is_env_var(*line, 0))
-		{
-			str = handle_env_var(line, str);
-			if (!str)
-				return (NULL);
-		}
-		else if (is_quote(**line))
-		{
-			if (handle_quotes_copy(line, &str, **line))
-				return (NULL);
-		}
-		else if (add_char(line, &str))
-			return (NULL);
-	}
-	skip_spaces(line);
-	return (str);
+	if (!ft_strncmp(*line, "./", 2))
+		*line += 2;
+	wildcard = copy_line_word(line);
+	if (!wildcard)
+		return (1);
+	command->arguments = read_dir(wildcard, command->arguments, index);
+	return (free(wildcard), command->arguments == NULL);
 }
 
 int	get_arguments(char **line, t_command *command)
@@ -208,23 +31,25 @@ int	get_arguments(char **line, t_command *command)
 	int	i;
 
 	i = 0;
-	while (**line && (!is_special_symbol(*line) || is_quote(**line) || is_redirection(*line)))
+	while (**line && !is_pipe(*line) && !is_operator(*line))
 	{
-		command->arguments = realloc_args(command->arguments, (i + 2), sizeof(char *));
+		command->arguments = ft_realloc(command->arguments, (i + 2), sizeof(char *), ARGUMENTS);
 		if (!command->arguments)
 			return (1);
-		if (is_redirection(*line))
+		if (is_wildcard(*line))
 		{
-			if (get_redirections(line, command))
-				return (write(1, "6\n", 2),1);
-		}
-		else
+			if (handle_wild_card(line, command, i))
+				return (write(1, "8\n", 2), 1);
+		} 
+		else if (!is_redirection(*line))
 		{
 			command->arguments[i] = copy_line_word(line);
-			if (!command->arguments[i])
+			if ((!command->arguments[i] && errno == ENOMEM) || (!i && is_directory(command->arguments[i])))
 				return (write(1, "7\n", 2),1);
 			i++;
 		}
+		else if (get_redirections(line, command))
+				return (write(1, "6\n", 2), 1);
 		skip_spaces(line);
 	}
 	return (0);
@@ -232,11 +57,7 @@ int	get_arguments(char **line, t_command *command)
 
 int	get_command(char **line, t_command *command)
 {
-	if (get_redirections(line, command))
-		return (write(1, "3\n", 2), 1);
-	command->name = copy_line_word(line);
-	if (!command->name)
-		return (write(1, "4\n", 2), 1);
+	command->is_end = 1;
 	if (get_arguments(line, command))
 		return (write(1, "5\n", 2), 1);
 	*line += is_pipe(*line);
@@ -267,7 +88,7 @@ int	get_pipeline(char **line, t_pipeline *pipeline)
 	i = 0;
 	while (**line && !is_operator(*line))
 	{
-		pipeline->commands = realloc_commands(pipeline->commands, (i + 2), sizeof(t_command));
+		pipeline->commands = ft_realloc(pipeline->commands, (i + 2), sizeof(t_command), COMMANDS);
 		if (!pipeline->commands)
 			return (write(1, "1\n", 2), 1);
 		if (get_command(line, pipeline->commands + i))
@@ -289,7 +110,7 @@ t_pipeline	*parse_line(char *line)
 	i = 0;
 	while (*line)
 	{
-		pipelines = realloc_pipelines(pipelines, i + 2, sizeof(t_pipeline));
+		pipelines = ft_realloc(pipelines, i + 2, sizeof(t_pipeline), PIPELINES);
 		if (!pipelines)
 			return (NULL);
 		if (get_pipeline(&line, pipelines + i))
@@ -298,6 +119,11 @@ t_pipeline	*parse_line(char *line)
 	}
 	return (pipelines);
 }
+
+// :
+// #
+// $'' $: $=
+//"$'"
 
 // cat a || (cat a && (cat b || cat a) || cat b)
 // cat a || (cat a || ((cat b && cat a) || cat b))
@@ -312,101 +138,17 @@ t_pipeline	*parse_line(char *line)
 // a"$USER"a"$USER" -> astanastan
 // $USER"$USER"$USER -> stanstanstan
 
-// char	*get_env_var_name(char **line)
+// int	get_command(char **line, t_command *command)
 // {
-// 	int		i;
-// 	char	*env_var_name;
-
-// 	env_var_name = malloc(10 + 1);
-// 	if (!env_var_name)
-// 		return (NULL);
-// 	i = 0;
-// 	while (**line && **line != '$' && !is_quote(**line) && **line != ' ')
-// 	{
-// 		env_var_name[i] = **line;
-// 		i++;
-// 		*line += 1;
-// 	}
-// 	env_var_name[i] = '\0';
-// 	return (env_var_name);
-// }
-
-// char	*handle_env_var(char **line, char *str)
-// {
-// 	char	*env_var_value;
-// 	char	*env_var_name;
-// 	char	*res;
-
-// 	*line += 1;
-// 	env_var_name = get_env_var_name(line);
-// 	env_var_value = getenv(env_var_name);
-// 	res = ft_strjoin(str, env_var_value);
-// 	free(env_var_name);
-// 	free(str);
-// 	if (!res)
-// 		return (NULL);
-// 	return (res);
-// }
-
-// char *handle_quotes_copy(char **line, char *str, char quote_type)
-// {
-// 	int		i;
-
-// 	*line += 1;
-// 	i = ft_strlen(str);
-// 	while (**line && **line != quote_type)
-// 	{
-// 		if (is_env_var(*line, quote_type))
-// 		{
-// 			str[i] = 0;
-// 			str = handle_env_var(line, str);
-// 			if (!str)
-// 				return (NULL);
-// 			i = ft_strlen(str);
-// 			if (!**line || **line == quote_type)
-// 				break ;
-// 		}
-// 		str[i] = **line;
-// 		(*line)++;
-// 		i++;
-// 	}
-// 	*line += 1;
-// 	return (str);
-// }
-
-// char	*copy_line_word(char **line)
-// {
-// 	char	*str;
-// 	int		i;
-
+// 	command->is_end = 1;
+// 	if (get_redirections(line, command))
+// 		return (write(1, "3\n", 2), 1);
+// 	command->name = copy_line_word(line);
+// 	if ((!command->name && errno == ENOMEM) || is_directory(command->name))
+// 		return (write(1, "4\n", 2), 1);
+// 	if (get_arguments(line, command))
+// 		return (write(1, "5\n", 2), 1);
+// 	*line += is_pipe(*line);
 // 	skip_spaces(line);
-// 	str = ft_calloc(100 + 1, sizeof(char));
-// 	if (!str)
-// 		return (NULL);
-// 	i = 0;
-// 	while (**line && **line != ' ' && !is_operator(*line) && !is_pipe(*line) && !is_redirection(*line))
-// 	{
-// 		if (is_env_var(*line, 0))
-// 		{
-// 			str = handle_env_var(line, str);
-// 			if (!str)
-// 				return (NULL);
-// 			i = ft_strlen(str);
-// 		}
-// 		else if (is_quote(**line))
-// 		{
-// 			str = handle_quotes_copy(line, str, **line);
-// 			if (!str)
-// 				return (free(str), NULL);
-// 			i = ft_strlen(str);
-// 		}
-// 		else
-// 		{
-// 			str[i] = **line;
-// 			(*line)++;
-// 			i++;
-// 		}
-// 	}
-// 	skip_spaces(line);
-// 	return (str);
+// 	return (0);
 // }

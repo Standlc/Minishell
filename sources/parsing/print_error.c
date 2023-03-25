@@ -1,10 +1,20 @@
 #include "minishell.h"
 
+char	*strjoin_handler(char *str, char *join)
+{
+	char	*temp_ptr;
+
+	temp_ptr = str;
+	str = ft_strjoin(str, join);
+	free(temp_ptr);
+	return (str);
+}
+
 void	print_line_component(char *line)
 {
 	if (*line == '\0')
 	{
-		write(2, "newline", 7);
+		write(2, "`newline`", 9);
 		return ;
 	}
 	write(2, "`", 1);
@@ -14,7 +24,7 @@ void	print_line_component(char *line)
 		write (2, line, 1);
 	else
 	{
-		while (*line && *line != ' ' && !is_special_symbol(line))
+		while (*line && *line != ' ' && !is_meta_char(line))
 			write(2, line++, 1);
 	}
 	write(2, "`", 1);

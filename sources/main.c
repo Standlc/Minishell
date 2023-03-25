@@ -10,11 +10,12 @@ void	show_data(t_pipeline *pipelines)
 	{
 		printf("[\n");
 		j = 0;
-		while (pipelines[i].commands[j].name)
+		while (pipelines[i].commands[j].is_end)
 		{
 			printf("\t{\n");
-			printf("\t\tname: %s\n", pipelines[i].commands[j].name);
-			k = 0;
+			if (pipelines[i].commands[j].arguments)
+				printf("\t\tname: %s\n", pipelines[i].commands[j].arguments[0]);
+			k = 1;
 			printf("\t\targuments: [");
 			while (pipelines[i].commands[j].arguments && pipelines[i].commands[j].arguments[k])
 			{
@@ -66,6 +67,6 @@ int	main(int argc, char **argv, char **env)
 	hook_signals();
 	get_line(pipelines);
 	printf("Exit\n");
-	rl_clear_history();
+	// rl_clear_history();
 	return (0);
 }
