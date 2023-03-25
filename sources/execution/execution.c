@@ -4,21 +4,21 @@ extern int	g_status;
 
 void	execution_command(t_command *command, t_pipe *pipes)
 {
-	if (!command->name)
+	if (!command->arguments[0])
 		return ;
-	if (!strncmp(command->name, "echo", 5))
+	if (!strncmp(command->arguments[0], "echo", 5))
 		return (echo_ms(command));
-	if (!strncmp(command->name, "cd", 3))
+	if (!strncmp(command->arguments[0], "cd", 3))
 		return (cd_ms(command));
-	if (!strncmp(command->name, "pwd", 4))
+	if (!strncmp(command->arguments[0], "pwd", 4))
 		return (pwd_ms(command));
-	if (!strncmp(command->name, "export", 7) && command->arguments[0])
+	if (!strncmp(command->arguments[0], "export", 7) && command->arguments[0])
 		return (export_ms(command));
-	if (!strncmp(command->name, "unset", 6))
+	if (!strncmp(command->arguments[0], "unset", 6))
 		return (unset_ms(command));
-	if (!strncmp(command->name, "env", 4))
+	if (!strncmp(command->arguments[0], "env", 4))
 		return (env_ms(command));
-	if (!strncmp(command->name, "exit", 5))
+	if (!strncmp(command->arguments[0], "exit", 5))
 		return (exit_ms(command));
 	another_command(command, pipes);
 }
@@ -31,9 +31,9 @@ void	execution_pipeline(t_command *commands)
 
 	i = 0;
 	set_position(commands);
-	if (commands[1].name)
+	if (commands[1].is_end)
 		set_pipe(commands, &pipes);
-	while (commands[i].name)
+	while (commands[i].is_end)
 	{
 		if (i == 1)
 			close(pipes.fd[1]);
@@ -54,7 +54,7 @@ void	execution_pipeline(t_command *commands)
 	i = -1;
 	if (close(pipes.fd[0]) == -1)
 		return (ft_putstr_fd("error close\n", 2));
-	while (commands[++i].name)
+	while (commands[++i].is_end)
 		if (waitpid(-1, NULL, 0) == -1)
 			ft_putstr_fd("error waitpid\n", 2);
 }

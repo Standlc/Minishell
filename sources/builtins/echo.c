@@ -54,7 +54,7 @@ void	echo_ms(t_command *command)
 	int	i;
 	int	option;
 
-	i = 0;
+	i = 1;
 	option = validate_flag(command, &i);
 	if (option == 1)
 		validate_n(command, &i);

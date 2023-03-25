@@ -26,7 +26,7 @@ int	variable_count(char **arguments)
 	int	i;
 	int	count;
 
-	i = 0;
+	i = 1;
 	count = 0;
 	while (arguments[i])
 	{

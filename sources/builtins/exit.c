@@ -112,7 +112,7 @@ void	exit_ms(t_command *command)
 	ft_putstr_fd("exit\n", 1);
 	while (command->arguments[i])
 		i++;
-	if (i > 0)
+	if (i > 1)
 	{
 		value = strcmp_for_exit(command->arguments[0], "-9223372036854775808", "9223372036854775807");
 		if (value == 0)
@@ -120,9 +120,9 @@ void	exit_ms(t_command *command)
 		else
 			(ft_putstr_fd("numeric argument required\n", command->output_file), errno = 2, exit(errno));
 	}
-	if (i == 2)
+	if (i == 3)
 		return (ft_putstr_fd("too many arguments\n", command->output_file), errno = 1, (void)0);
-	if (i > 2)
+	if (i > 4)
 		return (ft_putstr_fd("too many arguments\n", command->output_file), errno = 127, (void)0);
 	errno = value;
 	exit(errno);

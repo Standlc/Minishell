@@ -36,7 +36,7 @@ void	complete_env(char **new, char **arguments, int i)
 	int	j;
 	int	lign;
 
-	j = 0;
+	j = 1;
 	while (arguments[j])
 	{
 		if (arguments[j][0])

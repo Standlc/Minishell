@@ -6,9 +6,9 @@ void	cd_ms(t_command *command)
 {
 	char	*str;
 
-	if (command->arguments[0] && command->arguments[1])
+	if (command->arguments[1] && command->arguments[2])
 		return (ft_putstr_fd("too many arguments\n", 2), g_status = 1, (void)0);
-	if (command->arguments[0])
+	if (command->arguments[1])
 	{
 		if (chdir(command->arguments[0]) == -1)
 			return (ft_putstr_fd("No such directory\n", 2), g_status = 1, (void)0);

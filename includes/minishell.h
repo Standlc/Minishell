@@ -35,11 +35,11 @@ enum e_redirections {
 
 typedef struct s_command
 {
-	char	*name;
 	char	**arguments;
 	int		input_file;
 	int		output_file;
 	int		position;
+	int		is_end;
 }				t_command;
 
 typedef struct s_pipe
@@ -107,11 +107,10 @@ char	*good_path(char **paths, char *fill_path, char *final_path, char *cmd);
 char	*find_path(char	*env, char *cmd);
 char	*path_for_execve(char **env, char *cmd);
 
-char	**duplicate_for_execve(t_command *command);
 void	duplicate_for_streams(t_command *command, t_pipe *pipes);
 void	another_command(t_command *command, t_pipe *pipes);
 
-void    set_position(t_command *commands);
+void	set_position(t_command *commands);
 void	set_pipe(t_command *command, t_pipe *pipes);
 
 int		parenthesis_number(t_pipeline *pipelines);

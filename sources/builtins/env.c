@@ -18,9 +18,9 @@ void	env_ms(t_command *command)
 	char	**new_env;
 
 	i = -1;
-	if (command->arguments[0] && directory_exist(command->arguments[0]))
+	if (command->arguments[1] && directory_exist(command->arguments[1]))
 		return (ft_putstr_fd("Permission denied\n", 2), g_status = 126, (void)0);
-	if (command->arguments[0])
+	if (command->arguments[1])
 		return (ft_putstr_fd("No such directory\n", 2), g_status = 127, (void)0);
 	new_env = *(environnement(NULL));
 	if (!new_env)
