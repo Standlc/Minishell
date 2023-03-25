@@ -52,7 +52,6 @@ typedef struct s_pipeline
 {
 	t_command	*commands;
 	int			operator;
-	int			status;
 	int			parenthesis;
 }				t_pipeline;
 

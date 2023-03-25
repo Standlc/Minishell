@@ -67,7 +67,11 @@ int	check(char *wildcard, char *file)
 	return (0);
 }
 
-char	**read_dir(char *line, char **arguments, int size)
+// int	check_slash()
+// {
+// }
+
+char	**read_dir(char *wildcard, char **arguments, int size)
 {
 	int				i;
 	struct dirent	*directory_content;
@@ -80,7 +84,7 @@ char	**read_dir(char *line, char **arguments, int size)
 	i = size;
 	while (directory_content)
 	{
-		if (check(line, directory_content->d_name))
+		if (check(wildcard, directory_content->d_name))
 		{
 			arguments = ft_realloc(arguments, i + 2, sizeof(char *), ARGUMENTS);
 			if (!arguments)
@@ -89,6 +93,7 @@ char	**read_dir(char *line, char **arguments, int size)
 			arguments[i] = strjoin_handler(arguments[i], directory_content->d_name);
 			if (!arguments[i])
 				return (NULL);
+			// ADD TO END "/" IF NEEDED
 			i++;
 		}
 		directory_content = readdir(directory);
@@ -101,7 +106,7 @@ char	**read_dir(char *line, char **arguments, int size)
 		if (!arguments)
 			return (NULL);
 		arguments[i] = NULL;
-		arguments[i] = strjoin_handler(arguments[i], line);
+		arguments[i] = strjoin_handler(arguments[i], wildcard);
 		if (!arguments[i])
 			return (NULL);
 	}

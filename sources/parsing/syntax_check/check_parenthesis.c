@@ -2,14 +2,14 @@
 
 int	check_operator_before_parenthesis(char *line, char *ptr)
 {
-	printf("%c\n", *line);
+	// printf("%c\n", *line);
 
 	line -= line != ptr;
-	printf("%c\n", *line);
+	// printf("%c\n", *line);
 
 	while (line != ptr && *line == ' ')
 		line--;
-	printf("%c\n", *line);
+	// printf("%c\n", *line);
 	if (*line == '(')
 		return (0);
 	line -= line != ptr;

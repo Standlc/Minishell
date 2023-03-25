@@ -89,7 +89,7 @@ char	*copy_line_word(char **line)
 
 	skip_spaces(line);
 	str = NULL;
-	while (**line && **line != ' ' && !is_pipe(*line) && !is_operator(*line) && !is_redirection(*line))
+	while (**line && **line != ' ' && !is_pipe(*line) && !is_operator(*line) && !is_redirection(*line) && !is_parenthesis(*line))
 	{
 		if (is_env_var(*line, 0))
 		{

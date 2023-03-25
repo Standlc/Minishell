@@ -21,21 +21,24 @@ void	get_operator(char **line, t_pipeline *pipeline)
 
 int	is_directory(char *str)
 {
+	DIR				*directory;
+
 	if (!str || !str[0] || (str[0] != '.' && str[0] != '/'))
 		return (0);
 	if (!access(str, F_OK))
 	{
-		// if (access(str, X_OK))
-		// {
-		// 	print_error("permission denied: ", str);
-		// 	return (1);
-		// }
-		// if (!access(str, W_OK))
-		// {
-		// 	print_error("is a directory: ", str);
-		// 	return (1);
-		// }
-		return (0);
+		if (access(str, X_OK))
+		{
+			print_error("permission denied: ", str);
+			return (1);
+		}
+		directory = opendir(str);
+		if (directory)
+		{
+			print_error("is a directory: ", str);
+			return (1);
+		}
+		return (closedir(directory), 0);
 	}
 	return (print_error("no such file or directory: ", str), 1);
 }

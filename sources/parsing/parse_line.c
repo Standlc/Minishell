@@ -2,26 +2,35 @@
 
 int	is_wildcard(char *line)
 {
+	int	has_wildcard;
+	int	slash_count;
+
+	has_wildcard = 0;
+	slash_count = 0;
 	if (!ft_strncmp(line, "./", 2))
 		line += 2;
 	while (*line && *line != ' ' && !is_pipe(line) && !is_operator(line) && !is_redirection(line))
 	{
 		if (*line == '*')
-			return (1);
+			has_wildcard = 1;
+		slash_count += *line == '/';
+		if (slash_count && *line)
+			return (0);
 		line++;
 	}
-	return (0);
+	return (has_wildcard && slash_count <= 1);
 }
 
 int	handle_wild_card(char **line, t_command *command, int index)
 {
 	char	*wildcard;
 
-	if (!ft_strncmp(*line, "./", 2))
-		*line += 2;
 	wildcard = copy_line_word(line);
 	if (!wildcard)
 		return (1);
+	if (!ft_strncmp(wildcard, "./", 2))
+		*line += 2;
+	// KEEP "./" IF N0 MATCHES
 	command->arguments = read_dir(wildcard, command->arguments, index);
 	return (free(wildcard), command->arguments == NULL);
 }
@@ -31,7 +40,7 @@ int	get_arguments(char **line, t_command *command)
 	int	i;
 
 	i = 0;
-	while (**line && !is_pipe(*line) && !is_operator(*line))
+	while (**line && !is_pipe(*line) && !is_operator(*line) && !is_parenthesis(*line))
 	{
 		command->arguments = ft_realloc(command->arguments, (i + 2), sizeof(char *), ARGUMENTS);
 		if (!command->arguments)

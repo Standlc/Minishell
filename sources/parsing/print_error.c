@@ -24,7 +24,7 @@ void	print_line_component(char *line)
 		write (2, line, 1);
 	else
 	{
-		while (*line && *line != ' ' && !is_meta_char(line))
+		while (*line && *line != ' ' && (!is_meta_char(line) || *line == '*'))
 			write(2, line++, 1);
 	}
 	write(2, "`", 1);

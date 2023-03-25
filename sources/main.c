@@ -67,6 +67,6 @@ int	main(int argc, char **argv, char **env)
 	hook_signals();
 	get_line(pipelines);
 	printf("Exit\n");
-	// rl_clear_history();
+	rl_clear_history();
 	return (0);
 }
