@@ -33,6 +33,8 @@ void	execution_pipeline(t_command *commands)
 	set_position(commands);
 	if (commands[1].is_end)
 		set_pipe(commands, &pipes);
+	else
+		commands->position = 2;
 	while (commands[i].is_end)
 	{
 		if (i == 1)
@@ -52,7 +54,7 @@ void	execution_pipeline(t_command *commands)
 		i++;
 	}
 	i = -1;
-	if (close(pipes.fd[0]) == -1)
+	if (commands[1].is_end && close(pipes.fd[0]) == -1)
 		return (ft_putstr_fd("error close\n", 2));
 	while (commands[++i].is_end)
 		if (waitpid(-1, NULL, 0) == -1)
