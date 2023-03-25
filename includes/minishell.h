@@ -39,9 +39,14 @@ typedef struct s_command
 	char	**arguments;
 	int		input_file;
 	int		output_file;
-	int		fd[2];
 	int		position;
 }				t_command;
+
+typedef struct s_pipe
+{
+	int	link[2];
+	int	fd[2];
+}				t_pipe;
 
 typedef struct s_pipeline
 {
@@ -103,14 +108,16 @@ char	*find_path(char	*env, char *cmd);
 char	*path_for_execve(char **env, char *cmd);
 
 char	**duplicate_for_execve(t_command *command);
-void	duplicate_for_streams(t_command *command, int fd[2]);
-void	another_command(t_command *command, int fd[2]);
+void	duplicate_for_streams(t_command *command, t_pipe *pipes);
+void	another_command(t_command *command, t_pipe *pipes);
+
+void    set_position(t_command *commands);
+void	set_pipe(t_command *command, t_pipe *pipes);
 
 int		parenthesis_number(t_pipeline *pipelines);
 void	parenthesis(t_pipeline *pipelines, int *index);
 
-void	execution_command(t_command *command, int fd[2]);
-void	set_pipe(t_command *command, int fd[2]);
+void	execution_command(t_command *command, t_pipe *pipes);
 void	execution_pipeline(t_command *commands);
 int		check_last_status(t_pipeline last);
 void	execution_global(t_pipeline *pipelines);

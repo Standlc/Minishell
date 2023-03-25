@@ -2,7 +2,7 @@
 
 extern int	g_status;
 
-void	execution_command(t_command *command, int fd[2])
+void	execution_command(t_command *command, t_pipe *pipes)
 {
 	if (!command->name)
 		return ;
@@ -20,53 +20,39 @@ void	execution_command(t_command *command, int fd[2])
 		return (env_ms(command));
 	if (!strncmp(command->name, "exit", 5))
 		return (exit_ms(command));
-	another_command(command, fd);
-}
-
-void	set_pipe(t_command *command, int fd[2])
-{
-	int	i;
-
-	i = -1;
-	while (command[++i].name)
-		command[i].position = 0;
-	command->position = -1;
-	while (command[i].name)
-	{
-		if (i != 0 && command[i].input_file == 0)
-			command[i].input_file = fd[0];
-		if (command[i + 1].name && command[i].output_file == 1)
-			command[i].output_file = fd[1];
-		i++;
-	}
-	i--;
-	command[i].position = 1;
+	another_command(command, pipes);
 }
 
 void	execution_pipeline(t_command *commands)
 {
-	int		i;
-	pid_t	pid;
-	int		fd[2];
+	int			i;
+	pid_t		pid;
+	t_pipe		pipes;
 
 	i = 0;
+	set_position(commands);
 	if (commands[1].name)
-	{
-		if (pipe(fd) == -1)
-			ft_putstr_fd("pipe failed\n", 2);
-		set_pipe(commands, fd);
-	}
+		set_pipe(commands, &pipes);
 	while (commands[i].name)
 	{
+		if (i == 1)
+			close(pipes.fd[1]);
+		if (commands[i].position == 0)
+			if (pipe(pipes.link) == -1)
+				return (ft_putstr_fd("error pipe\n", 2));
 		pid = fork();
 		if (pid == -1)
 			ft_putstr_fd("fork failed\n", 2);
 		if (pid == 0)
-			execution_command(&(commands[i]), fd);
+			execution_command(&(commands[i]), &pipes);
+		if (commands[i].position == 0)
+			if (dup2(pipes.link[0], pipes.fd[0]) == -1 || close(pipes.link[1]) == -1
+				|| close(pipes.link[0]) == -1)
+				return (ft_putstr_fd("error many pipes\n", 2));
 		i++;
 	}
 	i = -1;
-	if (close(fd[0]) == -1 || close(fd[1]) == -1)
+	if (close(pipes.fd[0]) == -1)
 		return (ft_putstr_fd("error close\n", 2));
 	while (commands[++i].name)
 		if (waitpid(-1, NULL, 0) == -1)
