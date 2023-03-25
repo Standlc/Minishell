@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+extern int	g_status;
+
 int	add_char(char **line, char **str)
 {
 	int		i;
@@ -53,7 +55,7 @@ char	*handle_env_var(char **line, char *str)
 	if (!env_var_name)
 		return (NULL);
 	if (env_var_name[0] == '?')
-		env_var_value = ft_itoa(0);
+		env_var_value = ft_itoa(g_status);
 	else
 		env_var_value = getenv(env_var_name);
 	if (!env_var_value && errno == ENOMEM)
