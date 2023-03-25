@@ -87,7 +87,7 @@ void	execution_global(t_pipeline *pipelines)
 	{
 		if (i == 0 || (i != 0 && !check_last_status(pipelines[i])))
 			execution_pipeline(pipelines[i].commands);
-		else if (pipelines[i + 1].commands && pipelines[i + 1].start_priority)
+		else if (pipelines[i + 1].commands && pipelines[i + 1].parenthesis > 0)
 		{
 			parenthesis(&pipelines[i], &i);
 			i++;

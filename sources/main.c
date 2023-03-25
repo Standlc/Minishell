@@ -32,8 +32,7 @@ t_pipeline	*test(t_pipeline *pipelines)
 	pipelines->commands[3].arguments[0] = malloc(100);
 	pipelines->commands[3].arguments[1] = malloc(100);
 	pipelines->commands[3].arguments[2] = malloc(100);
-	pipelines->start_priority = NONE;
-	pipelines->end_priority = NONE;
+	pipelines->parenthesis = 0;
 	pipelines->operator = NONE;
 	pipelines->commands->arguments[0] = "ls";
 	pipelines->commands->arguments[1] = NULL;

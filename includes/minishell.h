@@ -52,8 +52,7 @@ typedef struct s_pipeline
 {
 	t_command			*commands;
 	enum e_operators	operator;
-	int					start_priority;
-	int					end_priority;
+	int					parenthesis;
 }				t_pipeline;
 
 
@@ -113,7 +112,6 @@ void	another_command(t_command *command, t_pipe *pipes);
 void	set_position(t_command *commands);
 void	set_pipe(t_command *command, t_pipe *pipes);
 
-int		parenthesis_number(t_pipeline *pipelines);
 void	parenthesis(t_pipeline *pipelines, int *index);
 
 void	execution_command(t_command *command, t_pipe *pipes);
