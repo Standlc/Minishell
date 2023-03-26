@@ -151,6 +151,7 @@ int		multi_pipes(t_command *commands, int *fd);
 void	pipeline_start(t_command *commands, int fd[2]);
 void	fork_command(t_command *command);
 int		until_last_command(t_command *commands, int fd[2]);
+int		is_child(t_command command);
 void	end_of_pipeline(t_command *commands, int fd[2]);
 
 void	parenthesis(t_pipeline *pipelines, int *index);

@@ -76,6 +76,8 @@ void	unset_ms(t_command *command)
 
 	g_status = 0;
 	i = 0;
+	if (command->position != 2)
+		return ;
 	if (!command->arguments[1])
 		return ;
 	while (command->arguments[++i])

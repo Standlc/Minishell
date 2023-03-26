@@ -36,6 +36,21 @@ int		until_last_command(t_command *commands, int fd[2])
 	return (i);
 }
 
+int	is_child(t_command command)
+{
+	if (!command.arguments[0])
+		return (g_status = 0, 0);
+	if (!strncmp(command.arguments[0], "cd", 3))
+		return (g_status = 0, 0);
+	if (!strncmp(command.arguments[0], "export", 7))
+		return (g_status = 0, 0);
+	if (!strncmp(command.arguments[0], "unset", 6))
+		return (g_status = 0, 0);
+	if (!strncmp(command.arguments[0], "exit", 5))
+		return (g_status = 0, 0);
+	return (1);
+}
+
 void	end_of_pipeline(t_command *commands, int fd[2])
 {
 	int	i;
@@ -44,6 +59,6 @@ void	end_of_pipeline(t_command *commands, int fd[2])
 	if (commands[1].is_end && close(fd[0]) == -1)
 		ft_putstr_fd("error close\n", 2);
 	while (commands[++i].is_end)
-		if (waitpid(-1, &g_status, 0) == -1)
+		if (is_child(commands[i]) && waitpid(-1, &g_status, 0) == -1)
 			ft_putstr_fd("error waitpid\n", 2);
 }

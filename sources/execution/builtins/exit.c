@@ -109,14 +109,17 @@ void	exit_ms(t_command *command)
 	int		i;
 
 	i = 0;
+	value = g_status;
+	if (command->position != 2)
+		return ;
 	ft_putstr_fd("exit\n", 1);
 	while (command->arguments[i])
 		i++;
 	if (i > 1)
 	{
-		value = strcmp_for_exit(command->arguments[0], "-9223372036854775808", "9223372036854775807");
+		value = strcmp_for_exit(command->arguments[1], "-9223372036854775808", "9223372036854775807");
 		if (value == 0)
-			(value = ft_atoi_exit(command->arguments[0]));
+			(value = ft_atoi_exit(command->arguments[1]));
 		else
 			(ft_putstr_fd("numeric argument required\n", command->output_file), g_status = 2, exit(g_status));
 	}

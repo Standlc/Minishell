@@ -6,6 +6,9 @@ void	cd_ms(t_command *command)
 {
 	char	*str;
 
+	g_status = 0;
+	if (command->position != 2)
+		return ;
 	if (command->arguments[1] && command->arguments[2])
 		return (ft_putstr_fd("too many arguments\n", 2), g_status = 1, (void)0);
 	if (command->arguments[1])

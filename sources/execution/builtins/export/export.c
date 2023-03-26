@@ -67,6 +67,9 @@ void	export_ms(t_command *command)
 	char	**env;
 
 	i = 0;
+	g_status = 0;
+	if (command->position != 2)
+		return ;
 	env = *(environnement(NULL));
 	while (env[i])
 		i++;
