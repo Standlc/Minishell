@@ -118,12 +118,12 @@ void	exit_ms(t_command *command)
 		if (value == 0)
 			(value = ft_atoi_exit(command->arguments[0]));
 		else
-			(ft_putstr_fd("numeric argument required\n", command->output_file), errno = 2, exit(errno));
+			(ft_putstr_fd("numeric argument required\n", command->output_file), g_status = 2, exit(g_status));
 	}
 	if (i == 3)
-		return (ft_putstr_fd("too many arguments\n", command->output_file), errno = 1, (void)0);
+		return (ft_putstr_fd("too many arguments\n", command->output_file), g_status = 1, (void)0);
 	if (i > 4)
-		return (ft_putstr_fd("too many arguments\n", command->output_file), errno = 127, (void)0);
-	errno = value;
-	exit(errno);
+		return (ft_putstr_fd("too many arguments\n", command->output_file), g_status = 127, (void)0);
+	g_status = value;
+	exit(g_status);
 }

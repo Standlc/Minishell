@@ -55,6 +55,7 @@ void	echo_ms(t_command *command)
 	int	option;
 
 	i = 1;
+	g_status = 0;
 	option = validate_flag(command, &i);
 	if (option == 1)
 		validate_n(command, &i);
@@ -68,4 +69,5 @@ void	echo_ms(t_command *command)
 	if (option == 0)
 		ft_putchar_fd('\n', command->output_file);
 	close_files(command->output_file);
+	exit(g_status);
 }

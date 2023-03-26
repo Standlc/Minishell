@@ -81,4 +81,5 @@ void	unset_ms(t_command *command)
 	while (command->arguments[++i])
 		if (valid_delete(command->arguments[i]))
 			delete_env(command, i);
+	exit(g_status);
 }

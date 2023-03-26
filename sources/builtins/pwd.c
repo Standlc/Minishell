@@ -20,4 +20,5 @@ void	pwd_ms(t_command *command)
 	ft_putchar_fd('\n', command->output_file);
 	free(str);
 	close_files(command->output_file);
+	exit(g_status);
 }
