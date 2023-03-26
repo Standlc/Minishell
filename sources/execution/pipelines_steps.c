@@ -7,7 +7,10 @@ void	pipeline_start(t_command *commands, int fd[2])
 	if (commands[1].is_end)
 		set_pipe(commands, fd);
 	else
+	{
 		commands->position = 2;
+		commands->file_close = -1;
+	}
 }
 
 void	fork_command(t_command *command)

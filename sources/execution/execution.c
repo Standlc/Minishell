@@ -7,13 +7,10 @@ void	execution_pipeline(t_command *commands)
 	int		i;
 	int		fd[2];
 
-	i = 0;
-	while (commands[i].is_end)
-	{
-		commands[i].input_file = 0;
-		commands[i].output_file = 1;
-		i++;
-	}
+	i = -1;
+	while (commands[++i].is_end)
+		if (commands[i].output_file == 0)
+			commands[i].output_file = 1;
 	i = 0;
 	set_position(commands);
 	pipeline_start(commands, fd);
