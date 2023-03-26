@@ -6,8 +6,8 @@ SRC			=	main.c							parsing/parse_line.c \
 				parsing/is_functions/is_functions_2.c	parsing/redirections/get_redirections_utils.c \
 				parsing/syntax_check/check_syntax_utils.c 	parsing/syntax_check/check_parenthesis.c \
 				parsing/wildcards.c 						\
-				execution/execution.c execution/for_dup.c execution/parenthesis.c \
-				execution/another.c execution/path.c execution/pipe.c\
+				execution/execution.c execution/for_dup.c execution/parenthesis.c execution/execute_command.c\
+				execution/another.c execution/path.c execution/pipe.c execution/pipelines_steps.c\
 				builtins/cd.c builtins/echo.c builtins/env.c builtins/exit.c \
 				builtins/pwd.c builtins/unset.c builtins/export/export.c \
 				builtins/export/complete_env.c				

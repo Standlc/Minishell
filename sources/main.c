@@ -27,6 +27,7 @@ void	show_data(t_pipeline *pipelines)
 			printf("]\n");
 			printf("\t\tinput: %d\n", pipelines[i].commands[j].input_file);
 			printf("\t\touput: %d\n", pipelines[i].commands[j].output_file);
+			printf("\t\tis_end: %d\n", pipelines[i].commands[j].is_end);
 			printf("\t\theredoc limit: %s\n", pipelines[i].commands[j].heredoc_limit);
 			printf("\t}\n");
 			j++;
@@ -116,7 +117,7 @@ t_pipeline	*get_line(t_pipeline *pipelines, char **env)
 		pipelines = parse_line(line);
 		if (pipelines)
 		{
-			// show_data(pipelines);
+			//show_data(pipelines);
 			execution_global(pipelines);
 			free_pipelines(pipelines);
 		}

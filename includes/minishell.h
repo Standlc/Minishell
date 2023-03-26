@@ -47,14 +47,9 @@ typedef struct s_command
 	int		output_file;
 	char	*heredoc_limit;
 	int		position;
+	int		file_close;
 	int		is_end;
 }				t_command;
-
-typedef struct s_pipe
-{
-	int	link[2];
-	int	fd[2];
-}				t_pipe;
 
 typedef struct s_pipeline
 {
@@ -142,15 +137,24 @@ char	*good_path(char **paths, char *fill_path, char *final_path, char *cmd);
 char	*find_path(char	*env, char *cmd);
 char	*path_for_execve(char **env, char *cmd);
 
-void	duplicate_for_streams(t_command *command, t_pipe *pipes);
-void	another_command(t_command *command, t_pipe *pipes);
+void	duplicate_for_streams(t_command *command);
+void	another_command(t_command *command);
+
+int		execution_env(t_command *command);
+void	execution_command(t_command *command);
 
 void	set_position(t_command *commands);
-void	set_pipe(t_command *command, t_pipe *pipes);
+void	set_pipe(t_command *command, int fd[2]);
+void	set_files(t_command *command, int link[2], int fd);
+int		multi_pipes(t_command *commands, int *fd);
+
+void	pipeline_start(t_command *commands, int fd[2]);
+void	fork_command(t_command *command);
+int		until_last_command(t_command *commands, int fd[2]);
+void	end_of_pipeline(t_command *commands, int fd[2]);
 
 void	parenthesis(t_pipeline *pipelines, int *index);
 
-void	execution_command(t_command *command, t_pipe *pipes);
 void	execution_pipeline(t_command *commands);
 int		check_last_status(t_pipeline last);
 void	execution_global(t_pipeline *pipelines);

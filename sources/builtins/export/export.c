@@ -72,12 +72,11 @@ void	export_ms(t_command *command)
 		i++;
 	new = new_env(env, command->arguments);
 	if (!new)
-		(ft_putstr_fd("Cannot allocate memory\n", 2), g_status = 12, exit(g_status));
+		return (ft_putstr_fd("Cannot allocate memory\n", 2), g_status = 12, (void)0);
 	complete_env(new, command->arguments, i);
 	if (!new)
-		(ft_putstr_fd("Cannot allocate memory\n", 2), g_status = 12, exit(g_status));
+		return (ft_putstr_fd("Cannot allocate memory\n", 2), g_status = 12, (void)0);
 	tmp = env;
 	(void)environnement(new);
 	free_dup(tmp);
-	exit(g_status);
 }

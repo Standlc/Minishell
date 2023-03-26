@@ -13,14 +13,14 @@ void	delete_variable(char **env, int j)
 	index_new = 0;
 	new = malloc(sizeof(char *) * bigarray_len(env));
 	if (!new)
-		return (ft_putstr_fd("Cannot allocate memory\n", 2));
+		return (ft_putstr_fd("Cannot allocate memory\n", 2), g_status = 12, (void)0);
 	while (env[i])
 	{
 		if (i != j)
 		{
 			new[index_new] = ft_strdup(env[i]);
 			if (!new)
-				return (ft_putstr_fd("Cannot allocate memory\n", 2));
+				return (ft_putstr_fd("Cannot allocate memory\n", 2), g_status = 12, (void)0);
 			index_new++;
 		}
 		i++;
@@ -81,5 +81,4 @@ void	unset_ms(t_command *command)
 	while (command->arguments[++i])
 		if (valid_delete(command->arguments[i]))
 			delete_env(command, i);
-	exit(g_status);
 }
