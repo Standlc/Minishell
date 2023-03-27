@@ -136,6 +136,9 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	pipelines = NULL;
+	if (!isatty(0) || !isatty(1) || !isatty(2))
+		return (ft_putstr_fd("stdin, stdout or stderr have been changed\n", 2)
+			, ENOTTY);
 	hook_signals();
 	g_status = 0;
 	pipelines = get_line(pipelines, env);
