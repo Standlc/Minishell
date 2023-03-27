@@ -37,7 +37,7 @@ char	*get_env_var_name(char **line)
 	env_var_name = NULL;
 	if (add_char(NULL, &env_var_name))
 		return (NULL);
-	while (**line && ft_isalnum(**line))
+	while (**line && (ft_isalnum(**line) || **line == '?'))
 	{
 		if (add_char(line, &env_var_name))
 			return (NULL);
@@ -99,8 +99,11 @@ char	*copy_line_word(char **line)
 			if (!str)
 				return (NULL);
 		}
-		else if (is_quote(**line) && handle_quotes_copy(line, &str, **line))
+		else if (is_quote(**line))
+		{
+			if (handle_quotes_copy(line, &str, **line))
 				return (NULL);
+		}
 		else if (add_char(line, &str))
 			return (NULL);
 	}

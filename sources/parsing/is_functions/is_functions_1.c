@@ -26,7 +26,7 @@ int	is_parenthesis(char *line)
 
 int	is_env_var(char *line, char quote_type)
 {
-	if (!ft_isalnum(*(line + 1)))
+	if (!ft_isalnum(*(line + 1)) && *(line + 1) != '?')
 		return (0);
 	return (*line == '$' && *(line + 1)
 		&& (!quote_type || (quote_type == '"' && *(line + 1) != '"')));
