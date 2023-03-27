@@ -118,8 +118,8 @@ t_pipeline	*get_line(t_pipeline *pipelines, char **env)
 		pipelines = parse_line(line);
 		if (pipelines)
 		{
-			show_data(pipelines);
-			// execution_global(pipelines);
+			// show_data(pipelines);
+			execution_global(pipelines);
 			free_pipelines(pipelines);
 		}
 		free(line);
