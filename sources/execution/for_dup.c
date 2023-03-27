@@ -1,5 +1,7 @@
 #include <minishell.h>
 
+extern int	g_status;
+
 int	bigarray_len(char **bigarray)
 {
 	int	i;
@@ -34,12 +36,15 @@ char	**duplicate_bigarray(char **bigarray)
 	i = 0;
 	dup_bigarray = malloc(sizeof(char *) * (bigarray_len(bigarray) + 1));
 	if (!dup_bigarray)
-		(ft_putstr_fd("Cannot allocate memory\n", 2), exit(errno));
+		return (ft_putstr_fd("Cannot allocate memory\n", 2),
+			g_status = 12, NULL);
 	while (bigarray[i])
 	{
 		dup_bigarray[i] = ft_strdup(bigarray[i]);
 		if (!dup_bigarray[i])
-			(free_dup(dup_bigarray), ft_putstr_fd("Cannot allocate memory\n", 2), exit(errno));
+			return (free_dup(dup_bigarray),
+				ft_putstr_fd("Cannot allocate memory\n", 2),
+				g_status = 12, NULL);
 		i++;
 	}
 	dup_bigarray[i] = NULL;

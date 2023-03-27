@@ -2,9 +2,9 @@
 
 extern int	g_status;
 
-void    set_position(t_command *commands)
+void	set_position(t_command *commands)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	commands->position = -1;

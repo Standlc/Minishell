@@ -21,9 +21,9 @@ void	fork_command(t_command *command)
 	{
 		pid = fork();
 		if (pid == -1)
-			ft_putstr_fd("fork failed\n", 2);
+			return (g_status = ECHILD, ft_putstr_fd("fork failed\n", 2));
 		if (pid == 0)
-				execution_command(command);
+			execution_command(command);
 	}
 }
 

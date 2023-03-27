@@ -7,10 +7,6 @@ void	execution_pipeline(t_command *commands)
 	int		i;
 	int		fd[2];
 
-	i = -1;
-	while (commands[++i].is_end)
-		if (commands[i].output_file == 0)
-			commands[i].output_file = 1;
 	i = 0;
 	set_position(commands);
 	pipeline_start(commands, fd);
@@ -19,6 +15,8 @@ void	execution_pipeline(t_command *commands)
 		if (i == 1)
 			i = until_last_command(commands, fd);
 		fork_command(&commands[i]);
+		// if (g_status == ECHILD)
+		// 	return (end_of_pipeline());
 		i++;
 	}
 	end_of_pipeline(commands, fd);

@@ -57,7 +57,7 @@ char	*handle_env_var(char **line, char *str)
 	if (env_var_name[0] == '?')
 		env_var_value = ft_itoa(g_status);
 	else
-		env_var_value = getenv(env_var_name);
+		env_var_value = getenv_ms(env_var_name);
 	if (!env_var_value && errno == ENOMEM)
 		return (free(env_var_name), free(str), NULL);
 	str = strjoin_handler(str, env_var_value);
