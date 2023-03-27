@@ -19,6 +19,7 @@
 # include "get_next_line.h"
 # include "ft_printf.h"
 # include <dirent.h>
+# include <string.h>
 
 enum e_realloc_data_types {
 	PIPELINES,
@@ -67,6 +68,7 @@ typedef struct s_pipeline
 t_pipeline	*parse_line(char *line);
 char		*copy_line_word(char **line);
 int			add_char(char **line, char **str);
+int			arguments_count(char **arguments);
 
 int			check_syntax(char *line, int is_inside_parenthesis);
 int			check_redirection_error(char **line);

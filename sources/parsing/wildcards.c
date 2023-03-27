@@ -67,16 +67,62 @@ int	check(char *wildcard, char *file)
 	return (0);
 }
 
-// int	check_slash()
-// {
-// }
+char	*clean_wildcard(char *wildcard)
+{
+	int		i;
+	char	*res;
 
-char	**read_dir(char *wildcard, char **arguments, int size)
+	res = malloc(ft_strlen(wildcard) + 1);
+	if (!res)
+		return (NULL);
+	i = 0;
+	if (!ft_strncmp(wildcard, "./", 2))
+		wildcard += 2;
+	while (wildcard[i] && wildcard[i] != '/')
+	{
+		res[i] = wildcard[i];
+		i++;
+	}
+	res[i] = '\0';
+	return (res);
+}
+
+void	sort(char **arr, int size)
+{
+	char	*temp;
+	int		i;
+	int		j;
+	int		k;
+
+	i = 0;
+	while (i < size)
+	{
+		j = 1;
+		while (j < size - i)
+		{
+			k = 0;
+			while (arr[j - 1][k] && arr[j][k] && arr[j - 1][k] == arr[j][k])
+				k++;
+			if (arr[j - 1][k] > arr[j][k])
+			{
+				temp = arr[j - 1];
+				arr[j - 1] = arr[j];
+				arr[j] = temp;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+char	**read_dir(char *arg, char **arguments, int size)
 {
 	int				i;
+	char			*wildcard;
 	struct dirent	*directory_content;
 	DIR				*directory;
 
+	wildcard = clean_wildcard(arg);
 	directory = opendir("./");
 	if (!directory)
 		return (printf("error\n"), NULL);
@@ -88,27 +134,16 @@ char	**read_dir(char *wildcard, char **arguments, int size)
 		{
 			arguments = ft_realloc(arguments, i + 2, sizeof(char *), ARGUMENTS);
 			if (!arguments)
-				return (NULL);
-			arguments[i] = NULL;
+				return (free(wildcard), NULL);
 			arguments[i] = strjoin_handler(arguments[i], directory_content->d_name);
 			if (!arguments[i])
-				return (NULL);
+				return (free(wildcard), NULL);
 			// ADD TO END "/" IF NEEDED
 			i++;
 		}
 		directory_content = readdir(directory);
 	}
 	closedir(directory);
-	//SORT
-	if (i == size)
-	{
-		arguments = ft_realloc(arguments, i + 2, sizeof(char *), ARGUMENTS);
-		if (!arguments)
-			return (NULL);
-		arguments[i] = NULL;
-		arguments[i] = strjoin_handler(arguments[i], wildcard);
-		if (!arguments[i])
-			return (NULL);
-	}
-	return (arguments);
+	sort(arguments + size, arguments_count(arguments + size));
+	return (free(wildcard), arguments);
 }

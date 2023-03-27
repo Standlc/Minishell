@@ -11,14 +11,23 @@ int	is_wildcard(char *line)
 		line += 2;
 	while (*line && *line != ' ' && !is_pipe(line) && !is_operator(line) && !is_redirection(line))
 	{
-		if (*line == '*')
-			has_wildcard = 1;
+		has_wildcard += *line == '*';
 		slash_count += *line == '/';
-		if (slash_count && *line)
+		if (slash_count && *line && *line != '/')
 			return (0);
 		line++;
 	}
-	return (has_wildcard && slash_count <= 1);
+	return (has_wildcard);
+}
+
+int	arguments_count(char **arguments)
+{
+	int	i;
+
+	i = 0;
+	while (arguments[i])
+		i++;
+	return (i);
 }
 
 int	handle_wild_card(char **line, t_command *command, int index)
@@ -28,11 +37,16 @@ int	handle_wild_card(char **line, t_command *command, int index)
 	wildcard = copy_line_word(line);
 	if (!wildcard)
 		return (1);
-	if (!ft_strncmp(wildcard, "./", 2))
-		*line += 2;
-	// KEEP "./" IF N0 MATCHES
 	command->arguments = read_dir(wildcard, command->arguments, index);
-	return (free(wildcard), command->arguments == NULL);
+	if (!command->arguments)
+		return (free(wildcard), 1);
+	if (index != arguments_count(command->arguments))
+		return (free(wildcard), 0);
+	command->arguments = ft_realloc(command->arguments, index + 2, sizeof(char **), ARGUMENTS);
+	if (!command->arguments)
+		return (free(wildcard), 1);
+	command->arguments[index] = wildcard;
+	return (0);
 }
 
 int	get_arguments(char **line, t_command *command)
@@ -47,8 +61,9 @@ int	get_arguments(char **line, t_command *command)
 			return (1);
 		if (is_wildcard(*line))
 		{
-			if (handle_wild_card(line, command, i))
+			if (handle_wild_card(line, command, i) || (!i && is_directory(command->arguments[i])))
 				return (write(1, "8\n", 2), 1);
+			i = arguments_count(command->arguments);
 		} 
 		else if (!is_redirection(*line))
 		{
@@ -67,6 +82,7 @@ int	get_arguments(char **line, t_command *command)
 int	get_command(char **line, t_command *command)
 {
 	command->is_end = 1;
+	command->output_file = 1;
 	if (get_arguments(line, command))
 		return (write(1, "5\n", 2), 1);
 	*line += is_pipe(*line);

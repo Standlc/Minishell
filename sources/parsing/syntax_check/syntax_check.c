@@ -20,15 +20,6 @@
 // 	return (0);
 // }
 
-int	check_wildcards(char **line)
-{
-	if (**line != '*')
-		return (0);
-	while (**line && **line == '*')
-		*line += 1;
-	return (0);
-}
-
 //AMBIGOUS REDIRECT
 
 int	check_syntax(char *line, int is_inside_parenthesis)
@@ -47,8 +38,6 @@ int	check_syntax(char *line, int is_inside_parenthesis)
 		if (check_redirection_error(&line))
 			return (print_error("3 unexpected token error: ", line), 1);
 		if (check_operator_error(&line))
-			return (print_error("2 unexpected token error: ", line), 1);
-		if (check_wildcards(&line))
 			return (print_error("2 unexpected token error: ", line), 1);
 		if (check_parenthesis_error(&line, line_ptr_cpy, is_inside_parenthesis))
 			return (1);
