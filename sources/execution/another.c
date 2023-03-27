@@ -4,8 +4,9 @@ extern int	g_status;
 
 void	duplicate_for_streams(t_command *command)
 {
-	if (dup2(command->input_file, 0) == -1 || dup2(command->output_file, 1) == -1)
-	 		ft_putstr_fd("duplicate files failed\n", 2);
+	if (dup2(command->input_file, 0) == -1
+		|| dup2(command->output_file, 1) == -1)
+		ft_putstr_fd("duplicate files failed\n", 2);
 	if (command->file_close != -1)
 		if (close(command->file_close) == -1)
 			ft_putstr_fd("error close\n", 2);
@@ -17,8 +18,9 @@ void	another_command(t_command *command)
 	char	**env;
 
 	env = *(environnement(NULL));
-	if (command->arguments[0][0] == '/')
-		path = command->arguments[0]; 	// check if name is valid ?
+	if (command->arguments[0][0] == '/' ||
+		(command->arguments[0][0] == '.' && command->arguments[0][1] == '/'))
+			path = command->arguments[0];
 	else
 		path = path_for_execve(env, command->arguments[0]);
 	if (!path)

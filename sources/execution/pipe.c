@@ -58,8 +58,8 @@ int	multi_pipes(t_command *commands, int *fd)
 		set_files(&commands[i], link, *fd);
 		fork_command(&commands[i]);
 		if (dup2(link[0], *fd) == -1 || close(link[1]) == -1
-				|| close(link[0]) == -1)
-				ft_putstr_fd("error many pipes\n", 2);
+			|| close(link[0]) == -1)
+			ft_putstr_fd("error many pipes\n", 2);
 		i++;
 	}
 	return (i);

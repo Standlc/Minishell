@@ -27,7 +27,7 @@ void	fork_command(t_command *command)
 	}
 }
 
-int		until_last_command(t_command *commands, int fd[2])
+int	until_last_command(t_command *commands, int fd[2])
 {
 	int	i;
 
