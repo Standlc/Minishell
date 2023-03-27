@@ -33,7 +33,6 @@ int	arguments_count(char **arguments)
 int	handle_wild_card(char **line, t_command *command, int index)
 {
 	char	*wildcard;
-			printf("2\n");
 
 	wildcard = copy_line_word(line);
 	if (!wildcard)

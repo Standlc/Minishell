@@ -87,7 +87,7 @@ int	get_redirections(char **line, t_command *command)
 		if (!file_name)
 			return (1);
 		if (handle_redirection_type(command, redirection_type, file_name) == -1)
-			return (free(file_name), 1);		
+			return (free(file_name), 1);
 		skip_spaces(line);
 	}
 	return (0);
