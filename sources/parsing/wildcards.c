@@ -138,7 +138,6 @@ char	**read_dir(char *arg, char **arguments, int size)
 			arguments[i] = strjoin_handler(arguments[i], directory_content->d_name);
 			if (!arguments[i])
 				return (free(wildcard), NULL);
-			// ADD TO END "/" IF NEEDED
 			i++;
 		}
 		directory_content = readdir(directory);
@@ -147,3 +146,5 @@ char	**read_dir(char *arg, char **arguments, int size)
 	sort(arguments + size, arguments_count(arguments + size));
 	return (free(wildcard), arguments);
 }
+
+// HANDLE '/' DIRECTORIES

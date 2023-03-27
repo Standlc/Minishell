@@ -120,7 +120,7 @@ t_pipeline	*get_line(t_pipeline *pipelines, char **env)
 		if (pipelines)
 		{
 			show_data(pipelines);
-			// execution_global(pipelines);
+			execution_global(pipelines);
 			free_pipelines(pipelines);
 		}
 		free(line);
@@ -137,8 +137,10 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	pipelines = NULL;
 	if (!isatty(0) || !isatty(1) || !isatty(2))
-		return (ft_putstr_fd("stdin, stdout or stderr have been changed\n", 2)
-			, ENOTTY);
+	{
+		ft_putstr_fd("stdin, stdout or stderr have been changed\n", 2);
+		return (ENOTTY);
+	}
 	hook_signals();
 	g_status = 0;
 	pipelines = get_line(pipelines, env);
@@ -146,3 +148,6 @@ int	main(int argc, char **argv, char **env)
 	printf("exit\n");
 	return (0);
 }
+
+// WILDCARDS REDIRECTIONS
+// CHECK REDIRECTIONS FILE

@@ -110,3 +110,6 @@ char	*copy_line_word(char **line)
 	skip_spaces(line);
 	return (str);
 }
+
+// truc="s -a"
+// l$truc
