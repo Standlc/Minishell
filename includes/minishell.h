@@ -124,6 +124,9 @@ void	export_ms(t_command *command);
 
 void	pwd_ms(t_command *command);
 
+char	*getenv_ms(char *variable);
+void	complete_env_pwd(t_command *command, char *old_pwd, char *pwd);
+void	env_pwd(char *old_pwd);
 void	cd_ms(t_command *command);
 
 int		validate_option(t_command *command, int *i);

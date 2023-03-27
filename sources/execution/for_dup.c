@@ -18,7 +18,7 @@ void	free_dup(char **dup_bigarray)
 	while (dup_bigarray[i])
 		i++;
 	i--;
-	while (i <= 0)
+	while (i >= 0)
 	{
 		free(dup_bigarray[i]);
 		i--;

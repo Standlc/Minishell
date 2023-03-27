@@ -110,6 +110,7 @@ t_pipeline	*get_line(t_pipeline *pipelines, char **env)
 	line = readline(PROMPT);
 	new_env = duplicate_bigarray(env);
 	(void)environnement(new_env);
+	env = (*environnement(NULL));
 	while (line)
 	{
 		if (*line)

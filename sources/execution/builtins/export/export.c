@@ -79,6 +79,8 @@ void	export_ms(t_command *command)
 	complete_env(new, command->arguments, i);
 	if (!new)
 		return (ft_putstr_fd("Cannot allocate memory\n", 2), g_status = 12, (void)0);
+	//for (int o = 0; new[o]; o++)
+	//	printf("%s\n", new[o]);
 	tmp = env;
 	(void)environnement(new);
 	free_dup(tmp);
