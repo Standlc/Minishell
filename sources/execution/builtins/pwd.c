@@ -6,7 +6,7 @@ void	pwd_ms(t_command *command)
 {
 	char	*str;
 
-	for_close_file(command);
+	close_file_pipe(command);
 	g_status = 0;
 	str = getcwd(NULL, 1024);
 	if (!str)

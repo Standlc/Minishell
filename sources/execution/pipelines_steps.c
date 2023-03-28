@@ -43,13 +43,13 @@ int	until_last_command(t_command *commands, int fd[2])
 int	is_child(t_command command)
 {
 	if (!command.arguments[0])
-		return (g_status = 0, 0);
+		return (0);
 	if (!strncmp(command.arguments[0], "cd", 3))
-		return (g_status = 0, 0);
+		return (0);
 	if (!strncmp(command.arguments[0], "export", 7))
-		return (g_status = 0, 0);
+		return (0);
 	if (!strncmp(command.arguments[0], "unset", 6))
-		return (g_status = 0, 0);
+		return (0);
 	return (1);
 }
 

@@ -143,7 +143,7 @@ char	*good_path(char **paths, char *fill_path, char *final_path, char *cmd);
 char	*find_path(char	*env, char *cmd);
 char	*path_for_execve(char **env, char *cmd);
 
-void	for_close_file(t_command *command);
+void	close_file_pipe(t_command *command);
 void	duplicate_for_streams(t_command *command);
 int		valide_argument_for_path(char *argument);
 void	another_command(t_command *command);

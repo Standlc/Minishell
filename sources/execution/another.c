@@ -2,7 +2,7 @@
 
 extern int	g_status;
 
-void	for_close_file(t_command *command)
+void	close_file_pipe(t_command *command)
 {
 	if (command->file_close != -1)
 		if (close(command->file_close) == -1)
@@ -14,7 +14,7 @@ void	duplicate_for_streams(t_command *command)
 	if (dup2(command->input_file, 0) == -1
 		|| dup2(command->output_file, 1) == -1)
 		perror("minishell: dup2");
-	for_close_file(command);
+	close_file_pipe(command);
 }
 
 int	valide_argument_for_path(char *argument)
