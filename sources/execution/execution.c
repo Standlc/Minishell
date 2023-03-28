@@ -50,6 +50,7 @@ void	execution_global(t_pipeline *pipelines)
 	int	i;
 
 	i = 0;
+	check_here_doc(pipelines);
 	while (pipelines[i].commands)
 	{
 		if (!strncmp("exit", pipelines[i].commands->arguments[0], 5) && !pipelines[i].commands[1].is_end)

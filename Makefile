@@ -7,7 +7,7 @@ SRC			=	main.c							parsing/parse_line.c \
 				parsing/syntax_check/check_syntax_utils.c 	parsing/syntax_check/check_parenthesis.c \
 				parsing/wildcards.c 						\
 				execution/execution.c execution/for_dup.c execution/parenthesis.c execution/execute_command.c\
-				execution/another.c execution/path.c execution/pipe.c execution/pipelines_steps.c\
+				execution/another.c execution/path.c execution/pipe.c execution/pipelines_steps.c execution/here_doc.c\
 				execution/builtins/cd.c execution/builtins/echo.c execution/builtins/env.c execution/builtins/exit/exit.c \
 				execution/builtins/exit/exit_pipelines.c execution/builtins/pwd.c execution/builtins/unset.c \
 				execution/builtins/export/export.c execution/builtins/export/complete_env.c				
