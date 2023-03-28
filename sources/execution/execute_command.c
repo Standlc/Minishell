@@ -12,13 +12,13 @@ int	execution_env(t_command *command)
 		return (export_ms(command), 1);
 	if (!strncmp(command->arguments[0], "unset", 6))
 		return (unset_ms(command), 1);
-	if (!strncmp(command->arguments[0], "exit", 5))
-		return (exit_ms(command), 1);
 	return (0);
 }
 
 void	execution_command(t_command *command)
 {
+	if (!strncmp(command->arguments[0], "exit", 5))
+		return ((void)exit_ms(command));
 	if (!strncmp(command->arguments[0], "echo", 5))
 		return (echo_ms(command));
 	if (!strncmp(command->arguments[0], "pwd", 4))

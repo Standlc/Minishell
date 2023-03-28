@@ -6,14 +6,15 @@ void	pwd_ms(t_command *command)
 {
 	char	*str;
 
+	for_close_file(command);
+	g_status = 0;
 	str = getcwd(NULL, 1024);
-	g_status = errno;
 	if (!str)
 	{
 		if (errno == ERANGE)
-			ft_putstr_fd("Path exceeds max buffer lenght.", 2);
+			perror("minishell: pwd");
 		else if (errno == ENOMEM)
-			ft_putstr_fd("Memory cannot be allocated for path", 2);
+			ft_putstr_fd(MEM, 2);
 	}
 	else
 		ft_putstr_fd(str, command->output_file);

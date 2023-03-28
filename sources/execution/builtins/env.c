@@ -19,6 +19,7 @@ void	env_ms(t_command *command)
 
 	g_status = 0;
 	i = -1;
+	for_close_file(command);
 	if (command->arguments[1] && directory_exist(command->arguments[1]))
 		return (ft_putstr_fd("Permission denied\n", 2), g_status = 126, exit(g_status));
 	if (command->arguments[1])

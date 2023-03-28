@@ -19,15 +19,15 @@ void	set_pipe(t_command *command, int fd[2])
 
 	i = 0;
 	if (pipe(fd) == -1)
-		return (ft_putstr_fd("pipe failed\n", 2));
+		return (g_status = errno, perror("minishell: pipe function"));
 	while (command[i].is_end)
 	{
-		if (i == 0 && command[i].output_file == 1)
+		if (i == 0)
 		{
 			command[i].output_file = fd[1];
 			command[i].file_close = fd[0];
 		}
-		if (!command[i + 1].is_end && command[i].input_file == 0)
+		if (!command[i + 1].is_end)
 		{
 			command[i].input_file = fd[0];
 			command[i].file_close = -1;
@@ -54,12 +54,12 @@ int	multi_pipes(t_command *commands, int *fd)
 	while (commands[i].position == 0)
 	{
 		if (pipe(link) == -1)
-			ft_putstr_fd("pipe failed\n", 2);
+			(g_status = errno, perror("minishell: close"));
 		set_files(&commands[i], link, *fd);
 		fork_command(&commands[i]);
 		if (dup2(link[0], *fd) == -1 || close(link[1]) == -1
 			|| close(link[0]) == -1)
-			ft_putstr_fd("error many pipes\n", 2);
+			(g_status = errno, perror("minishell: multi pipe"));
 		i++;
 	}
 	return (i);

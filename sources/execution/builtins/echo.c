@@ -56,6 +56,7 @@ void	echo_ms(t_command *command)
 
 	i = 1;
 	g_status = 0;
+	for_close_file(command);
 	option = validate_flag(command, &i);
 	if (option == 1)
 		validate_n(command, &i);

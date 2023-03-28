@@ -2,6 +2,7 @@
 # define MINISHELL_H
 
 # define PROMPT	"➜  minishell $> "
+# define MEM "Cannot allocate memory\n"
 
 # include <signal.h>
 # include <unistd.h>
@@ -101,12 +102,12 @@ void		free_pipelines(t_pipeline *pipelines);
 int			hook_signals(void);
 
 
-
+void	exit_pipeline(t_pipeline *pipelines, int i);
 int		exit_max(char *value, char *max);
 int		exit_min(char *value, char *min);
 int		strcmp_for_exit(char *value, char *min, char *max);
 long	ft_atoi_exit(char *str);
-void	exit_ms(t_command *command);
+int		exit_ms(t_command *command);
 
 int		directory_exist(char *dir);
 void	env_ms(t_command *command);
@@ -142,7 +143,9 @@ char	*good_path(char **paths, char *fill_path, char *final_path, char *cmd);
 char	*find_path(char	*env, char *cmd);
 char	*path_for_execve(char **env, char *cmd);
 
+void	for_close_file(t_command *command);
 void	duplicate_for_streams(t_command *command);
+int		valide_argument_for_path(char *argument);
 void	another_command(t_command *command);
 
 int		execution_env(t_command *command);
@@ -154,10 +157,10 @@ void	set_files(t_command *command, int link[2], int fd);
 int		multi_pipes(t_command *commands, int *fd);
 
 void	pipeline_start(t_command *commands, int fd[2]);
-void	fork_command(t_command *command);
+int		fork_command(t_command *command);
 int		until_last_command(t_command *commands, int fd[2]);
 int		is_child(t_command command);
-void	end_of_pipeline(t_command *commands, int fd[2]);
+void	end_of_pipeline(t_command *commands, int fd[2], int end);
 
 void	parenthesis(t_pipeline *pipelines, int *index);
 

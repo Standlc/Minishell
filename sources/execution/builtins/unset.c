@@ -13,14 +13,14 @@ void	delete_variable(char **env, int j)
 	index_new = 0;
 	new = malloc(sizeof(char *) * bigarray_len(env));
 	if (!new)
-		return (ft_putstr_fd("Cannot allocate memory\n", 2), g_status = 12, (void)0);
+		return (g_status = 12, ft_putstr_fd(MEM, 2));
 	while (env[i])
 	{
 		if (i != j)
 		{
 			new[index_new] = ft_strdup(env[i]);
 			if (!new)
-				return (ft_putstr_fd("Cannot allocate memory\n", 2), g_status = 12, (void)0);
+				return (g_status = 12, ft_putstr_fd(MEM, 2));
 			index_new++;
 		}
 		i++;
