@@ -8,10 +8,11 @@ void	fill_here_doc(t_command command)
 	char	*str;
 
 	here_doc_index = 0;
-	while (command.heredoc_limit[here_doc_index])
+	while (command.heredoc_limit[here_doc_index] && str)
 	{
-		printf("here_doc >");
+		ft_printf("here_doc >");
 		str = get_next_line(0);
+		write(1, NULL, 0);
 		if (str && !command.heredoc_limit[here_doc_index + 1] && strncmp(str, command.heredoc_limit[here_doc_index], ft_strlen(command.heredoc_limit[here_doc_index] + 1)))
 		{
 			if (write(command.input_file, str, ft_strlen(command.heredoc_limit[here_doc_index])) == -1)
@@ -21,6 +22,8 @@ void	fill_here_doc(t_command command)
 			here_doc_index++;
 		free(str);
 	}
+	close(command.input_file);
+	command.input_file = open("here_doc",  O_RDONLY);
 }
 
 void	check_here_doc(t_pipeline *pipelines)

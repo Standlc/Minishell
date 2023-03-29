@@ -2,7 +2,7 @@
 # define MINISHELL_H
 
 # define PROMPT	"➜  minishell $> "
-# define MEM "Cannot allocate memory\n"
+# define MEM "minishell: Cannot allocate memory\n"
 
 # include <signal.h>
 # include <unistd.h>
