@@ -57,6 +57,7 @@ void	echo_ms(t_command *command)
 	i = 1;
 	g_status = 0;
 	printf("%d\n", command->file_close);
+	close(command->input_file);
 	close_file_pipe(command);
 	option = validate_flag(command, &i);
 	if (option == 1)

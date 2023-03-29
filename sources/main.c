@@ -48,20 +48,20 @@ char	***environnement(char **new_env)
 	return (&env);
 }
 
-void	test_hd(t_pipeline *pipelines)
-{
-	int fd;
+// void	test_hd(t_pipeline *pipelines)
+// {
+// 	int fd;
 
-	fd = open("here_doc", O_WRONLY | O_CREAT | O_TRUNC, 0664);
-	unlink("here_doc");
-	printf("je passe : %d\n", fd);
-	pipelines->commands->input_file = fd;
-	pipelines->commands->heredoc_limit = malloc(sizeof(char *) * 4);
-	pipelines->commands->heredoc_limit[0] = "EOF";
-	pipelines->commands->heredoc_limit[1] = "fefe";
-	pipelines->commands->heredoc_limit[2] = "coco";
-	pipelines->commands->heredoc_limit[3] = NULL;
-}
+// 	fd = open("here_doc", O_WRONLY | O_CREAT | O_TRUNC, 0664);
+// 	unlink("here_doc");
+// 	printf("je passe : %d\n", fd);
+// 	pipelines->commands->input_file = fd;
+// 	pipelines->commands->heredoc_limit = malloc(sizeof(char *) * 4);
+// 	pipelines->commands->heredoc_limit[0] = "EOF";
+// 	pipelines->commands->heredoc_limit[1] = "fefe";
+// 	pipelines->commands->heredoc_limit[2] = "coco";
+// 	pipelines->commands->heredoc_limit[3] = NULL;
+// }
 
 // t_pipeline	*test(t_pipeline *pipelines)
 // {
@@ -134,7 +134,7 @@ t_pipeline	*get_line(t_pipeline *pipelines, char **env)
 		pipelines = parse_line(line);
 		if (pipelines)
 		{
-			test_hd(pipelines);
+			//test_hd(pipelines);
 			//show_data(pipelines);
 			execution_global(pipelines);
 			free_pipelines(pipelines);

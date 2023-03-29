@@ -47,7 +47,7 @@ typedef struct s_command
 	char	**arguments;
 	int		input_file;
 	int		output_file;
-	char	**heredoc_limit;
+	char	*heredoc_limit;
 	int		position;
 	int		file_close;
 	int		is_end;
@@ -164,8 +164,8 @@ void	end_of_pipeline(t_command *commands, int fd[2], int end);
 
 void	parenthesis(t_pipeline *pipelines, int *index);
 
-void	fill_here_doc(t_command command);
-void	check_here_doc(t_pipeline *pipelines);
+// void	fill_here_doc(t_command command);
+// void	check_here_doc(t_pipeline *pipelines);
 
 void	execution_pipeline(t_command *commands);
 int		check_last_status(t_pipeline last);

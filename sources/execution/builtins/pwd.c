@@ -6,6 +6,7 @@ void	pwd_ms(t_command *command)
 {
 	char	*str;
 
+	printf("je passe dans pwd\n");
 	close_file_pipe(command);
 	g_status = 0;
 	str = getcwd(NULL, 1024);
