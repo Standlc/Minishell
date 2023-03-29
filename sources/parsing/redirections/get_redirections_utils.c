@@ -2,7 +2,7 @@
 
 int	handle_simple_left_redirection(t_command *command, char *file)
 {
-	if (command->input_file)
+	if (command->input_file > 2)
 		close(command->input_file);
 	command->input_file = open(file, O_RDONLY);
 	if (command->input_file == -1)

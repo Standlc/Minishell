@@ -19,7 +19,7 @@ void	get_operator(char **line, t_pipeline *pipeline)
 	skip_spaces(line);
 }
 
-int	is_directory(char *str)
+int	file_or_dir_check(char *str)
 {
 	DIR				*directory;
 
@@ -36,9 +36,9 @@ int	is_directory(char *str)
 		if (directory)
 		{
 			print_error("is a directory: ", str);
-			return (1);
+			return (closedir(directory), 1);
 		}
-		return (closedir(directory), 0);
+		return (0);
 	}
 	return (print_error("no such file or directory: ", str), 1);
 }
@@ -53,16 +53,25 @@ void	realloc_memcpy(void *dest, void *src, int data_type, int index)
 		((char **)dest)[index] = ((char **)src)[index];
 }
 
-void	*ft_realloc(void *src, int nmemb, int size, int data_type)
+int	ft_sizeof(int data_type)
+{
+	if (data_type == PIPELINES)
+		return (sizeof(t_pipeline));
+	if (data_type == COMMANDS)
+		return (sizeof(t_command));
+	return (sizeof(char **));
+}
+
+void	*ft_realloc(void *src, int prev_size, int new_size, int data_type)
 {
 	void	*res;
 	int		i;
 
-	res = ft_calloc(nmemb, size);
+	res = ft_calloc(new_size, ft_sizeof(data_type));
 	if (!res || !src)
 		return (res);
 	i = 0;
-	while (i < nmemb - 1)
+	while (i < prev_size)
 	{
 		realloc_memcpy(res, src, data_type, i);
 		i++;

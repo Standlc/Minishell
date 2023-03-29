@@ -24,7 +24,7 @@
 enum e_realloc_data_types {
 	PIPELINES,
 	COMMANDS,
-	ARGUMENTS
+	STR_ARR
 };
 
 enum e_operators {
@@ -46,7 +46,7 @@ typedef struct s_command
 	char	**arguments;
 	int		input_file;
 	int		output_file;
-	char	*heredoc_limit;
+	char	**heredoc_limits;
 	int		position;
 	int		file_close;
 	int		is_end;
@@ -61,9 +61,11 @@ typedef struct s_pipeline
 
 //PARSING
 t_pipeline	*parse_line(char *line);
-char		*copy_line_word(char **line);
+char		**get_line_args(char **line);
 int			add_char(char **line, char **str);
-int			arguments_count(char **arguments);
+int			str_arr_size(char **arr);
+char	**join_arr_strjoin(char **arr1, char **arr2);
+char	**join_str_arr(char **dest, char **arr2);
 
 int			check_syntax(char *line, int is_inside_parenthesis);
 int			check_redirection_error(char **line);
@@ -86,17 +88,22 @@ int			handle_simple_right_redirection(t_command *command, char *file);
 int			handle_simple_left_redirection(t_command *command, char *file);
 int			handle_double_right_redirection(t_command *command, char *file);
 
+int			handle_heredoc(char **line, t_command *command);
+
 void		skip_spaces(char **line);
 void		get_operator(char **line, t_pipeline *pipeline);
-int			is_directory(char *str);
-void		*ft_realloc(void *src, int nmemb, int size, int data_type);
+int	file_or_dir_check(char *str);
+void	*ft_realloc(void *src, int prev_size, int new_size, int data_type);
 
 void		print_error(char *message, char *line);
 char		*strjoin_handler(char *str, char *join);
 
-char		**read_dir(char *line, char **arguments, int size);
+char		**handle_widlcards(char **args);
+char		**read_dir(char *wildcard);
+int			is_wildcard(char *line);
 
 void		free_pipelines(t_pipeline *pipelines);
+void		free_str_arr(char **str_arr);
 
 int			hook_signals(void);
 

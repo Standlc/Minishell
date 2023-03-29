@@ -1,8 +1,8 @@
-SRC			=	main.c							parsing/parse_line.c \
+SRC			=	main.c							parsing/parse_line.c parsing/redirections/heredoc.c \
 				parsing/parse_line_utils.c				close_program.c \
-				signals.c						parsing/print_error.c \
+				signals.c						parsing/print_error.c parsing/push_functions/push_str_arr.c \
 				parsing/redirections/get_redirections.c			parsing/syntax_check/syntax_check.c \
-				parsing/copy_line_word.c 				parsing/is_functions/is_functions_1.c \
+				parsing/get_line_args.c 				parsing/is_functions/is_functions_1.c \
 				parsing/is_functions/is_functions_2.c	parsing/redirections/get_redirections_utils.c \
 				parsing/syntax_check/check_syntax_utils.c 	parsing/syntax_check/check_parenthesis.c \
 				parsing/wildcards.c 						\

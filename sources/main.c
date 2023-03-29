@@ -28,7 +28,14 @@ void	show_data(t_pipeline *pipelines)
 			printf("\t\tinput: %d\n", pipelines[i].commands[j].input_file);
 			printf("\t\touput: %d\n", pipelines[i].commands[j].output_file);
 			printf("\t\tis_end: %d\n", pipelines[i].commands[j].is_end);
-			printf("\t\theredoc limit: %s\n", pipelines[i].commands[j].heredoc_limit);
+			k = 0;
+			printf("\t\theredoc limits: [");
+			while (pipelines[i].commands[j].heredoc_limits && pipelines[i].commands[j].heredoc_limits[k])
+			{
+				printf("%s ", pipelines[i].commands[j].heredoc_limits[k]);
+				k++;
+			}
+			printf("]\n");
 			printf("\t}\n");
 			j++;
 		}
@@ -120,7 +127,7 @@ t_pipeline	*get_line(t_pipeline *pipelines, char **env)
 		if (pipelines)
 		{
 			show_data(pipelines);
-			execution_global(pipelines);
+			// execution_global(pipelines);
 			free_pipelines(pipelines);
 		}
 		free(line);
@@ -144,7 +151,7 @@ int	main(int argc, char **argv, char **env)
 	hook_signals();
 	g_status = 0;
 	pipelines = get_line(pipelines, env);
-	rl_clear_history();
+	// rl_clear_history();
 	printf("exit\n");
 	return (0);
 }
