@@ -128,12 +128,12 @@ int	get_command(char **line, t_command *command)
 	command->output_file = 1;
 	if (get_arguments(line, command))
 		return (write(1, "5\n", 2), 1);	
-	if (command->arguments)
-	{
-		command->arguments = handle_widlcards(command->arguments);
-		if (file_or_dir_check(command->arguments[0]))
-			return (1);
-	}
+	// if (command->arguments)
+	// {
+	// 	command->arguments = handle_widlcards(command->arguments);
+	// 	if (file_or_dir_check(command->arguments[0]))
+	// 		return (1);
+	// }
 	*line += is_pipe(*line);
 	skip_spaces(line);
 	return (0);

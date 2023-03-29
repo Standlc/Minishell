@@ -55,6 +55,7 @@ char	**recursivity(char *env_var_value)
 	str_arr = ft_split(env_var_value, ' ');
 	if (!str_arr)
 		return (NULL);
+	free(env_var_value);
 	i = 0;
 	while (str_arr[i])
 	{
@@ -73,15 +74,20 @@ char	**handle_env_var(char **line, int is_inside_quotes)
 	env_var_name = get_env_var_name(line);
 	if (!env_var_name)
 		return (NULL);
+	printf("var name: %s\n", env_var_name);
 	if (env_var_name[0] == '?')
 		env_var_value = ft_itoa(g_status);
 	else
 		env_var_value = getenv_ms(env_var_name);
+	printf("var name: %s\n", env_var_value);
 	if (!env_var_value && errno == ENOMEM)
 		return (free(env_var_name), NULL);
+	if (!env_var_value)
+		return (ft_calloc(1, sizeof(char **)));
 	if (is_inside_quotes)
 		return (ft_split(env_var_value, '\0'));
-	return (recursivity(env_var_value));
+	return (ft_split(env_var_value, ' '));
+	// return (recursivity(env_var_value));
 }
 
 char	**handle_quotes_copy(char **line, char quote_type)
@@ -101,9 +107,9 @@ char	**handle_quotes_copy(char **line, char quote_type)
 			if (!env_var_values)
 				return (free(quotes_str), NULL);
 			quotes_str[0] = strjoin_handler(quotes_str[0], env_var_values[0]);
-			if (!quotes_str)
-				return (free_str_arr(env_var_values), NULL);
 			free_str_arr(env_var_values);
+			if (!quotes_str[0])
+				return (NULL);
 		}
 		else if (add_char(line, quotes_str))
 			return (NULL);
@@ -124,18 +130,24 @@ char	**get_line_args(char **line)
 	{
 		if (is_env_var(*line, 0))
 		{
+			printf("var\n");
 			str_arr = join_arr_strjoin(str_arr, handle_env_var(line, 0));
 			if (!str_arr)
 				return (NULL);
 		}
 		else if (is_quote(**line))
 		{
+			printf("quotes\n");
 			str_arr = join_arr_strjoin(str_arr, handle_quotes_copy(line, **line));
 			if (!str_arr)
 				return (NULL);
 		}
-		else if (add_char(line, str_arr))
+		else 
+		{
+			printf("char\n");
+			if (add_char(line, str_arr))
 			return (NULL);
+		}
 	}
 	skip_spaces(line);
 	return (str_arr);

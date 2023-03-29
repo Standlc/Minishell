@@ -88,8 +88,8 @@ char	**ft_split(char const *s, char c)
 	int				compteurdemot;
 	size_t			iandj[2];
 
-	if (!s)
-		return (ft_calloc(1, sizeof(char **)));
+	// if (!s)
+	// 	return (ft_calloc(1, sizeof(char **)));
 	compteurdemot = ft_compteurdemot(s, c);
 	split = malloc(sizeof(char *) * (compteurdemot + 1));
 	iandj[0] = 0;

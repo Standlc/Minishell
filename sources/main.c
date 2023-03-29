@@ -151,7 +151,7 @@ int	main(int argc, char **argv, char **env)
 	hook_signals();
 	g_status = 0;
 	pipelines = get_line(pipelines, env);
-	// rl_clear_history();
+	rl_clear_history();
 	printf("exit\n");
 	return (0);
 }

@@ -7,7 +7,8 @@ void	free_str_arr(char **str_arr)
 	i = 0;
 	while (str_arr && str_arr[i])
 	{
-		// free(str_arr[i]);
+		free(str_arr[i]);
+		// str_arr[i] = NULL;
 		i++;
 	}
 	if (str_arr)
