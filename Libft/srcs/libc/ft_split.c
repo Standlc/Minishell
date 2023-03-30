@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 12:58:51 by svan-de-          #+#    #+#             */
-/*   Updated: 2023/03/28 14:34:20 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/03/30 05:28:17 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,6 @@ char	**ft_split(char const *s, char c)
 	int				compteurdemot;
 	size_t			iandj[2];
 
-	// if (!s)
-	// 	return (ft_calloc(1, sizeof(char **)));
 	compteurdemot = ft_compteurdemot(s, c);
 	split = malloc(sizeof(char *) * (compteurdemot + 1));
 	iandj[0] = 0;

@@ -1,11 +1,11 @@
 SRC			=	main.c							parsing/parse_line.c parsing/redirections/heredoc.c \
 				parsing/parse_line_utils.c				close_program.c \
 				signals.c						parsing/print_error.c parsing/push_functions/push_str_arr.c \
-				parsing/redirections/get_redirections.c			parsing/syntax_check/syntax_check.c \
-				parsing/get_line_args.c 				parsing/is_functions/is_functions_1.c \
+				parsing/redirections/get_redirections.c			parsing/syntax/syntax_check.c parsing/line_methods/env_var.c \
+				parsing/line_methods/get_line_args.c parsing/line_methods/dup_word.c parsing/is_functions/is_functions_1.c parsing/ft_realloc.c \
 				parsing/is_functions/is_functions_2.c	parsing/redirections/get_redirections_utils.c \
-				parsing/syntax_check/check_syntax_utils.c 	parsing/syntax_check/check_parenthesis.c \
-				parsing/wildcards.c 						\
+				parsing/syntax/utils.c 	parsing/syntax/check_parenthesis.c \
+				parsing/wildcards/wildcards.c parsing/wildcards/utils.c 					parsing/heredocs/heredocs.c parsing/heredocs/heredocs_utils.c \
 				execution/execution.c execution/for_dup.c execution/parenthesis.c execution/execute_command.c\
 				execution/another.c execution/path.c execution/pipe.c execution/pipelines_steps.c\
 				execution/builtins/cd.c execution/builtins/echo.c execution/builtins/env.c execution/builtins/exit.c \

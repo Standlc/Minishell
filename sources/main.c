@@ -21,21 +21,13 @@ void	show_data(t_pipeline *pipelines)
 			printf("\t\targuments: [");
 			while (pipelines[i].commands[j].arguments && pipelines[i].commands[j].arguments[k])
 			{
-				printf("%s ", pipelines[i].commands[j].arguments[k]);
+				printf("%s, ", pipelines[i].commands[j].arguments[k]);
 				k++;
 			}
 			printf("]\n");
 			printf("\t\tinput: %d\n", pipelines[i].commands[j].input_file);
 			printf("\t\touput: %d\n", pipelines[i].commands[j].output_file);
 			printf("\t\tis_end: %d\n", pipelines[i].commands[j].is_end);
-			k = 0;
-			printf("\t\theredoc limits: [");
-			while (pipelines[i].commands[j].heredoc_limits && pipelines[i].commands[j].heredoc_limits[k])
-			{
-				printf("%s ", pipelines[i].commands[j].heredoc_limits[k]);
-				k++;
-			}
-			printf("]\n");
 			printf("\t}\n");
 			j++;
 		}
@@ -109,8 +101,9 @@ char	***environnement(char **new_env)
 // 	return (pipelines);
 // }
 
-t_pipeline	*get_line(t_pipeline *pipelines, char **env)
+int	get_line(t_pipeline *pipelines, char **env)
 {
+	int		*heredoc_fds;
 	char	*line;
 	char	**new_env;
 
@@ -123,17 +116,18 @@ t_pipeline	*get_line(t_pipeline *pipelines, char **env)
 	{
 		if (*line)
 			add_history(line);
-		pipelines = parse_line(line);
-		if (pipelines)
-		{
-			show_data(pipelines);
-			// execution_global(pipelines);
-			free_pipelines(pipelines);
-		}
-		free(line);
+		heredoc_fds = handle_heredocs(line, heredoc_fds);
+		if (!heredoc_fds)
+			return (free(line), 1);
+		pipelines = parse_line(line, heredoc_fds);
+		if (!pipelines)
+			return (1);
+		show_data(pipelines);
+		// execution_global(pipelines);
+		free_pipelines(pipelines);
 		line = readline(PROMPT);
 	}
-	return (pipelines);
+	return (0);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -150,7 +144,8 @@ int	main(int argc, char **argv, char **env)
 	}
 	hook_signals();
 	g_status = 0;
-	pipelines = get_line(pipelines, env);
+	if (get_line(pipelines, env))
+		return (1);
 	rl_clear_history();
 	printf("exit\n");
 	return (0);

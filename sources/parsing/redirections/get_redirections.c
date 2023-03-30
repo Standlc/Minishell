@@ -40,7 +40,7 @@ int	handle_redirections(char **line, t_command *command, int f(t_command *, char
 	return (free_str_arr(file_names), 0);
 }
 
-int	get_redirections(char **line, t_command *command)
+int	get_redirections(char **line, t_command *command, int *heredoc_fds)
 {
 	int		redirect_type;
 
@@ -55,7 +55,7 @@ int	get_redirections(char **line, t_command *command)
 			if (handle_redirections(line, command, get_red_function(redirect_type)))
 				return (1);
 		}
-		else if (handle_heredoc(line, command))
+		else if (assign_heredoc_fd(line, command, heredoc_fds))
 			return (1);
 		skip_spaces(line);
 	}

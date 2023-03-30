@@ -43,39 +43,42 @@ int	file_or_dir_check(char *str)
 	return (print_error("no such file or directory: ", str), 1);
 }
 
-void	realloc_memcpy(void *dest, void *src, int data_type, int index)
+int	get_pipeline_commands_amount(char *line)
 {
-	if (data_type == PIPELINES)
-		((t_pipeline *)dest)[index] = ((t_pipeline *)src)[index];
-	else if (data_type == COMMANDS)
-		((t_command *)dest)[index] = ((t_command *)src)[index];
-	else
-		((char **)dest)[index] = ((char **)src)[index];
-}
+	int	count;
 
-int	ft_sizeof(int data_type)
-{
-	if (data_type == PIPELINES)
-		return (sizeof(t_pipeline));
-	if (data_type == COMMANDS)
-		return (sizeof(t_command));
-	return (sizeof(char **));
-}
-
-void	*ft_realloc(void *src, int prev_size, int new_size, int data_type)
-{
-	void	*res;
-	int		i;
-
-	res = ft_calloc(new_size, ft_sizeof(data_type));
-	if (!res || !src)
-		return (res);
-	i = 0;
-	while (i < prev_size)
+	count = 0;
+	while (*line && !is_operator(line))
 	{
-		realloc_memcpy(res, src, data_type, i);
-		i++;
+		while (*line && !is_operator(line) && !is_pipe(line))
+			line++;
+		if (is_pipe(line))
+		{
+			line += 1;
+			count++;
+		}
+		else if (is_operator(line) || !*line)
+			break ;
 	}
-	free(src);
-	return (res);
+	// printf("	%d\n", count + 1);
+	return (count + 1);
+}
+
+int	get_pipelines_amount(char *line)
+{
+	int	count;
+
+	count = 0;
+	while (*line)
+	{
+		while (*line && !is_operator(line))
+			line++;
+		if (is_operator(line))
+		{
+			line += 2;
+			count++;
+		}
+	}
+	// printf("%d\n", count + 1);
+	return (count + 1);
 }

@@ -1,25 +1,5 @@
 #include "minishell.h"
 
-int	is_wildcard(char *str)
-{
-	int	has_wildcard;
-	int	slash_count;
-
-	has_wildcard = 0;
-	slash_count = 0;
-	if (!ft_strncmp(str, "./", 2))
-		str += 2;
-	while (*str)
-	{
-		has_wildcard += *str == '*';
-		slash_count += *str == '/';
-		if (slash_count && *str && *str != '/')
-			return (0);
-		str++;
-	}
-	return (has_wildcard);
-}
-
 char	**insert_str_arr_at_index(char **arr1, char **arr2, int index)
 {
 	char	**res;
@@ -105,7 +85,7 @@ int	str_arr_size(char **arr)
 	return (i);
 }
 
-int	get_arguments(char **line, t_command *command)
+int	get_arguments(char **line, t_command *command, int *heredoc_fds)
 {
 	while (**line && !is_pipe(*line) && !is_operator(*line) && !is_parenthesis(*line))
 	{
@@ -115,25 +95,25 @@ int	get_arguments(char **line, t_command *command)
 			if (!command->arguments)
 				return (write(1, "7\n", 2), 1);
 		}
-		else if (get_redirections(line, command))
+		else if (get_redirections(line, command, heredoc_fds))
 				return (write(1, "6\n", 2), 1);
 		skip_spaces(line);
 	}
 	return (0);
 }
 
-int	get_command(char **line, t_command *command)
+int	get_command(char **line, t_command *command, int *heredoc_fds)
 {
 	command->is_end = 1;
 	command->output_file = 1;
-	if (get_arguments(line, command))
+	if (get_arguments(line, command, heredoc_fds))
 		return (write(1, "5\n", 2), 1);	
-	// if (command->arguments)
-	// {
-	// 	command->arguments = handle_widlcards(command->arguments);
-	// 	if (file_or_dir_check(command->arguments[0]))
-	// 		return (1);
-	// }
+	if (command->arguments)
+	{
+		command->arguments = handle_widlcards(command->arguments);
+		if (file_or_dir_check(command->arguments[0]))
+			return (1);
+	}
 	*line += is_pipe(*line);
 	skip_spaces(line);
 	return (0);
@@ -153,19 +133,19 @@ void	handle_parenthesis(char **line, t_pipeline *pipeline, char parenthesis_type
 	}
 }
 
-int	get_pipeline(char **line, t_pipeline *pipeline)
+int	get_pipeline(char **line, t_pipeline *pipeline, int *heredoc_fds)
 {
 	int	i;
 
 	get_operator(line, pipeline);
 	handle_parenthesis(line, pipeline, '(', 1);
+	pipeline->commands = ft_calloc(get_pipeline_commands_amount(*line) + 1, sizeof(t_command));
+	if (!pipeline->commands)
+		return (1);
 	i = 0;
 	while (**line && !is_operator(*line))
 	{
-		pipeline->commands = ft_realloc(pipeline->commands, i, i + 2, COMMANDS);
-		if (!pipeline->commands)
-			return (write(1, "1\n", 2), 1);
-		if (get_command(line, pipeline->commands + i))
+		if (get_command(line, pipeline->commands + i, heredoc_fds))
 			return (write(1, "2\n", 2), 1);
 		handle_parenthesis(line, pipeline, ')', -1);
 		i++;
@@ -173,25 +153,26 @@ int	get_pipeline(char **line, t_pipeline *pipeline)
 	return (0);
 }
 
-t_pipeline	*parse_line(char *line)
+t_pipeline	*parse_line(char *line, int *heredoc_fds)
 {
+	char		*line_ptr;
 	t_pipeline	*pipelines;
 	int			i;
 
-	if (!line || check_syntax(line, 0))
-		return (NULL);
-	pipelines = NULL;
+	line_ptr = line;
+	if (check_syntax(line, 0))
+		return (ft_calloc(0, sizeof(t_pipeline)));
+	pipelines = ft_calloc(get_pipelines_amount(line) + 1, sizeof(t_pipeline));
+	if (!pipelines)
+		return (free(line_ptr), NULL);
 	i = 0;
 	while (*line)
 	{
-		pipelines = ft_realloc(pipelines, i, i + 2, PIPELINES);
-		if (!pipelines)
-			return (NULL);
-		if (get_pipeline(&line, pipelines + i))
-			return (free_pipelines(pipelines), pipelines = NULL, NULL);
+		if (get_pipeline(&line, pipelines + i, heredoc_fds))
+			return (free(line_ptr), free(heredoc_fds), free_pipelines(pipelines), NULL);
 		i++;
 	}
-	return (pipelines);
+	return (free(heredoc_fds), pipelines);
 }
 
 // :
@@ -211,18 +192,3 @@ t_pipeline	*parse_line(char *line)
 // com arg"$USER" -> argstan
 // a"$USER"a"$USER" -> astanastan
 // $USER"$USER"$USER -> stanstanstan
-
-// int	get_command(char **line, t_command *command)
-// {
-// 	command->is_end = 1;
-// 	if (get_redirections(line, command))
-// 		return (write(1, "3\n", 2), 1);
-// 	command->name = get_line_args(line);
-// 	if ((!command->name && errno == ENOMEM) || is_directory(command->name))
-// 		return (write(1, "4\n", 2), 1);
-// 	if (get_arguments(line, command))
-// 		return (write(1, "5\n", 2), 1);
-// 	*line += is_pipe(*line);
-// 	skip_spaces(line);
-// 	return (0);
-// }

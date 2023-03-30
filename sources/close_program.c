@@ -8,7 +8,6 @@ void	free_str_arr(char **str_arr)
 	while (str_arr && str_arr[i])
 	{
 		free(str_arr[i]);
-		// str_arr[i] = NULL;
 		i++;
 	}
 	if (str_arr)
@@ -30,7 +29,6 @@ void	free_pipelines(t_pipeline *pipelines)
 				close(pipelines[i].commands[j].input_file);
 			if (pipelines[i].commands[j].output_file > 2)
 				close(pipelines[i].commands[j].output_file);
-			free_str_arr(pipelines[i].commands[j].heredoc_limits);
 			j++;
 		}
 		free(pipelines[i].commands);

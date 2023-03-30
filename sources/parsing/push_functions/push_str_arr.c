@@ -10,9 +10,7 @@ char	**join_arr_strjoin(char **arr1, char **arr2)
 		return (NULL);
 	res = ft_calloc(str_arr_size(arr1) + str_arr_size(arr2) + 2, sizeof(char **));
 	if (!res)
-		return (
-			// free_str_arr(arr1), free_str_arr(arr2),
-			 NULL);
+		return (free_str_arr(arr1), free_str_arr(arr2), NULL);
 	i = 0;
 	while (arr1 && arr1[i + 1])
 	{
@@ -21,18 +19,14 @@ char	**join_arr_strjoin(char **arr1, char **arr2)
 	}
 	res[i] = ft_strjoin(arr1[i], arr2[0]);
 	if (!res[i])
-		return (
-			// free_str_arr(arr1), free_str_arr(arr2),
-			 NULL);
+		return (free(arr1), free_str_arr(arr2), NULL);
 	j = 1;
 	while (arr2 && arr2[0] && arr2[j])
 	{
 		res[j + i] = arr2[j];
 		j++;
 	}
-	return (
-		// free_str_arr(arr1), free_str_arr(arr2),
-		 res);
+	return (free(arr1), free(arr2), res);
 }
 
 char	**join_str_arr(char **dest, char **arr2)
@@ -45,12 +39,12 @@ char	**join_str_arr(char **dest, char **arr2)
 	dest_size = str_arr_size(dest);
 	dest = ft_realloc(dest, dest_size, dest_size + str_arr_size(arr2) + 2, STR_ARR);
 	if (!dest)
-		return (NULL);
+		return (free_str_arr(arr2), NULL);
 	i = 0;
 	while (arr2[0] && arr2[i])
 	{
 		dest[dest_size + i] = arr2[i];
 		i++;
 	}
-	return (dest);
+	return (free(arr2), dest);
 }

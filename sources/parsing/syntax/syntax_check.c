@@ -1,27 +1,5 @@
 #include "minishell.h"
 
-// int	check_embeded_parenthesis(char *line)
-// {
-// 	while (*line && !is_parenthesis(line) && !is_operator(line))
-// 		line += 1;
-// 	if (*line == '(')
-// 	{
-// 		line += 1;
-// 		while (*line && !is_parenthesis(line) && !is_operator(line))
-// 			line += 1;
-// 		if (*line == ')')
-// 		{
-// 			line += 1;
-// 			while (*line && !is_parenthesis(line) && !is_operator(line))
-// 				line += 1;
-// 			return (*line == ')');
-// 		}
-// 	}
-// 	return (0);
-// }
-
-//AMBIGOUS REDIRECT
-
 int	check_syntax(char *line, int is_inside_parenthesis)
 {
 	static char	*line_ptr_cpy = NULL;
@@ -33,7 +11,7 @@ int	check_syntax(char *line, int is_inside_parenthesis)
 		return (print_error("0 unexpected token error: ", line), 1);
 	while (*line && (*line != ')' || !is_inside_parenthesis))
 	{
-		if (check_missing_quotes(&line))
+		if (check_quotes(&line))
 			return (print_error("1 syntax error: missing quote", NULL), 1);
 		if (check_redirection_error(&line))
 			return (print_error("3 unexpected token error: ", line), 1);

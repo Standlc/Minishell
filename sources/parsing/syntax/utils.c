@@ -8,7 +8,18 @@ void	skip_special_symbol(char **line)
 		*line += 1;
 }
 
-int	check_missing_quotes(char **line)
+int	check_for_missing_quote(char *line)
+{
+	while (*line)
+	{
+		if (is_quote(*line) && check_quotes(&line))
+			return (1);
+		line++;
+	}
+	return (0);
+}
+
+int	check_quotes(char **line)
 {
 	char	quote_type;
 
