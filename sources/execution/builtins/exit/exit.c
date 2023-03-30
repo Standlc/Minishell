@@ -109,7 +109,6 @@ void	exit_ms(t_command *command)
 	int		i;
 
 	i = 0;
-	close_file_pipe(command);
 	value = g_status;
 	while (command->arguments[i])
 		i++;

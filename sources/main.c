@@ -142,6 +142,7 @@ t_pipeline	*get_line(t_pipeline *pipelines, char **env)
 		free(line);
 		line = readline(PROMPT);
 	}
+	free_dup(new_env);
 	return (pipelines);
 }
 

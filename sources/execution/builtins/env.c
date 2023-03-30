@@ -19,7 +19,6 @@ void	env_ms(t_command *command)
 
 	g_status = 0;
 	i = -1;
-	close_file_pipe(command);
 	if (command->arguments[1] && directory_exist(command->arguments[1]))
 		return (ft_putstr_fd("env: Permission denied\n", 2), g_status = 126, exit(g_status));
 	if (command->arguments[1])
@@ -32,5 +31,4 @@ void	env_ms(t_command *command)
 		ft_putstr_fd(new_env[i], command->output_file);
 		ft_putchar_fd('\n', command->output_file);
 	}
-	close_files(command->output_file);
 }

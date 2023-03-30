@@ -22,7 +22,7 @@ void	pipeline_start(t_command *commands, int fd[2])
 	else
 	{
 		commands->position = 2;
-		commands->file_close = -1;
+		commands->close_pipe = -1;
 	}
 }
 
@@ -36,7 +36,13 @@ int	fork_command(t_command *command, int i)
 		if (pid == -1)
 			return (g_status = errno, perror("minishell: fork"), 1);
 		if (pid == 0)
-			return (execution_command(command), 2);
+		{
+			execution_command(command);
+			close_file(command->output_file);
+			close_file(command->input_file);
+			close_file(command->close_pipe);
+			return (2);
+		}
 	}
 	else
 		execution_env(command);

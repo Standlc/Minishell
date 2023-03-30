@@ -49,7 +49,7 @@ typedef struct s_command
 	int		output_file;
 	char	*heredoc_limit;
 	int		position;
-	int		file_close[2];
+	int		close_pipe;
 	int		is_end;
 }				t_command;
 
@@ -134,7 +134,7 @@ void	cd_ms(t_command *command);
 
 int		validate_option(t_command *command, int *i);
 void	validate_n(t_command *command, int *i);
-void	close_files(int fd_out);
+void	close_file(int fd_out);
 void	echo_ms(t_command *command);
 
 void	free_split(char **split);
@@ -143,7 +143,6 @@ char	*good_path(char **paths, char *fill_path, char *final_path, char *cmd);
 char	*find_path(char	*env, char *cmd);
 char	*path_for_execve(char **env, char *cmd);
 
-void	close_file_pipe(t_command *command);
 void	duplicate_for_streams(t_command *command);
 int		valide_argument_for_path(char *argument);
 void	another_command(t_command *command);

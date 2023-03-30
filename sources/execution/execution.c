@@ -17,7 +17,13 @@ void	execution_pipeline(t_command *commands)
 	while (commands[i].is_end)
 	{
 		if (i == 1)
+		{
 			i = until_last_command(commands, fd);
+			if (i == -1)
+				return (commands->is_end = 2, (void)0);
+			if (commands[i + 1].is_end)
+				return (end_of_pipeline(commands, fd, i));
+		}
 		flag = fork_command(&commands[i], i);
 		if (flag == 1)
 			return (end_of_pipeline(commands, fd, i));
