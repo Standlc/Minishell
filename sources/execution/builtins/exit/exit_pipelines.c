@@ -11,11 +11,8 @@ void	exit_pipeline(t_pipeline *pipelines, int i)
 	command = pipelines[i].commands;
 	command->position = 2;
 	ft_putstr_fd("exit\n", 1);
-	if (!exit_ms(command))
-	{
-		free_dup(env);
-		free_pipelines(pipelines);
-		rl_clear_history();
-		exit(g_status);
-	}
+	free_dup(env);
+	free_pipelines(pipelines);
+	rl_clear_history();
+	exit(g_status);
 }

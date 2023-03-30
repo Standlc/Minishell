@@ -79,8 +79,6 @@ void	export_ms(t_command *command)
 	complete_env(new, command->arguments, i);
 	if (!new)
 		return (g_status = 12, ft_putstr_fd(MEM, 2));
-	//for (int o = 0; new[o]; o++)
-	//	printf("%s\n", new[o]);
 	tmp = env;
 	(void)environnement(new);
 	free_dup(tmp);

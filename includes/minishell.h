@@ -49,7 +49,7 @@ typedef struct s_command
 	int		output_file;
 	char	*heredoc_limit;
 	int		position;
-	int		file_close;
+	int		file_close[2];
 	int		is_end;
 }				t_command;
 
@@ -107,7 +107,7 @@ int		exit_max(char *value, char *max);
 int		exit_min(char *value, char *min);
 int		strcmp_for_exit(char *value, char *min, char *max);
 long	ft_atoi_exit(char *str);
-int		exit_ms(t_command *command);
+void	exit_ms(t_command *command);
 
 int		directory_exist(char *dir);
 void	env_ms(t_command *command);
@@ -148,7 +148,7 @@ void	duplicate_for_streams(t_command *command);
 int		valide_argument_for_path(char *argument);
 void	another_command(t_command *command);
 
-int		execution_env(t_command *command);
+void	execution_env(t_command *command);
 void	execution_command(t_command *command);
 
 void	set_position(t_command *commands);
@@ -157,7 +157,7 @@ void	set_files(t_command *command, int link[2], int fd);
 int		multi_pipes(t_command *commands, int *fd);
 
 void	pipeline_start(t_command *commands, int fd[2]);
-int		fork_command(t_command *command);
+int		fork_command(t_command *command, int i);
 int		until_last_command(t_command *commands, int fd[2]);
 int		is_child(t_command command);
 void	end_of_pipeline(t_command *commands, int fd[2], int end);

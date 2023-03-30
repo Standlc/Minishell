@@ -21,9 +21,9 @@ void	env_ms(t_command *command)
 	i = -1;
 	close_file_pipe(command);
 	if (command->arguments[1] && directory_exist(command->arguments[1]))
-		return (ft_putstr_fd("Permission denied\n", 2), g_status = 126, exit(g_status));
+		return (ft_putstr_fd("env: Permission denied\n", 2), g_status = 126, exit(g_status));
 	if (command->arguments[1])
-		return (ft_putstr_fd("No such directory\n", 2), g_status = 127, exit(g_status));
+		return (ft_putstr_fd("env: No such directory\n", 2), g_status = 127, exit(g_status));
 	new_env = *(environnement(NULL));
 	if (!new_env)
 		return (exit(g_status));
@@ -33,5 +33,4 @@ void	env_ms(t_command *command)
 		ft_putchar_fd('\n', command->output_file);
 	}
 	close_files(command->output_file);
-	exit(g_status);
 }

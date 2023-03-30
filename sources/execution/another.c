@@ -4,8 +4,8 @@ extern int	g_status;
 
 void	close_file_pipe(t_command *command)
 {
-	printf("%s : close file : %d\n", command->arguments[0] ,command->file_close);
-	if (command->file_close != -1)
+	if (command->file_close != -1)// && command->file_close != 0
+		//&& command->file_close != 1 && command->file_close != 2)
 		if (close(command->file_close) == -1)
 			perror("minishell: close");
 }

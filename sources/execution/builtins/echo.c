@@ -41,12 +41,12 @@ void	validate_n(t_command *command, int *i)
 	}
 }
 
-void	close_files(int fd_out)
+void	close_files(int fd)
 {
-	if (fd_out == 1 || fd_out == 2 || fd_out == 0)
+	if (fd == 0 || fd == 1 || fd == 2)
 		return ;
-	if (close(fd_out) == -1)
-		exit(g_status);
+	if (close(fd) == -1)
+		perror("minishell: close");
 }
 
 void	echo_ms(t_command *command)
@@ -56,8 +56,6 @@ void	echo_ms(t_command *command)
 
 	i = 1;
 	g_status = 0;
-	printf("%d\n", command->file_close);
-	close(command->input_file);
 	close_file_pipe(command);
 	option = validate_flag(command, &i);
 	if (option == 1)
@@ -72,5 +70,5 @@ void	echo_ms(t_command *command)
 	if (option == 0)
 		ft_putchar_fd('\n', command->output_file);
 	close_files(command->output_file);
-	exit(g_status);
+	close_files(command->input_file);
 }
