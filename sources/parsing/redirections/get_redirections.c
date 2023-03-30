@@ -40,7 +40,7 @@ int	handle_redirections(char **line, t_command *command, int f(t_command *, char
 	return (free_str_arr(file_names), 0);
 }
 
-int	get_redirections(char **line, t_command *command, int *heredoc_fds)
+int	get_redirections(char **line, t_command *command, int **heredoc_fds)
 {
 	int		redirect_type;
 

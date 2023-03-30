@@ -32,31 +32,12 @@ char	*get_env_var_name(char **line)
 	return (env_var_name);
 }
 
-char	**var_concatenation(char **split)
-{
-	char	**env_var_values;
-	int		i;
-
-	env_var_values = ft_calloc(1, sizeof(char **));
-	if (!env_var_values)
-		return (NULL);
-	i = 0;
-	while (split[i])
-	{
-		env_var_values = join_str_arr(env_var_values, get_line_args(split + i));
-		if (!env_var_values)
-			return (NULL);
-		i++;
-	}
-	return (env_var_values);
-}
-
 char	**split_handler(char *s, char c)
 {
 	char	**split;
 
 	if (!s)
-		return (ft_calloc(1, sizeof(char **)));
+		return (ft_calloc(2, sizeof(char **)));
 	split = ft_split(s, c);
 	free(s);
 	return (split);
@@ -75,9 +56,34 @@ char	**handle_env_var(char **line, int is_inside_quotes)
 		env_var_value = ft_itoa(g_status);
 	else
 		env_var_value = getenv_ms(env_var_name);
+	free(env_var_name);
 	if (!env_var_value && errno == ENOMEM)
-		return (free(env_var_name), NULL);
+		return (NULL);
 	if (is_inside_quotes)
 		return (split_handler(env_var_value, '\0'));
-	return (var_concatenation(split_handler(env_var_value, ' ')));
+	return (split_handler(env_var_value, ' '));
 }
+
+// char	**var_concatenation(char **split)
+// {
+// 	char	*ptr_cpy;
+// 	char	**env_var_values;
+// 	int		i;
+
+// 	if (!split)
+// 		return (NULL);
+// 	env_var_values = ft_calloc(2, sizeof(char **));
+// 	if (!env_var_values)
+// 		return (free_str_arr(split), NULL);
+// 	i = 0;
+// 	while (split[i])
+// 	{
+// 		ptr_cpy = split[i];
+// 		env_var_values = join_str_arr(env_var_values, get_line_args(&ptr_cpy));
+// 		if (!env_var_values)
+// 			return (NULL);
+// 		i++;
+// 	}
+// 	free_str_arr(split);
+// 	return (env_var_values);
+// }

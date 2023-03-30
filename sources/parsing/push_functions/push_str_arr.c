@@ -17,11 +17,12 @@ char	**join_arr_strjoin(char **arr1, char **arr2)
 		res[i] = arr1[i];
 		i++;
 	}
-	res[i] = ft_strjoin(arr1[i], arr2[0]);
+	res[i] = strjoin_handler(arr1[i], arr2[0]);
+	free(arr2[0]);
 	if (!res[i])
 		return (free(arr1), free_str_arr(arr2), NULL);
 	j = 1;
-	while (arr2 && arr2[0] && arr2[j])
+	while (arr2 && arr2[j])
 	{
 		res[j + i] = arr2[j];
 		j++;

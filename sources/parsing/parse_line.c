@@ -85,7 +85,7 @@ int	str_arr_size(char **arr)
 	return (i);
 }
 
-int	get_arguments(char **line, t_command *command, int *heredoc_fds)
+int	get_arguments(char **line, t_command *command, int **heredoc_fds)
 {
 	while (**line && !is_pipe(*line) && !is_operator(*line) && !is_parenthesis(*line))
 	{
@@ -102,7 +102,7 @@ int	get_arguments(char **line, t_command *command, int *heredoc_fds)
 	return (0);
 }
 
-int	get_command(char **line, t_command *command, int *heredoc_fds)
+int	get_command(char **line, t_command *command, int **heredoc_fds)
 {
 	command->is_end = 1;
 	command->output_file = 1;
@@ -133,7 +133,7 @@ void	handle_parenthesis(char **line, t_pipeline *pipeline, char parenthesis_type
 	}
 }
 
-int	get_pipeline(char **line, t_pipeline *pipeline, int *heredoc_fds)
+int	get_pipeline(char **line, t_pipeline *pipeline, int **heredoc_fds)
 {
 	int	i;
 
@@ -161,18 +161,18 @@ t_pipeline	*parse_line(char *line, int *heredoc_fds)
 
 	line_ptr = line;
 	if (check_syntax(line, 0))
-		return (ft_calloc(0, sizeof(t_pipeline)));
+		return (ft_calloc(1, sizeof(t_pipeline)));
 	pipelines = ft_calloc(get_pipelines_amount(line) + 1, sizeof(t_pipeline));
 	if (!pipelines)
 		return (free(line_ptr), NULL);
 	i = 0;
 	while (*line)
 	{
-		if (get_pipeline(&line, pipelines + i, heredoc_fds))
-			return (free(line_ptr), free(heredoc_fds), free_pipelines(pipelines), NULL);
+		if (get_pipeline(&line, pipelines + i, &heredoc_fds))
+			return (free(line_ptr), free_pipelines(pipelines), NULL);
 		i++;
 	}
-	return (free(heredoc_fds), pipelines);
+	return (free(line_ptr), pipelines);
 }
 
 // :

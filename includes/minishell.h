@@ -100,12 +100,12 @@ int			is_wildcard(char *str);
 int			is_heredoc(char *line);
 int	is_directory(char *file);
 
-int			get_redirections(char **line, t_command *command, int *heredoc_fds);
+int			get_redirections(char **line, t_command *command, int **heredoc_fds);
 int			handle_simple_right_redirection(t_command *command, char *file);
 int			handle_simple_left_redirection(t_command *command, char *file);
 int			handle_double_right_redirection(t_command *command, char *file);
 
-int			assign_heredoc_fd(char **line, t_command *command, int *heredoc_fds);
+int			assign_heredoc_fd(char **line, t_command *command, int **heredoc_fds);
 char	*dup_line_word(char **line);
 
 void		skip_spaces(char **line);

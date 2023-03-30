@@ -10,11 +10,15 @@ void	skip_special_symbol(char **line)
 
 int	check_for_missing_quote(char *line)
 {
-	while (*line)
+	while (line && *line)
 	{
-		if (is_quote(*line) && check_quotes(&line))
-			return (1);
-		line++;
+		if (is_quote(*line))
+		{
+			if (check_quotes(&line))
+				return (1);
+		}
+		else
+			line++;
 	}
 	return (0);
 }

@@ -120,6 +120,7 @@ int	get_line(t_pipeline *pipelines, char **env)
 		if (!heredoc_fds)
 			return (free(line), 1);
 		pipelines = parse_line(line, heredoc_fds);
+		free(heredoc_fds);
 		if (!pipelines)
 			return (1);
 		show_data(pipelines);
@@ -127,6 +128,7 @@ int	get_line(t_pipeline *pipelines, char **env)
 		free_pipelines(pipelines);
 		line = readline(PROMPT);
 	}
+	free_dup(new_env);
 	return (0);
 }
 

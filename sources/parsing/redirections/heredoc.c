@@ -1,17 +1,19 @@
 #include "minishell.h"
 
-int	assign_heredoc_fd(char **line, t_command *command, int *heredoc_fds)
+int	assign_heredoc_fd(char **line, t_command *command, int **heredoc_fds)
 {
 	char		*heredoc_limit;
 	static int	i = 0;
 
 	if (command->input_file > 2)
 		close(command->input_file);
-	command->input_file = heredoc_fds[i];
+	command->input_file = **heredoc_fds;
+	*heredoc_fds += 1;
 	heredoc_limit = NULL;
 	heredoc_limit = get_heredoc_limit(line, heredoc_limit);
 	if (!heredoc_limit)
 		return (1);
+	free(heredoc_limit);
 	i++;
 	return (0);
 }
