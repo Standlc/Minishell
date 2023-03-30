@@ -47,3 +47,5 @@ int	*handle_heredocs(char *line, int *heredoc_fds)
 	heredoc_fds = do_the_heredoc(heredoc_fds, limits);
 	return (free_str_arr(limits), heredoc_fds);
 }
+
+// HEREDOCS INSIDE QUOTES

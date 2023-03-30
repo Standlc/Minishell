@@ -2,6 +2,7 @@
 # define MINISHELL_H
 
 # define PROMPT	"➜  minishell $> "
+# define MEM "minishell: Cannot allocate memory\n"
 
 # include <signal.h>
 # include <unistd.h>
@@ -48,7 +49,7 @@ typedef struct s_command
 	int		input_file;
 	int		output_file;
 	int		position;
-	int		file_close;
+	int		close_pipe;
 	int		is_end;
 }				t_command;
 
@@ -128,7 +129,7 @@ void		free_str_arr(char **str_arr);
 int			hook_signals(void);
 
 // EXECUTION
-
+void	exit_pipeline(t_pipeline *pipelines, int i);
 int		exit_max(char *value, char *max);
 int		exit_min(char *value, char *min);
 int		strcmp_for_exit(char *value, char *min, char *max);
@@ -160,7 +161,7 @@ void	cd_ms(t_command *command);
 
 int		validate_option(t_command *command, int *i);
 void	validate_n(t_command *command, int *i);
-void	close_files(int fd_out);
+void	close_file(int fd_out);
 void	echo_ms(t_command *command);
 
 void	free_split(char **split);
@@ -170,9 +171,10 @@ char	*find_path(char	*env, char *cmd);
 char	*path_for_execve(char **env, char *cmd);
 
 void	duplicate_for_streams(t_command *command);
+int		valide_argument_for_path(char *argument);
 void	another_command(t_command *command);
 
-int		execution_env(t_command *command);
+void	execution_env(t_command *command);
 void	execution_command(t_command *command);
 
 void	set_position(t_command *commands);
@@ -181,12 +183,15 @@ void	set_files(t_command *command, int link[2], int fd);
 int		multi_pipes(t_command *commands, int *fd);
 
 void	pipeline_start(t_command *commands, int fd[2]);
-void	fork_command(t_command *command);
+int		fork_command(t_command *command, int i);
 int		until_last_command(t_command *commands, int fd[2]);
 int		is_child(t_command command);
-void	end_of_pipeline(t_command *commands, int fd[2]);
+void	end_of_pipeline(t_command *commands, int fd[2], int end);
 
 void	parenthesis(t_pipeline *pipelines, int *index);
+
+// void	fill_here_doc(t_command command);
+// void	check_here_doc(t_pipeline *pipelines);
 
 void	execution_pipeline(t_command *commands);
 int		check_last_status(t_pipeline last);

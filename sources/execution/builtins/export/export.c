@@ -75,12 +75,10 @@ void	export_ms(t_command *command)
 		i++;
 	new = new_env(env, command->arguments);
 	if (!new)
-		return (ft_putstr_fd("Cannot allocate memory\n", 2), g_status = 12, (void)0);
+		return (g_status = 12, ft_putstr_fd(MEM, 2));
 	complete_env(new, command->arguments, i);
 	if (!new)
-		return (ft_putstr_fd("Cannot allocate memory\n", 2), g_status = 12, (void)0);
-	//for (int o = 0; new[o]; o++)
-	//	printf("%s\n", new[o]);
+		return (g_status = 12, ft_putstr_fd(MEM, 2));
 	tmp = env;
 	(void)environnement(new);
 	free_dup(tmp);

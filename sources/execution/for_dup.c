@@ -1,4 +1,4 @@
-#include <minishell.h>
+#include "minishell.h"
 
 extern int	g_status;
 
@@ -36,14 +36,14 @@ char	**duplicate_bigarray(char **bigarray)
 	i = 0;
 	dup_bigarray = malloc(sizeof(char *) * (bigarray_len(bigarray) + 1));
 	if (!dup_bigarray)
-		return (ft_putstr_fd("Cannot allocate memory\n", 2),
+		return (ft_putstr_fd(MEM, 2),
 			g_status = 12, NULL);
 	while (bigarray[i])
 	{
 		dup_bigarray[i] = ft_strdup(bigarray[i]);
 		if (!dup_bigarray[i])
 			return (free_dup(dup_bigarray),
-				ft_putstr_fd("Cannot allocate memory\n", 2),
+				ft_putstr_fd(MEM, 2),
 				g_status = 12, NULL);
 		i++;
 	}

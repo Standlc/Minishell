@@ -7,7 +7,7 @@ int	validate_flag(t_command *command, int *i)
 	int	j;
 
 	j = 0;
-	if (!strncmp(command->arguments[*i], "-n", 2))
+	if (command->arguments[*i] && !strncmp(command->arguments[*i], "-n", 2))
 	{
 		j++;
 		while (command->arguments[*i][j] && command->arguments[*i][j] == 'n')
@@ -41,12 +41,12 @@ void	validate_n(t_command *command, int *i)
 	}
 }
 
-void	close_files(int fd_out)
+void	close_file(int fd)
 {
-	if (fd_out == 1 || fd_out == 2 || fd_out == 0)
+	if (fd < 3)
 		return ;
-	if (close(fd_out) == -1)
-		exit(g_status);
+	if (close(fd) == -1)
+		perror("minishell: close");
 }
 
 void	echo_ms(t_command *command)
@@ -68,6 +68,4 @@ void	echo_ms(t_command *command)
 	}
 	if (option == 0)
 		ft_putchar_fd('\n', command->output_file);
-	close_files(command->output_file);
-	exit(g_status);
 }

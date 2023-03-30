@@ -9,7 +9,7 @@ void	replace_variable(char **new, char *argument, int lign)
 	tmp = new[lign];
 	new[lign] = ft_strdup(argument);
 	if (!new)
-		return (ft_putstr_fd("Cannot allocate memory\n", 2), g_status = 12, (void)0);
+		return (g_status = 12, ft_putstr_fd(MEM, 2));
 	free(tmp);
 }
 

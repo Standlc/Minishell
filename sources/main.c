@@ -47,6 +47,21 @@ char	***environnement(char **new_env)
 	return (&env);
 }
 
+// void	test_hd(t_pipeline *pipelines)
+// {
+// 	int fd;
+
+// 	fd = open("here_doc", O_WRONLY | O_CREAT | O_TRUNC, 0664);
+// 	unlink("here_doc");
+// 	printf("je passe : %d\n", fd);
+// 	pipelines->commands->input_file = fd;
+// 	pipelines->commands->heredoc_limit = malloc(sizeof(char *) * 4);
+// 	pipelines->commands->heredoc_limit[0] = "EOF";
+// 	pipelines->commands->heredoc_limit[1] = "fefe";
+// 	pipelines->commands->heredoc_limit[2] = "coco";
+// 	pipelines->commands->heredoc_limit[3] = NULL;
+// }
+
 // t_pipeline	*test(t_pipeline *pipelines)
 // {
 // 	pipelines = malloc(sizeof(t_pipeline) * 2);
@@ -118,14 +133,18 @@ int	get_line(t_pipeline *pipelines, char **env)
 			add_history(line);
 		heredoc_fds = handle_heredocs(line, heredoc_fds);
 		if (!heredoc_fds)
-			return (free(line), 1);
+		{
+			free(line);
+			break ;
+		}
 		pipelines = parse_line(line, heredoc_fds);
 		free(heredoc_fds);
-		if (!pipelines)
-			return (1);
-		show_data(pipelines);
-		// execution_global(pipelines);
-		free_pipelines(pipelines);
+		if (pipelines)
+		{
+			// show_data(pipelines);
+			execution_global(pipelines);
+			free_pipelines(pipelines);
+		}
 		line = readline(PROMPT);
 	}
 	free_dup(new_env);
@@ -146,8 +165,7 @@ int	main(int argc, char **argv, char **env)
 	}
 	hook_signals();
 	g_status = 0;
-	if (get_line(pipelines, env))
-		return (1);
+	get_line(pipelines, env);
 	rl_clear_history();
 	printf("exit\n");
 	return (0);

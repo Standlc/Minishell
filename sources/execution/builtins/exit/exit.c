@@ -1,4 +1,4 @@
-#include <minishell.h>
+#include "minishell.h"
 
 extern int	g_status;
 
@@ -110,9 +110,6 @@ void	exit_ms(t_command *command)
 
 	i = 0;
 	value = g_status;
-	if (command->position != 2)
-		return ;
-	ft_putstr_fd("exit\n", 1);
 	while (command->arguments[i])
 		i++;
 	if (i > 1)
@@ -121,12 +118,17 @@ void	exit_ms(t_command *command)
 		if (value == 0)
 			(value = ft_atoi_exit(command->arguments[1]));
 		else
-			(ft_putstr_fd("numeric argument required\n", command->output_file), g_status = 2, exit(g_status));
+		{
+			(ft_putstr_fd("exit: numeric argument required\n", command->output_file), g_status = 2);
+			if (command->position != 2)
+				exit(g_status);
+		}
 	}
 	if (i == 3)
-		return (ft_putstr_fd("too many arguments\n", command->output_file), g_status = 1, (void)0);
+		return (g_status = 1, ft_putstr_fd("exit: too many arguments\n", command->output_file));
 	if (i > 4)
-		return (ft_putstr_fd("too many arguments\n", command->output_file), g_status = 127, (void)0);
+		return (g_status = 127, ft_putstr_fd("exit: too many arguments\n", command->output_file));
 	g_status = value;
-	exit(g_status);
+	if (command->position != 2)
+		exit(g_status);
 }
