@@ -15,6 +15,7 @@ char	**insert_str_arr_at_index(char **arr1, char **arr2, int index)
 		res[i] = arr1[i];
 		i++;
 	}
+	free(arr1[i]);
 	j = 0;
 	while (arr2 && arr2[j])
 	{
@@ -27,13 +28,14 @@ char	**insert_str_arr_at_index(char **arr1, char **arr2, int index)
 		i++;
 		j++;
 	}
+	free(arr1);
 	return (res);
 }
 
 char	**replace_wildcard(char **args, char *wildcard, int *insert_index)
 {
 	int		wildcard_matches_size;
-	char	**wildcard_matches;
+	char	**wildcard_matches = NULL;
 
 	wildcard_matches = get_wildcard_matches(wildcard);
 	if (!wildcard_matches)
@@ -52,7 +54,9 @@ char	**handle_widlcards(char **args)
 	int		i;
 	int		insert_index;
 
-	new_args = args;
+	new_args = str_arr_dup(args);
+	if (!new_args)
+		return (free_str_arr(args), NULL);
 	insert_index = 0;
 	i = 0;
 	while (args[i])
@@ -63,7 +67,10 @@ char	**handle_widlcards(char **args)
 			if (!new_args)
 				return (NULL);
 		}
+		else
+			insert_index++;
 		i++;
 	}
+	free_str_arr(args);
 	return (new_args);
 }

@@ -23,20 +23,21 @@ int	ft_sizeof(int data_type)
 	return (sizeof(int *));
 }
 
-void	*ft_realloc(void *src, int prev_size, int new_size, int data_type)
+void	*ft_realloc(void *src, int prev_size, int new_size)
 {
 	void	*res;
 	int		i;
 
-	res = ft_calloc(new_size, ft_sizeof(data_type));
+	res = ft_calloc(new_size, sizeof(char **));
 	if (!res || !src)
 		return (res);
 	i = 0;
 	while (i < prev_size)
 	{
-		realloc_memcpy(res, src, data_type, i);
+		((char **)res)[i] = ((char **)src)[i];
 		i++;
 	}
+	// ((char **)res)[i] = NULL;
 	free(src);
 	return (res);
 }

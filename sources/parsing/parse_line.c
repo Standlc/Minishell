@@ -19,7 +19,6 @@ int	get_arguments(char **line, t_command *command, int **heredoc_fds)
 
 int	get_command(char **line, t_command *command, int **heredoc_fds)
 {
-	command->is_end = 1;
 	command->output_file = 1;
 	if (get_arguments(line, command, heredoc_fds))
 		return (1);
@@ -51,12 +50,15 @@ void	handle_parenthesis(char **line, t_pipeline *pipeline, char parenthesis_type
 int	get_pipeline(char **line, t_pipeline *pipeline, int **heredoc_fds)
 {
 	int	i;
+	int	command_amount;
 
 	get_operator(line, pipeline);
 	handle_parenthesis(line, pipeline, '(', 1);
-	pipeline->commands = ft_calloc(get_pipeline_commands_amount(*line) + 1, sizeof(t_command));
+	command_amount = get_pipeline_commands_amount(*line);
+	pipeline->commands = ft_calloc(command_amount + 1, sizeof(t_command));
 	if (!pipeline->commands)
 		return (1);
+	pipeline->commands[command_amount].is_end = 1;
 	i = 0;
 	while (**line && !is_operator(*line))
 	{
@@ -75,7 +77,7 @@ t_pipeline	*parse_line(char *line, int *heredoc_fds)
 	int			i;
 
 	line_ptr = line;
-	if (check_syntax(line, 0))
+	if (check_syntax(line))
 		return (ft_calloc(1, sizeof(t_pipeline)));
 	pipelines = ft_calloc(get_pipelines_amount(line) + 1, sizeof(t_pipeline));
 	if (!pipelines)

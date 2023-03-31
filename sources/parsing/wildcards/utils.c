@@ -10,6 +10,20 @@ int	is_matching_chunk(char *wildcard, char *file)
 	return (wildcard[i] == '*' || wildcard[i] == '\0');
 }
 
+int	stuff_stuff(char *wildcard, char *file)
+{
+	while (*file && !is_matching_chunk(wildcard, file))
+		file++;
+	while (*wildcard && *file && *wildcard == *file)
+	{
+		file++;
+		wildcard++;
+	}
+	if (*wildcard == '*')
+		return (compare(wildcard, file));
+	return (*file == *wildcard);
+}
+
 int	compare(char *wildcard, char *file)
 {
 	if (*wildcard == '*')
@@ -18,8 +32,9 @@ int	compare(char *wildcard, char *file)
 			wildcard++;
 		if (!*wildcard)
 			return (1);
-		while (*file && !is_matching_chunk(wildcard, file))
+		while (*file && !stuff_stuff(wildcard, file))
 			file++;
+		return (*file);
 	}
 	if (!is_matching_chunk(wildcard, file))
 		return (0);
@@ -30,7 +45,7 @@ int	compare(char *wildcard, char *file)
 	}
 	if (*wildcard == '*')
 		return (compare(wildcard, file));
-	return (*file == '\0' && *wildcard == '\0');
+	return (*file == *wildcard);
 }
 
 int	wildcard_matches_amount(char *curr_dir_wildcard, int is_directory_match)

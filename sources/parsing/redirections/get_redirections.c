@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+extern int	g_status;
+
 int	get_redirect_type(char **line)
 {
 	if (!ft_strncmp(*line, "<<", 2))
@@ -32,7 +34,10 @@ int	handle_redirections(char **line, t_command *command, int f(t_command *, char
 	if (file_names)
 		file_names = handle_widlcards(file_names);
 	if (str_arr_size(file_names) != 1)
-		return (print_error("ambiguous redirect: ", line_cpy), 1);
+	{
+		g_status = 1;
+		return (free_str_arr(file_names), print_error("ambiguous redirect: ", line_cpy), 1);
+	}
 	if (file_or_dir_check(file_names[0]))
 		return (1);
 	if (f(command, file_names[0]) == -1)

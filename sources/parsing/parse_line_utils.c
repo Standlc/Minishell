@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+extern int	g_status;
+
 void	skip_spaces(char **line)
 {
 	while (**line == ' ')
@@ -29,17 +31,20 @@ int	file_or_dir_check(char *str)
 	{
 		if (access(str, X_OK))
 		{
+			g_status = 126;
 			print_error("permission denied: ", str);
 			return (1);
 		}
 		directory = opendir(str);
 		if (directory)
 		{
+			g_status = 126;
 			print_error("is a directory: ", str);
 			return (closedir(directory), 1);
 		}
 		return (0);
 	}
+	g_status = 127;
 	return (print_error("no such file or directory: ", str), 1);
 }
 
@@ -60,7 +65,6 @@ int	get_pipeline_commands_amount(char *line)
 		else if (is_operator(line) || !*line)
 			break ;
 	}
-	// printf("	%d\n", count + 1);
 	return (count + 1);
 }
 
@@ -79,6 +83,5 @@ int	get_pipelines_amount(char *line)
 			count++;
 		}
 	}
-	// printf("%d\n", count + 1);
 	return (count + 1);
 }

@@ -10,6 +10,26 @@ int	str_arr_size(char **arr)
 	return (i);
 }
 
+char	**str_arr_dup(char **src)
+{
+	char	**res;
+	int		i;
+
+	res = malloc((str_arr_size(src) + 1) * sizeof(char **));
+	if (!res)
+		return (NULL);
+	i = 0;
+	while (src[i])
+	{
+		res[i] = ft_strdup(src[i]);
+		if (!res[i])
+			return (free_str_arr(res), NULL);
+		i++;
+	}
+	res[i] = NULL;
+	return (res);
+}
+
 int	get_index_str_arr(char **str_arr, char *str)
 {
 	int	i;
@@ -64,7 +84,7 @@ char	**join_str_arr(char **dest, char **arr2)
 	if (!arr2)
 		return (NULL);
 	dest_size = str_arr_size(dest);
-	dest = ft_realloc(dest, dest_size, dest_size + str_arr_size(arr2) + 2, STR_ARR);
+	dest = ft_realloc(dest, dest_size, dest_size + str_arr_size(arr2) + 2);
 	if (!dest)
 		return (free_str_arr(arr2), NULL);
 	i = 0;

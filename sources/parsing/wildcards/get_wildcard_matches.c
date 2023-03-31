@@ -8,9 +8,13 @@ int	is_match(char *curr_dir_wildcard, int is_directory_match, char *file)
 		return (0);
 	if (curr_dir_wildcard[0] != '*')
 		return (compare(curr_dir_wildcard, file));
-	while (*file && !compare(curr_dir_wildcard, file))
+	while (*file)
+	{
+		if (compare(curr_dir_wildcard, file))
+			return (1);
 		file++;
-	return (*file);
+	}
+	return (0);
 }
 
 int	add_match(char **match, int is_directory_match, char *entry_name)
@@ -43,6 +47,7 @@ char	**read_dir(char *wildcard, char **matches, int is_directory_match)
 		}
 		entry = readdir(directory);
 	}
+	closedir(directory);
 	return (matches);
 }
 

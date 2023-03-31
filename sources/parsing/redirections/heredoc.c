@@ -27,7 +27,7 @@ int	assign_heredoc_fd(char **line, t_command *command, int **heredoc_fds)
 // 	if (command->input_file > 2)
 // 		close(command->input_file);
 // 	size = str_arr_size(command->heredoc_limits);
-// 	command->heredoc_limits = ft_realloc(command->heredoc_limits, size, size + 2, STR_ARR);
+// 	command->heredoc_limits = ft_realloc(command->heredoc_limits, size, size + 2);
 // 	if (!command->heredoc_limits)
 // 		return (1);
 // 	command->heredoc_limits[size] = dup_line_word(line);

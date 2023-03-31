@@ -23,10 +23,12 @@ int			add_char(char **line, char **str);
 int			str_arr_size(char **arr);
 char	**join_arr_strjoin(char **arr1, char **arr2);
 char	**join_str_arr(char **dest, char **arr2);
+char	**str_arr_dup(char **src);
 char	**insert_str_arr_at_index(char **arr1, char **arr2, int index);
 int	get_index_str_arr(char **str_arr, char *str);
 
-int			check_syntax(char *line, int is_inside_parenthesis);
+int			check_syntax(char *line);
+int	check_line(char *line, int is_inside_parenthesis, char *line_ptr_cpy);
 int			check_redirection_error(char **line);
 int			check_operator_error(char **line);
 int			is_last_special_symbol(char *line);
@@ -57,7 +59,7 @@ char	*dup_line_word(char **line);
 void		skip_spaces(char **line);
 void		get_operator(char **line, t_pipeline *pipeline);
 int	file_or_dir_check(char *str);
-void	*ft_realloc(void *src, int prev_size, int new_size, int data_type);
+void	*ft_realloc(void *src, int prev_size, int new_size);
 
 void		print_error(char *message, char *line);
 char		*strjoin_handler(char *str, char *join);

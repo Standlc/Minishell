@@ -1,11 +1,9 @@
 #include "minishell.h"
 
-int	check_syntax(char *line, int is_inside_parenthesis)
-{
-	static char	*line_ptr_cpy = NULL;
+extern int	g_status;
 
-	if (!line_ptr_cpy)
-		line_ptr_cpy = line;
+int	check_line(char *line, int is_inside_parenthesis, char *line_ptr_cpy)
+{
 	skip_spaces(&line);
 	if ((is_operator(line) || is_pipe(line)))
 		return (print_error("0 unexpected token error: ", line), 1);
@@ -20,6 +18,19 @@ int	check_syntax(char *line, int is_inside_parenthesis)
 		if (check_parenthesis_error(&line, line_ptr_cpy, is_inside_parenthesis))
 			return (1);
 		line += *line && !is_meta_char(line);
+	}
+	return (0);
+}
+
+int	check_syntax(char *line)
+{
+	char	*line_ptr_cpy;
+
+	line_ptr_cpy = line;
+	if (check_line(line, 0, line_ptr_cpy))
+	{
+		g_status = 2;
+		return (1);
 	}
 	return (0);
 }

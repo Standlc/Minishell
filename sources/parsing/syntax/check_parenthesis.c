@@ -2,18 +2,13 @@
 
 int	check_operator_before_parenthesis(char *line, char *ptr)
 {
-	// printf("%c\n", *line);
-
 	line -= line != ptr;
-	// printf("%c\n", *line);
-
 	while (line != ptr && *line == ' ')
 		line--;
-	// printf("%c\n", *line);
 	if (*line == '(')
 		return (0);
 	line -= line != ptr;
-	return (!is_operator(line) && *line);
+	return (!is_operator(line) && line != ptr);
 }
 
 int	check_operator_after_parenthesis(char **line)
@@ -55,7 +50,7 @@ int	check_parenthesis_error(char **line, char *ptr, int is_inside_parenthesis)
 		*line += 1;
 		if (check_empty_parenthesis(line))
 			return (print_error("12 unexpected token error: ", *line), 1);
-		if (check_syntax(*line, 1))
+		if (check_line(*line, 1, ptr))
 			return (1);
 		if (check_missing_parenthesis(line))
 			return (print_error("13 syntax error: missing parenthesis", NULL), 1);
