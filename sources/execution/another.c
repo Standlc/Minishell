@@ -32,7 +32,7 @@ void	another_command(t_command *command)
 	else
 		path = path_for_execve(env, command->arguments[0]);
 	if (!path)
-		(ft_putstr_fd(command->arguments[0], 2), ft_putstr_fd(": command not found\n", 2), g_status = 127, exit(g_status));
+		return (ft_putstr_fd(command->arguments[0], 2), ft_putstr_fd(": command not found\n", 2), g_status = 127, (void)0);
 	duplicate_for_streams(command);
 	if (execve(path, command->arguments, env) == -1)
 		(ft_putstr_fd("execve failed\n", 2), exit(errno));
