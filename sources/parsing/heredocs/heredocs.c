@@ -20,7 +20,9 @@ char	**get_heredoc_limits(char *line, char **limits)
 	i = 0;
 	while (*line)
 	{
-		if (is_heredoc(line))
+		if (is_quote(*line))
+			check_quotes(&line);
+		else if (is_heredoc(line))
 		{
 			line += 2;
 			limits[i] = get_heredoc_limit(&line, limits[i]);
@@ -47,5 +49,3 @@ int	*handle_heredocs(char *line, int *heredoc_fds)
 	heredoc_fds = do_the_heredoc(heredoc_fds, limits);
 	return (free_str_arr(limits), heredoc_fds);
 }
-
-// HEREDOCS INSIDE QUOTES

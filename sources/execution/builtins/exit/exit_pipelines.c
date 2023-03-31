@@ -13,6 +13,6 @@ void	exit_pipeline(t_pipeline *pipelines, int i)
 	ft_putstr_fd("exit\n", 1);
 	free_dup(env);
 	free_pipelines(pipelines);
-	rl_clear_history();
+	// rl_clear_history();
 	exit(g_status);
 }

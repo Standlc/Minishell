@@ -1,5 +1,31 @@
 #include "minishell.h"
 
+int	str_arr_size(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr && arr[i])
+		i++;
+	return (i);
+}
+
+int	get_index_str_arr(char **str_arr, char *str)
+{
+	int	i;
+	int	str_len;
+
+	str_len = ft_strlen(str);
+	i = 0;
+	while (str_arr && str_arr[i])
+	{
+		if (!ft_strncmp(str, str_arr[i], str_len + 1))
+			return (i);
+		i++;
+	}
+	return (i);
+}
+
 char	**join_arr_strjoin(char **arr1, char **arr2)
 {
 	int		i;

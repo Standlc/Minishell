@@ -141,8 +141,8 @@ int	get_line(t_pipeline *pipelines, char **env)
 		free(heredoc_fds);
 		if (pipelines)
 		{
-			// show_data(pipelines);
-			execution_global(pipelines);
+			show_data(pipelines);
+			// execution_global(pipelines);
 			free_pipelines(pipelines);
 		}
 		line = readline(PROMPT);
