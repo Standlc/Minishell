@@ -20,6 +20,7 @@ int	get_arguments(char **line, t_command *command, int **heredoc_fds)
 int	get_command(char **line, t_command *command, int **heredoc_fds)
 {
 	command->output_file = 1;
+	command->is_end = 1;
 	if (get_arguments(line, command, heredoc_fds))
 		return (1);
 	if (command->arguments)
@@ -58,7 +59,7 @@ int	get_pipeline(char **line, t_pipeline *pipeline, int **heredoc_fds)
 	pipeline->commands = ft_calloc(command_amount + 1, sizeof(t_command));
 	if (!pipeline->commands)
 		return (1);
-	pipeline->commands[command_amount].is_end = 1;
+	// pipeline->commands[command_amount].is_end = 1;
 	i = 0;
 	while (**line && !is_operator(*line))
 	{

@@ -22,7 +22,7 @@ void	free_pipelines(t_pipeline *pipelines)
 	while (pipelines[i].commands)
 	{
 		j = 0;
-		while (!pipelines[i].commands[j].is_end)
+		while (pipelines[i].commands[j].is_end)
 		{
 			free_str_arr(pipelines[i].commands[j].arguments);
 			if (pipelines[i].commands[j].input_file > 2)
