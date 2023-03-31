@@ -8,12 +8,12 @@ int	validate_variable(char *argument)
 
 	i = 0;
 	if (!ft_isalpha(argument[i]) && argument[i] != '_')
-		return (ft_putstr_fd("not a valid identifier\n", 2), 0);
+		return (ft_putstr_fd("not a valid identifier\n", 2), g_status = 1, 0);
 	i++;
 	while (argument[i] && argument[i] != '=')
 	{
 		if (!ft_isalnum(argument[i]))
-			return (ft_putstr_fd("not a valid identifier\n", 2), 0);
+			return (ft_putstr_fd("not a valid identifier\n", 2), g_status = 1, 0);
 		i++;
 	}
 	if (argument[i] == '\0')
@@ -33,7 +33,7 @@ int	variable_count(char **arguments)
 		if (validate_variable(arguments[i]))
 			count++;
 		else
-			arguments[i] = "\0";    //leak ?
+			arguments[i][0] = '\0';
 		i++;
 	}
 	return (count);
@@ -55,21 +55,18 @@ char	**new_env(char **env, char **arguments)
 			return (free_dup(new), NULL);
 		i++;
 	}
-	new[i] = NULL; // leak ?
+	new[i] = NULL;
 	return (new);
 }
 
 void	export_ms(t_command *command)
 {
 	int		i;
-	char	**tmp;
 	char	**new;
 	char	**env;
 
 	i = 0;
 	g_status = 0;
-	if (command->position != 2)
-		return ;
 	env = *(environnement(NULL));
 	while (env[i])
 		i++;
@@ -79,7 +76,6 @@ void	export_ms(t_command *command)
 	complete_env(new, command->arguments, i);
 	if (!new)
 		return (g_status = 12, ft_putstr_fd(MEM, 2));
-	tmp = env;
 	(void)environnement(new);
-	free_dup(tmp);
+	free_dup(env);
 }

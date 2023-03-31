@@ -5,7 +5,6 @@ extern int	g_status;
 void	delete_variable(char **env, int j)
 {
 	char	**new;
-	char	**tmp;
 	int		i;
 	int		index_new;
 
@@ -25,10 +24,9 @@ void	delete_variable(char **env, int j)
 		}
 		i++;
 	}
-	new[i] = NULL;
-	tmp = env;
+	new[index_new] = NULL;
 	(void)environnement(new);
-	free_dup(tmp);
+	free_dup(env);
 }
 
 int	valid_delete(char *argument)
@@ -65,7 +63,10 @@ void	delete_env(t_command *command, int i)
 	while (new_env[j])
 	{
 		if (ft_strncmp(new_env[j], command->arguments[i], size_arg) == '=')
+		{
 			delete_variable(new_env, j);
+			new_env = *(environnement(NULL));
+		}
 		j++;
 	}
 }
@@ -76,8 +77,6 @@ void	unset_ms(t_command *command)
 
 	g_status = 0;
 	i = 0;
-	if (command->position != 2)
-		return ;
 	if (!command->arguments[1])
 		return ;
 	while (command->arguments[++i])

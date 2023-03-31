@@ -147,6 +147,7 @@ int	get_line(t_pipeline *pipelines, char **env)
 		}
 		line = readline(PROMPT);
 	}
+	new_env = *(environnement(NULL));
 	free_dup(new_env);
 	return (0);
 }
@@ -158,11 +159,11 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	pipelines = NULL;
-	if (!isatty(0) || !isatty(1) || !isatty(2))
-	{
-		ft_putstr_fd("stdin, stdout or stderr have been changed\n", 2);
-		return (ENOTTY);
-	}
+	// if (!isatty(0) || !isatty(1) || !isatty(2))
+	// {
+	// 	ft_putstr_fd("stdin, stdout or stderr have been changed\n", 2);
+	// 	return (ENOTTY);
+	// }
 	hook_signals();
 	g_status = 0;
 	get_line(pipelines, env);
