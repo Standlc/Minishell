@@ -4,8 +4,6 @@ extern int	g_status;
 
 int	is_child(t_command command)
 {
-	if (!command.arguments[0])
-		return (0);
 	if (!strncmp(command.arguments[0], "cd", 3))
 		return (0);
 	if (!strncmp(command.arguments[0], "export", 7))
@@ -22,7 +20,8 @@ void	pipeline_start(t_command *commands, int fd[2])
 	else
 	{
 		commands->position = 2;
-		commands->close_pipe = -1;
+		commands->close_pipe[0] = -1;
+		commands->close_pipe[1] = -1;
 	}
 }
 
@@ -40,7 +39,8 @@ int	fork_command(t_command *command, int i)
 			execution_command(command);
 			close_file(command->output_file);
 			close_file(command->input_file);
-			close_file(command->close_pipe);
+			close_file(command->close_pipe[0]);
+			close_file(command->close_pipe[1]);
 			return (2);
 		}
 	}

@@ -76,8 +76,6 @@ void	cd_ms(t_command *command)
 	char	*old_pwd;
 
 	g_status = 0;
-	if (command->position != 2)
-		return ;
 	if (command->arguments[1] && command->arguments[2])
 		return (g_status = 1, ft_putstr_fd("cd: too many arguments\n", 2));
 	old_pwd = getcwd(NULL, 1024);

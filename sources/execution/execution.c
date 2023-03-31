@@ -59,7 +59,6 @@ void	execution_global(t_pipeline *pipelines)
 	char	**env;
 
 	i = 0;
-	env = *(environnement(NULL));
 	while (pipelines[i].commands)
 	{
 		if (!strncmp("exit", pipelines[i].commands->arguments[0], 5) && !pipelines[i].commands[1].is_end)
@@ -68,7 +67,7 @@ void	execution_global(t_pipeline *pipelines)
 		{
 			execution_pipeline(pipelines[i].commands);
 			if (pipelines[i].commands->is_end == 2)
-				(free_pipelines(pipelines), free_dup(env), exit(g_status));
+				(env = *(environnement(NULL)), free_pipelines(pipelines), free_dup(env), exit(g_status));
 		}
 		else if (pipelines[i + 1].commands && pipelines[i + 1].parenthesis > 0)
 		{

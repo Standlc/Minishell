@@ -8,7 +8,7 @@ int	exit_max(char *value, char *max)
 
 	i = 0;
 	if (value[i] == '+')
-		i++;
+		value++;
 	if (ft_strlen(&value[i]) < ft_strlen(max))
 		return (0);
 	if (ft_strlen(&value[i]) > ft_strlen(max))
@@ -58,7 +58,7 @@ int	strcmp_for_exit(char *value, char *min, char *max)
 	i = 0;
 	while ((value[i] >= 9 && value[i] <= 13) || value[i] == ' ')
 		i++;
-	if (!(ft_isdigit(value[i]) || value[i] == '-'))
+	if (!(ft_isdigit(value[i]) || value[i] == '-' || value[i] == '+'))
 		return (1);
 	if (value[i] == '-')
 		if (!ft_isdigit(value[i + 1]))
@@ -118,17 +118,12 @@ void	exit_ms(t_command *command)
 		if (value == 0)
 			(value = ft_atoi_exit(command->arguments[1]));
 		else
-		{
-			(ft_putstr_fd("exit: numeric argument required\n", command->output_file), g_status = 2);
-			if (command->position != 2)
-				exit(g_status);
-		}
+			return (ft_putstr_fd("exit: numeric argument required\n", 2), g_status = 2, (void)0);
 	}
 	if (i == 3)
-		return (g_status = 1, ft_putstr_fd("exit: too many arguments\n", command->output_file));
+		return (g_status = 1, ft_putstr_fd("exit: too many arguments\n", 2));
 	if (i > 4)
-		return (g_status = 127, ft_putstr_fd("exit: too many arguments\n", command->output_file));
+		return (g_status = 127, ft_putstr_fd("exit: too many arguments\n", 2));
+	
 	g_status = value;
-	if (command->position != 2)
-		exit(g_status);
 }
