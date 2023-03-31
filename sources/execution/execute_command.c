@@ -4,6 +4,8 @@ extern int	g_status;
 
 void	execution_env(t_command *command)
 {
+	if (!command->arguments)
+		return (g_status = 0, (void)0);
 	if (!ft_strncmp(command->arguments[0], "cd", 3))
 		return (cd_ms(command));
 	if (!ft_strncmp(command->arguments[0], "export", 7))

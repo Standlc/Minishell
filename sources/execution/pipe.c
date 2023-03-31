@@ -24,17 +24,23 @@ void	set_pipe(t_command *command, int fd[2])
 	{
 		if (i == 0)
 		{
-			command[i].output_file = fd[1];
-			command[i].close_pipe = fd[0];
+			if (command->output_file == 1)
+			{
+				command->output_file = fd[1];
+				command->close_pipe[1] = -1;
+			}
+			else
+				command->close_pipe[1] = fd[1];
+			command[i].close_pipe[0] = fd[0];
 		}
 		else if (!command[i + 1].is_end)
 		{
 			if (command[i].input_file > 2)
-				command[i].close_pipe = fd[0];
+				command[i].close_pipe[0] = fd[0];
 			else
 			{
 				command[i].input_file = fd[0];
-				command[i].close_pipe = -1;
+				command[i].close_pipe[0] = -1;
 			}
 		}
 		i++;
@@ -46,8 +52,13 @@ void	set_files(t_command *command, int link[2], int fd)
 	if (command->input_file == 0)
 		command->input_file = fd;
 	if (command->output_file == 1)
+	{
 		command->output_file = link[1];
-	command->close_pipe = link[0];
+		command->close_pipe[1] = -1;
+	}
+	else
+		command->close_pipe[1] = link[1];
+	command->close_pipe[0] = link[0];
 }
 
 int	multi_pipes(t_command *commands, int *fd)

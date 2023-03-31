@@ -169,7 +169,7 @@ int	main(int argc, char **argv, char **env)
 	get_line(pipelines, env);
 	rl_clear_history();
 	printf("exit\n");
-	return (0);
+	return (g_status);
 }
 
 // WILDCARDS REDIRECTIONS

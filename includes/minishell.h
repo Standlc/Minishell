@@ -49,7 +49,7 @@ typedef struct s_command
 	int		input_file;
 	int		output_file;
 	int		position;
-	int		close_pipe;
+	int		close_pipe[2];
 	int		is_end;
 }				t_command;
 
