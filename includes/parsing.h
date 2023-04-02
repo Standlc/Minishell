@@ -15,12 +15,16 @@
 
 # include "minishell.h"
 
-int	*handle_heredocs(char *line, int *heredoc_fds);
-int	*do_the_heredoc(int *heredoc_fds, char **limits);
+typedef struct	s_heredoc_fds {
+	int	fds[2];
+}				t_heredoc_fds;
+
+t_heredoc_fds	*handle_heredocs(char *line, t_heredoc_fds *heredoc_fds);
+t_heredoc_fds	*do_the_heredoc(t_heredoc_fds *heredoc_fds, char **limits);
 int	get_heredoc_amount(char *line);
 char	*get_heredoc_limit(char **line, char *heredoc_limit);
 
-t_pipeline	*parse_line(char *line, int *heredoc_fds);
+t_pipeline	*parse_line(char *line, t_heredoc_fds *heredoc_fds);
 
 char		**get_line_args(char **line);
 char	**handle_env_var(char **line, int is_inside_quotes);
@@ -59,12 +63,12 @@ int			is_wildcard(char *str);
 int			is_heredoc(char *line);
 int	is_directory(char *file);
 
-int			get_redirections(char **line, t_command *command, int **heredoc_fds);
+int			get_redirections(char **line, t_command *command, t_heredoc_fds **heredoc_fds);
 int			handle_simple_right_redirection(t_command *command, char *file);
 int			handle_simple_left_redirection(t_command *command, char *file);
 int			handle_double_right_redirection(t_command *command, char *file);
 
-int			assign_heredoc_fd(char **line, t_command *command, int **heredoc_fds);
+int			assign_heredoc_fd(char **line, t_command *command, t_heredoc_fds **heredoc_fds);
 char	*dup_line_word(char **line);
 
 void		skip_spaces(char **line);
@@ -86,6 +90,7 @@ int	wildcard_matches_amount(char *curr_dir_wildcard, int is_directory_match);
 
 void		free_pipelines(t_pipeline *pipelines);
 void		free_str_arr(char **str_arr);
+void	close_heredoc_fds(t_heredoc_fds *heredoc_fds);
 
 int			hook_signals(void);
 

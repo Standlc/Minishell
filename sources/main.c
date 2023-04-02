@@ -12,7 +12,7 @@ void	show_data(t_pipeline *pipelines)
 	{
 		printf("[\n");
 		j = 0;
-		while (!pipelines[i].commands[j].is_end)
+		while (pipelines[i].commands[j].is_end)
 		{
 			printf("\t{\n");
 			if (pipelines[i].commands[j].arguments)
@@ -49,17 +49,22 @@ char	***environnement(char **new_env)
 
 char	*readline_handler(void)
 {
+	char	*prompt;
 	char	*line;
 
-	line = readline("▸  minishell ");
+	if (g_status)
+		prompt = PROMPT_ERROR;
+	else
+		prompt = PROMPT;
+	line = readline(prompt);
 	return (line);
 }
 
 int	get_line(t_pipeline *pipelines, char **env)
 {
-	int		*heredoc_fds;
-	char	*line;
-	char	**new_env;
+	t_heredoc_fds	*heredoc_fds;
+	char			*line;
+	char			**new_env;
 
 	line = readline_handler();
 	new_env = duplicate_bigarray(env);
@@ -70,24 +75,29 @@ int	get_line(t_pipeline *pipelines, char **env)
 	{
 		if (*line)
 			add_history(line);
-		heredoc_fds = handle_heredocs(line, heredoc_fds);
-		if (!heredoc_fds)
+		if (!check_syntax(line))
 		{
+			heredoc_fds = handle_heredocs(line, heredoc_fds);
+			if (!heredoc_fds)
+			{
+				free(line);
+				break ;
+			}
+			pipelines = parse_line(line, heredoc_fds);
+			close_heredoc_fds(heredoc_fds);
+			free(heredoc_fds);
 			free(line);
-			break ;
-		}
-		pipelines = parse_line(line, heredoc_fds);
-		free(heredoc_fds);
-		if (pipelines)
-		{
-			show_data(pipelines);
-			// execution_global(pipelines);
-			free_pipelines(pipelines);
+			if (pipelines)
+			{
+				// show_data(pipelines);
+				execution_global(pipelines);
+				free_pipelines(pipelines);
+			}
 		}
 		line = readline_handler();
 	}
 	new_env = *(environnement(NULL));
-	free_dup(new_env);
+	free_str_arr(new_env);
 	return (0);
 }
 

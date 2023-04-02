@@ -47,30 +47,27 @@ int	read_heredoc(int fd, char *limit)
 	{
 		if (!ft_strncmp(limit, heredoc_line, limit_len + 1))
 			return (0);
-		else
-			handle_write(fd, heredoc_line);
+		else if (handle_write(fd, heredoc_line))
+			return (1);
 		free(heredoc_line);
 		heredoc_line = readline("> ");
 	}
 	return (0);
 }
 
-int	*do_the_heredoc(int *heredoc_fds, char **limits)
+t_heredoc_fds	*do_the_heredoc(t_heredoc_fds *heredoc_fds, char **limits)
 {
-	int		pipe_fds[2];
+	int		size;
 	int		i;
 
-	heredoc_fds = ft_calloc(str_arr_size(limits), sizeof(int));
-	if (!heredoc_fds)
-		return (NULL);
+	size = str_arr_size(limits);
 	i = 0;
 	while (limits[i])
 	{
-		if (pipe(pipe_fds) == -1)
-			return (NULL);
-		heredoc_fds[i] = pipe_fds[0];
-		read_heredoc(pipe_fds[1], limits[i]);
-		close(pipe_fds[1]);
+		if (read_heredoc(heredoc_fds[i].fds[1], limits[i]))
+			return (close_heredoc_fds(heredoc_fds), free(heredoc_fds), NULL);
+		close(heredoc_fds[i].fds[1]);
+		close(heredoc_fds[i].fds[0]);
 		i++;
 	}
 	return (heredoc_fds);

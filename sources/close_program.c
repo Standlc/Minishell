@@ -12,13 +12,18 @@
 
 #include "minishell.h"
 
-// void	close_heredoc_fds(int *heredoc_fds)
-// {
-// 	while (heredoc_fds)
-// 	{
-// 		heredoc_fds++;
-// 	}
-// }
+void	close_heredoc_fds(t_heredoc_fds *heredoc_fds)
+{
+	if (!heredoc_fds)
+		return ;
+	while (heredoc_fds->fds[0] != -1)
+	{
+		// printf("%d\n", heredoc_fds->fds[0]);
+		// if (*heredoc_fds > 2)
+		// 	close(*heredoc_fds);
+		heredoc_fds++;
+	}
+}
 
 void	free_str_arr(char **str_arr)
 {

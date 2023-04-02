@@ -16,6 +16,7 @@ int	hook_signals(void)
 	// sact->sa_sigaction = handle_signals;
 	// sigaction(SIGINT, sact, (void *)pipelines);
 	// sigaction(SIGQUIT, sact, (void *)pipelines);
+	// signal(SIGUSR1, truc);
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	return (0);
