@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_line.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/02 13:09:11 by stde-la-          #+#    #+#             */
+/*   Updated: 2023/04/02 13:10:16 by stde-la-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	get_arguments(char **line, t_command *command, int **heredoc_fds)
@@ -36,15 +48,14 @@ int	get_command(char **line, t_command *command, int **heredoc_fds)
 
 void	handle_parenthesis(char **line, t_pipeline *pipeline, char parenthesis_type, int increment)
 {
-	if (**line == parenthesis_type)
+	if (**line != parenthesis_type)
+		return ;
+	skip_spaces(line);
+	while (**line == parenthesis_type)
 	{
+		*line += 1;
+		pipeline->parenthesis += increment;
 		skip_spaces(line);
-		while (**line == parenthesis_type)
-		{
-			*line += 1;
-			pipeline->parenthesis += increment;
-			skip_spaces(line);
-		}
 	}
 }
 
@@ -59,7 +70,6 @@ int	get_pipeline(char **line, t_pipeline *pipeline, int **heredoc_fds)
 	pipeline->commands = ft_calloc(command_amount + 1, sizeof(t_command));
 	if (!pipeline->commands)
 		return (1);
-	// pipeline->commands[command_amount].is_end = 1;
 	i = 0;
 	while (**line && !is_operator(*line))
 	{

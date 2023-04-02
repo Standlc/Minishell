@@ -1,11 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_error.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/02 13:10:18 by stde-la-          #+#    #+#             */
+/*   Updated: 2023/04/02 13:10:18 by stde-la-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*strjoin_handler(char *str, char *join)
 {
 	char	*temp_ptr;
 
-	// if (!join)
-	// 	return (free(str), NULL);
 	temp_ptr = str;
 	str = ft_strjoin(str, join);
 	free(temp_ptr);
@@ -29,7 +39,7 @@ void	print_line_component(char *line)
 		while (*line && *line != ' ' && (!is_meta_char(line) || *line == '*'))
 			write(2, line++, 1);
 	}
-	write(2, "`", 1);
+	write(2, "'", 1);
 }
 
 void	print_error(char *message, char *line)

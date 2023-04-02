@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/02 13:09:17 by stde-la-          #+#    #+#             */
+/*   Updated: 2023/04/02 14:09:33 by stde-la-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PARSING_H
 # define PARSING_H
 
@@ -13,7 +25,6 @@ t_pipeline	*parse_line(char *line, int *heredoc_fds);
 char		**get_line_args(char **line);
 char	**handle_env_var(char **line, int is_inside_quotes);
 char	*dup_line_word(char **line);
-char	*dup_line_word_quotes(char **line, char quote_type);
 
 int	get_pipeline_commands_amount(char *line);
 int	get_pipelines_amount(char *line);

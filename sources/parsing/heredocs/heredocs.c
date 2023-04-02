@@ -1,12 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredocs.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/02 13:09:36 by stde-la-          #+#    #+#             */
+/*   Updated: 2023/04/02 14:29:06 by stde-la-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*get_heredoc_limit(char **line, char *heredoc_limit)
 {
 	skip_spaces(line);
-	if (is_quote(**line))
-		heredoc_limit = dup_line_word_quotes(line, **line);
-	else
-		heredoc_limit = dup_line_word(line);
+	heredoc_limit = dup_line_word(line);
 	return (heredoc_limit);
 }
 
@@ -49,3 +58,5 @@ int	*handle_heredocs(char *line, int *heredoc_fds)
 	heredoc_fds = do_the_heredoc(heredoc_fds, limits);
 	return (free_str_arr(limits), heredoc_fds);
 }
+
+// << a"s" -> limit: as

@@ -1,7 +1,15 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define PROMPT	"➜  minishell $> "
+// # define NC		"\033[0m"
+// # define CYAN	"\033[1;36m"
+// # define GREEN	"\033[1;32m"
+// # define RED	"\033[1;31m"
+// # define BOLD	"\033[1m"
+// # define WHITE	"\033[0m"
+
+// # define PROMPT			"\033[1;32m▸  \033[1;36mminishell\033[0m "
+// # define PROMPT_ERROR	"\033[1;31m▸  \033[1;36mminishell\033[0m "
 # define MEM "minishell: Cannot allocate memory\n"
 
 enum e_realloc_data_types {

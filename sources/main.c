@@ -47,13 +47,21 @@ char	***environnement(char **new_env)
 	return (&env);
 }
 
+char	*readline_handler(void)
+{
+	char	*line;
+
+	line = readline("▸  minishell ");
+	return (line);
+}
+
 int	get_line(t_pipeline *pipelines, char **env)
 {
 	int		*heredoc_fds;
 	char	*line;
 	char	**new_env;
 
-	line = readline(PROMPT);
+	line = readline_handler();
 	new_env = duplicate_bigarray(env);
 	if (g_status != 0)
 		(free(line), exit(g_status));
@@ -72,11 +80,11 @@ int	get_line(t_pipeline *pipelines, char **env)
 		free(heredoc_fds);
 		if (pipelines)
 		{
-			// show_data(pipelines);
-			execution_global(pipelines);
+			show_data(pipelines);
+			// execution_global(pipelines);
 			free_pipelines(pipelines);
 		}
-		line = readline(PROMPT);
+		line = readline_handler();
 	}
 	new_env = *(environnement(NULL));
 	free_dup(new_env);

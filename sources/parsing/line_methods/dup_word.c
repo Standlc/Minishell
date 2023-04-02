@@ -1,14 +1,56 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dup_word.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/02 13:09:45 by stde-la-          #+#    #+#             */
+/*   Updated: 2023/04/02 14:28:04 by stde-la-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	word_len(char *line)
 {
-	int	len;
+	int		len;
+	char	quote_type;
 
 	len = 0;
-	while (line[len] && line[len] != ' ' && !is_pipe(line + len)
-		&& !is_operator(line + len) && !is_redirection(line + len))
+	while (*line && *line != ' ' && (!is_meta_char(line) || is_quote(*line)))
+	{
+		if (is_quote(*line))
+		{
+			quote_type = *line;
+			line++;
+			while (*line && *line != quote_type)
+			{
+				len++;
+				line++;
+			}
+			line++;
+			continue ;
+		}
 		len++;
+		line++;
+	}
 	return (len);
+}
+
+void	strcpy_quotes(char **line, char *str, int *index)
+{
+	char	quote_type;
+
+	quote_type = **line;
+	*line += 1;
+	while (**line && **line != quote_type)
+	{
+		str[*index] = **line;
+		*index += 1;
+		*line += 1;
+	}
+	*line += 1;
 }
 
 char	*dup_line_word(char **line)
@@ -16,45 +58,21 @@ char	*dup_line_word(char **line)
 	char	*str;
 	int		i;
 
-	str = ft_calloc(word_len(*line) + 1, sizeof(char));
+	str = malloc((word_len(*line) + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
 	i = 0;
-	while (**line && **line != ' ' && !is_pipe(*line)
-		&& !is_operator(*line) && !is_redirection(*line))
+	while (**line && **line != ' ' && (!is_meta_char(*line) || is_quote(**line)))
 	{
-		str[i] = **line;
-		i++;
-		*line += 1;
+		if (is_quote(**line))
+			strcpy_quotes(line, str, &i);
+		else
+		{
+			str[i] = **line;
+			i++;
+			*line += 1;
+		}
 	}
-	return (str);
-}
-
-int	word_len_quotes(char *line, char quote_type)
-{
-	int	len;
-
-	len = 0;
-	while (line[len] && line[len] != quote_type)
-		len++;
-	return (len);
-}
-
-char	*dup_line_word_quotes(char **line, char quote_type)
-{
-	char	*str;
-	int		i;
-
-	*line += **line == quote_type;
-	str = ft_calloc(word_len_quotes(*line, quote_type) + 1, sizeof(char));
-	if (!str)
-		return (NULL);
-	i = 0;
-	while (**line && **line != quote_type)
-	{
-		str[i] = **line;
-		i++;
-		*line += 1;
-	}
+	str[i] = '\0';
 	return (str);
 }
