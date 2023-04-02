@@ -20,9 +20,9 @@ void	env_ms(t_command *command)
 	g_status = 0;
 	i = -1;
 	if (command->arguments[1] && directory_exist(command->arguments[1]))
-		return (ft_putstr_fd("env: Permission denied\n", 2), g_status = 126, exit(g_status));
+		return (g_status = 126, ft_putstr_fd("env: Permission denied\n", 2));
 	if (command->arguments[1])
-		return (ft_putstr_fd("env: No such directory\n", 2), g_status = 127, exit(g_status));
+		return (g_status = 127, ft_putstr_fd("env: No such directory\n", 2));
 	new_env = *(environnement(NULL));
 	if (!new_env)
 		return (exit(g_status));

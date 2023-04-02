@@ -133,6 +133,10 @@ int		bigarray_len(char **bigarray);
 void	free_dup(char **dup_bigarray);
 char	**duplicate_bigarray(char **bigarray);
 
+void	child_sigint(int sig);
+void	child_sigquit(int sig);
+int		child_signals();
+
 char	***environnement(char **new_env);
 t_pipeline	*test(t_pipeline *pipelines);
 int		get_line(t_pipeline *pipelines, char **env);

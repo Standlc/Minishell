@@ -36,6 +36,7 @@ int	fork_command(t_command *command, int i)
 			return (g_status = errno, perror("minishell: fork"), 1);
 		if (pid == 0)
 		{
+			child_signals();
 			execution_command(command);
 			close_file(command->output_file);
 			close_file(command->input_file);
