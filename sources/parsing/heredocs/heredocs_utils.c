@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:33 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/02 13:09:33 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/03 01:48:35 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	read_heredoc(int fd, char *limit)
 		if (!ft_strncmp(limit, heredoc_line, limit_len + 1))
 			return (0);
 		else if (handle_write(fd, heredoc_line))
-			return (1);
+			return (free(heredoc_line), 1);
 		free(heredoc_line);
 		heredoc_line = readline("> ");
 	}
@@ -57,17 +57,17 @@ int	read_heredoc(int fd, char *limit)
 
 t_heredoc_fds	*do_the_heredoc(t_heredoc_fds *heredoc_fds, char **limits)
 {
-	int		size;
 	int		i;
 
-	size = str_arr_size(limits);
 	i = 0;
 	while (limits[i])
 	{
 		if (read_heredoc(heredoc_fds[i].fds[1], limits[i]))
-			return (close_heredoc_fds(heredoc_fds), free(heredoc_fds), NULL);
+			return (close_heredoc_fds(heredoc_fds), NULL);
 		close(heredoc_fds[i].fds[1]);
 		close(heredoc_fds[i].fds[0]);
+		heredoc_fds[i].fds[1] = 0;
+		heredoc_fds[i].fds[0] = 0;
 		i++;
 	}
 	return (heredoc_fds);

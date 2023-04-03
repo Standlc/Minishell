@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:30 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/02 13:09:31 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/03 03:13:01 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,22 +42,6 @@ char	**str_arr_dup(char **src)
 	return (res);
 }
 
-int	get_index_str_arr(char **str_arr, char *str)
-{
-	int	i;
-	int	str_len;
-
-	str_len = ft_strlen(str);
-	i = 0;
-	while (str_arr && str_arr[i])
-	{
-		if (!ft_strncmp(str, str_arr[i], str_len + 1))
-			return (i);
-		i++;
-	}
-	return (i);
-}
-
 char	**join_arr_strjoin(char **arr1, char **arr2)
 {
 	int		i;
@@ -75,14 +59,18 @@ char	**join_arr_strjoin(char **arr1, char **arr2)
 		res[i] = arr1[i];
 		i++;
 	}
-	res[i] = strjoin_handler(arr1[i], arr2[0]);
-	free(arr2[0]);
-	if (!res[i])
+	// if (arr2[0] && arr2[0][0])
+		res[i] = strjoin_handler(arr1[i], arr2[0]);
+	if (!res[i] && errno == ENOMEM)
 		return (free(arr1), free_str_arr(arr2), NULL);
+	free(arr2[0]);
 	j = 1;
 	while (arr2 && arr2[j])
 	{
-		res[j + i] = arr2[j];
+		// if (arr2[j][0])
+			res[j + i] = arr2[j];
+		// else
+		// 	free(arr2[j]);
 		j++;
 	}
 	return (free(arr1), free(arr2), res);
@@ -105,5 +93,6 @@ char	**join_str_arr(char **dest, char **arr2)
 		dest[dest_size + i] = arr2[i];
 		i++;
 	}
+	// return (ft_calloc(2, sizeof(char **)));
 	return (free(arr2), dest);
 }

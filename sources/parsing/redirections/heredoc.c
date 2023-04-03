@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:56 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/02 13:09:56 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/03 05:12:20 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	assign_heredoc_fd(char **line, t_command *command, t_heredoc_fds **heredoc_fds)
 {
 	char		*heredoc_limit;
-	static int	i = 0;
 
 	if (command->input_file > 2)
 		close(command->input_file);
@@ -27,7 +26,6 @@ int	assign_heredoc_fd(char **line, t_command *command, t_heredoc_fds **heredoc_f
 	if (!heredoc_limit)
 		return (1);
 	free(heredoc_limit);
-	i++;
 	return (0);
 }
 

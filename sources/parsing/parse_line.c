@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:11 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/02 13:10:16 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/03 16:18:20 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ int	get_command(char **line, t_command *command, t_heredoc_fds **heredoc_fds)
 			return (1);
 	}
 	*line += is_pipe(*line);
-	skip_spaces(line);
 	return (0);
 }
 
 void	handle_parenthesis(char **line, t_pipeline *pipeline, char parenthesis_type, int increment)
 {
+	skip_spaces(line);
 	if (**line != parenthesis_type)
 		return ;
 	skip_spaces(line);
@@ -64,7 +64,7 @@ int	get_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds)
 	int	i;
 	int	command_amount;
 
-	get_operator(line, pipeline);
+	pipeline->parenthesis = 0;
 	handle_parenthesis(line, pipeline, '(', 1);
 	command_amount = get_pipeline_commands_amount(*line);
 	pipeline->commands = ft_calloc(command_amount + 1, sizeof(t_command));
@@ -78,6 +78,7 @@ int	get_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds)
 		handle_parenthesis(line, pipeline, ')', -1);
 		i++;
 	}
+	get_operator(line, pipeline);
 	return (0);
 }
 
@@ -93,7 +94,12 @@ t_pipeline	*parse_line(char *line, t_heredoc_fds *heredoc_fds)
 	while (*line)
 	{
 		if (get_pipeline(&line, pipelines + i, &heredoc_fds))
-			return (free_pipelines(pipelines), NULL);
+		{
+			free_pipelines(pipelines);
+			if (errno == ENOMEM)
+				return (NULL);
+			return (ft_calloc(1, sizeof(t_pipeline)));
+		}
 		i++;
 	}
 	return (pipelines);

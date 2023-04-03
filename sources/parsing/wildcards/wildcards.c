@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:10:10 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/02 13:10:10 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/02 23:56:19 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ char	**handle_widlcards(char **args)
 	int		i;
 	int		insert_index;
 
+	if (!args)
+		return (NULL);
 	new_args = str_arr_dup(args);
 	if (!new_args)
 		return (free_str_arr(args), NULL);

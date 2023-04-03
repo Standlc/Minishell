@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:10:14 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/02 13:10:14 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/03 16:08:10 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ extern int	g_status;
 
 void	skip_spaces(char **line)
 {
-	while (**line == ' ')
+	while (**line == ' ' || **line == '\t')
 		*line += 1;
 }
 

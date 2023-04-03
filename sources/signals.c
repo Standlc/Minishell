@@ -11,12 +11,6 @@ void	handle_sigint(int sig)
 
 int	hook_signals(void)
 {
-	// sigemptyset(&(sact->sa_mask));
-	// sact->sa_flags = SA_SIGINFO | SA_RESTART;
-	// sact->sa_sigaction = handle_signals;
-	// sigaction(SIGINT, sact, (void *)pipelines);
-	// sigaction(SIGQUIT, sact, (void *)pipelines);
-	// signal(SIGUSR1, truc);
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	return (0);

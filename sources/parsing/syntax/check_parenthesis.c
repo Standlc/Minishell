@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:59 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/02 13:10:00 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/03 04:18:24 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ int	check_missing_parenthesis(char **line)
 {
 	while (**line && **line != ')')
 	{
-		if (**line == '(')
+		if (is_quote(**line))
+			check_quotes(line);
+		else if (**line == '(')
 		{
 			*line += 1;
 			if (check_missing_parenthesis(line))

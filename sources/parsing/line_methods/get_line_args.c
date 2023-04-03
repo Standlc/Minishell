@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:49 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/02 13:09:50 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/03 03:13:09 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ char	**get_line_args(char **line)
 				return (NULL);
 	}
 	skip_spaces(line);
+	// return (ft_calloc(2, sizeof(char **)));
 	return (str_arr);
 }
 

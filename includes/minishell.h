@@ -50,6 +50,12 @@ typedef struct s_pipeline
 	int			parenthesis;
 }				t_pipeline;
 
+typedef struct s_data
+{
+	t_pipeline	*pipelines;
+	char		**env;
+}				t_data;
+
 # include <signal.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -68,6 +74,8 @@ typedef struct s_pipeline
 # include <dirent.h>
 # include <string.h>
 # include "parsing.h"
+
+void	execute_pipeline(t_pipeline pipeline);
 
 void	exit_pipeline(t_pipeline *pipelines, int i);
 int		exit_max(char *value, char *max);
@@ -143,7 +151,6 @@ char	**duplicate_bigarray(char **bigarray);
 
 char	***environnement(char **new_env);
 t_pipeline	*test(t_pipeline *pipelines);
-int		get_line(t_pipeline *pipelines, char **env);
 int		main(int argc, char **argv, char **env);
 
 #endif
