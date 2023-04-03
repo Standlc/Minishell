@@ -2,18 +2,12 @@
 
 extern int	g_status;
 
-void	execution_pipeline(t_command *commands)
+void	execution_while(t_command *commands, int fd[2])
 {
 	int	i;
-	int	fd[2];
 	int	flag;
 
 	i = 0;
-	flag = g_status;
-	set_position(commands);
-	pipeline_start(commands, fd);
-	if (g_status != flag)
-		return ;
 	while (commands[i].is_end)
 	{
 		if (i == 1)
@@ -32,6 +26,19 @@ void	execution_pipeline(t_command *commands)
 		i++;
 	}
 	end_of_pipeline(commands, fd, i);
+}
+
+void	execution_pipeline(t_command *commands)
+{
+	int	fd[2];
+	int	flag;
+
+	flag = g_status;
+	set_position(commands);
+	pipeline_start(commands, fd);
+	if (g_status != flag)
+		return ;
+	return (execution_while(commands, fd));
 }
 
 int	check_last_status(t_pipeline last)

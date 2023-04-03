@@ -13,7 +13,8 @@ int	validate_variable(char *argument)
 	while (argument[i] && argument[i] != '=')
 	{
 		if (!ft_isalnum(argument[i]))
-			return (ft_putstr_fd("not a valid identifier\n", 2), g_status = 1, 0);
+			return (ft_putstr_fd("not a valid identifier\n", 2),
+				g_status = 1, 0);
 		i++;
 	}
 	if (argument[i] == '\0')
@@ -45,7 +46,8 @@ char	**new_env(char **env, char **arguments)
 	int		i;
 
 	i = 0;
-	new = malloc(sizeof(char *) * (bigarray_len(env) + variable_count(arguments) + 1));
+	new = malloc(sizeof(char *)
+			* (bigarray_len(env) + variable_count(arguments) + 1));
 	if (!new)
 		return (NULL);
 	while (env[i])

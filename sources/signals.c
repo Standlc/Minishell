@@ -40,12 +40,13 @@ void	backslash()
 	ft_printf("\n");
 }
 
-void	backslash_quit()
+void	backslash_quit(int sig)
 {
+	(void)sig;
 	ft_putstr_fd("Quit\n", 2);
 }
 
-void	signal_for_wait()
+void	signal_for_wait(void)
 {
 	signal(SIGINT, backslash);
 	signal(SIGQUIT, backslash_quit);

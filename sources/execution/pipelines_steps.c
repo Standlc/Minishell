@@ -58,7 +58,7 @@ int	until_last_command(t_command *commands, int fd[2])
 
 	i = 1;
 	if (close(fd[1]) == -1)
-		(g_status = errno, perror("minishell: close"));
+		(perror("minishell: close"), g_status = errno);
 	if (commands[i].position == 0)
 		i = multi_pipes(commands, &fd[0]);
 	return (i);
@@ -72,13 +72,13 @@ void	end_of_pipeline(t_command *commands, int fd[2], int end)
 	i = -1;
 	signal_for_wait();
 	if (commands[1].is_end && close(fd[0]) == -1)
-		(g_status = errno, perror("minishell: close"));
+		(perror("minishell: close"), g_status = errno);
 	while (commands[++i].is_end && i < end)
 	{
 		if ((i != 0 || commands[i + 1].is_end) || is_child(commands[i]))
 		{
 			if (waitpid(-1, &status_w, 0) == -1)
-				(g_status = errno, perror("minishell: waitpid"));
+				(perror("minishell: waitpid"), g_status = errno);
 			else if (WIFEXITED(status_w))
 			{
 				g_status = WEXITSTATUS(status_w);

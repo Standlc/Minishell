@@ -43,7 +43,8 @@ void	complete_env_pwd(t_command *command, char *old_pwd, char *pwd)
 	{
 		command->arguments[2] = ft_strjoin("OLDPWD=", old_pwd);
 		if (!command->arguments[2])
-			return (ft_putstr_fd(MEM, 2), free(command->arguments[1]), free(command->arguments), free(pwd));
+			return (ft_putstr_fd(MEM, 2), free(command->arguments[1]),
+				free(command->arguments), free(pwd));
 	}
 	else
 		command->arguments[2] = NULL;
@@ -83,15 +84,18 @@ void	cd_ms(t_command *command)
 	if (command->arguments[1])
 	{
 		if (chdir(command->arguments[1]) == -1)
-			return (ft_putstr_fd("cd: No such directory\n", 2), g_status = 1, free(old_pwd));
+			return (ft_putstr_fd("cd: No such directory\n", 2),
+				g_status = 1, free(old_pwd));
 	}
 	else
 	{
 		str = getenv_ms("HOME");
 		if (!str)
-			return (ft_putstr_fd("cd: HOME not set\n", 2), g_status = 1, free(old_pwd));
+			return (ft_putstr_fd("cd: HOME not set\n", 2),
+				g_status = 1, free(old_pwd));
 		if (chdir(str) == -1)
-			return (ft_putstr_fd("cd: No such directory\n", 2), g_status = 1, free(old_pwd), free(str));
+			return (ft_putstr_fd("cd: No such directory\n", 2),
+				g_status = 1, free(old_pwd), free(str));
 	}
 	(env_pwd(old_pwd), free(old_pwd), free(str));
 }

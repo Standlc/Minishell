@@ -50,8 +50,8 @@ int	valid_delete(char *argument)
 
 void	delete_env(t_command *command, int i)
 {
-	int	j;
-	int	size_arg;
+	int		j;
+	int		size_arg;
 	char	**new_env;
 
 	j = 0;

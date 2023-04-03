@@ -13,6 +13,31 @@ void	set_position(t_command *commands)
 	commands[i - 1].position = 1;
 }
 
+void	set_pipe_files(t_command *command, int fd[2], int i)
+{
+	if (i == 0)
+	{
+		if (command->output_file == 1)
+		{
+			command->output_file = fd[1];
+			command->close_pipe[1] = -1;
+		}
+		else
+			command->close_pipe[1] = fd[1];
+		command[i].close_pipe[0] = fd[0];
+	}
+	else if (!command[i + 1].is_end)
+	{
+		if (command[i].input_file > 2)
+			command[i].close_pipe[0] = fd[0];
+		else
+		{
+			command[i].input_file = fd[0];
+			command[i].close_pipe[0] = -1;
+		}
+	}
+}
+
 void	set_pipe(t_command *command, int fd[2])
 {
 	int	i;
@@ -22,27 +47,7 @@ void	set_pipe(t_command *command, int fd[2])
 		return (g_status = errno, perror("minishell: pipe function"));
 	while (command[i].is_end)
 	{
-		if (i == 0)
-		{
-			if (command->output_file == 1)
-			{
-				command->output_file = fd[1];
-				command->close_pipe[1] = -1;
-			}
-			else
-				command->close_pipe[1] = fd[1];
-			command[i].close_pipe[0] = fd[0];
-		}
-		else if (!command[i + 1].is_end)
-		{
-			if (command[i].input_file > 2)
-				command[i].close_pipe[0] = fd[0];
-			else
-			{
-				command[i].input_file = fd[0];
-				command[i].close_pipe[0] = -1;
-			}
-		}
+		set_pipe_files(command, fd, i);
 		i++;
 	}
 }
@@ -71,7 +76,7 @@ int	multi_pipes(t_command *commands, int *fd)
 	while (commands[i].position == 0)
 	{
 		if (pipe(link) == -1)
-			(g_status = errno, perror("minishell: close"));
+			(perror("minishell: close"), g_status = errno);
 		set_files(&commands[i], link, *fd);
 		flag = fork_command(&commands[i], i);
 		if (flag == 1)
@@ -80,7 +85,7 @@ int	multi_pipes(t_command *commands, int *fd)
 			return (-1);
 		if (dup2(link[0], *fd) == -1 || close(link[1]) == -1
 			|| close(link[0]) == -1)
-			(g_status = errno, perror("minishell: multi pipe"));
+			(perror("minishell: multi pipe"), g_status = errno);
 		i++;
 	}
 	return (i);
