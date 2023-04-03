@@ -13,11 +13,11 @@ void	duplicate_for_streams(t_command *command)
 
 int	valide_argument_for_path(char *argument)
 {
-	if (argument[0] == '/' ||
-		(argument[0] == '.' && argument[1] == '/')
+	if (argument[0] == '/'
+		|| (argument[0] == '.' && argument[1] == '/')
 		|| (argument[0] == '.' && argument[1] == '.'
-		&& argument[1] == '/'))
-			return (1);
+			&& argument[1] == '/'))
+		return (1);
 	return (0);
 }
 
@@ -32,8 +32,14 @@ void	another_command(t_command *command)
 	else
 		path = path_for_execve(env, command->arguments[0]);
 	if (!path)
-		(ft_putstr_fd(command->arguments[0], 2), ft_putstr_fd(": command not found\n", 2), g_status = 127, exit(g_status));
+	{
+		g_status = 127;
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(command->arguments[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+		return ;
+	}
 	duplicate_for_streams(command);
 	if (execve(path, command->arguments, env) == -1)
-		(ft_putstr_fd("execve failed\n", 2), exit(errno));
+		ft_putstr_fd("minishell: execve failed\n", 2);
 }

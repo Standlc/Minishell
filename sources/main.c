@@ -149,6 +149,7 @@ int	get_line(char **minishell_env)
 			if (execute_command_line(minishell_env, line))
 				return (1);
 		}
+		hook_signals();
 		line = readline_handler();
 	}
 	return (0);

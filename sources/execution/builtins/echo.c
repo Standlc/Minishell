@@ -30,7 +30,8 @@ void	validate_n(t_command *command, int *i)
 		if (!strncmp(command->arguments[*i], "-n", 2))
 		{
 			j++;
-			while (command->arguments[*i][j] && command->arguments[*i][j] == 'n')
+			while (command->arguments[*i][j]
+				&& command->arguments[*i][j] == 'n')
 				j++;
 			if (command->arguments[*i][j] != '\0')
 				break ;

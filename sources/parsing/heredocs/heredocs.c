@@ -136,7 +136,10 @@ t_heredoc_fds	*handle_heredocs(char **minishell_env, char *line)
 		if (pid == 0)
 			return (heredoc_child(&heredoc), NULL);
 		else
+		{
+			signal_for_wait();
 			waitpid(pid, &status_waitpid, 0);
+		}
 		if (WIFSIGNALED(status_waitpid))
 			g_status = 128 + WTERMSIG(status_waitpid);
 		else if (WIFEXITED(status_waitpid))

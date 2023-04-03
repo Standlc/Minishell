@@ -52,7 +52,7 @@ int	exit_min(char *value, char *min)
 int	strcmp_for_exit(char *value, char *min, char *max)
 {
 	int	i;
-	int check;
+	int	check;
 	int	return_value;
 
 	i = 0;
@@ -114,16 +114,16 @@ void	exit_ms(t_command *command)
 		i++;
 	if (i > 1)
 	{
-		value = strcmp_for_exit(command->arguments[1], "-9223372036854775808", "9223372036854775807");
+		value = strcmp_for_exit(command->arguments[1], LMIN, LMAX);
 		if (value == 0)
 			(value = ft_atoi_exit(command->arguments[1]));
 		else
-			return (ft_putstr_fd("exit: numeric argument required\n", 2), g_status = 2, (void)0);
+			return (g_status = 2,
+				ft_putstr_fd("exit: numeric argument required\n", 2));
 	}
 	if (i == 3)
 		return (g_status = 1, ft_putstr_fd("exit: too many arguments\n", 2));
 	if (i > 4)
 		return (g_status = 127, ft_putstr_fd("exit: too many arguments\n", 2));
-	
 	g_status = value;
 }

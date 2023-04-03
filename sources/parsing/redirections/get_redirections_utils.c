@@ -44,7 +44,7 @@ int	handle_double_right_redirection(t_command *command, char *file)
 {
 	if (command->output_file != 1)
 		close(command->output_file);
-	command->output_file = open(file, O_WRONLY | O_CREAT, 0644);
+	command->output_file = open(file, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (command->output_file == -1)
 	{
 		g_status = errno;

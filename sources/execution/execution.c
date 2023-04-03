@@ -2,18 +2,12 @@
 
 extern int	g_status;
 
-void	execution_pipeline(t_command *commands)
+void	execution_while(t_command *commands, int fd[2])
 {
 	int	i;
-	int	fd[2];
 	int	flag;
 
 	i = 0;
-	flag = g_status;
-	set_position(commands);
-	pipeline_start(commands, fd);
-	if (g_status != flag)
-		return ;
 	while (commands[i].is_end)
 	{
 		if (i == 1)
@@ -32,6 +26,19 @@ void	execution_pipeline(t_command *commands)
 		i++;
 	}
 	end_of_pipeline(commands, fd, i);
+}
+
+void	execution_pipeline(t_command *commands)
+{
+	int	fd[2];
+	int	flag;
+
+	flag = g_status;
+	set_position(commands);
+	pipeline_start(commands, fd);
+	if (g_status != flag)
+		return ;
+	return (execution_while(commands, fd));
 }
 
 int	check_last_status(t_pipeline last)
@@ -78,13 +85,13 @@ void	execution_global(t_pipeline *pipelines)
 	i = 0;
 	while (pipelines[i].commands)
 	{
-		if (!strncmp("exit", pipelines[i].commands->arguments[0], 5) && !pipelines[i].commands[1].is_end)
+		if ((pipelines[i].commands->arguments && pipelines[i].commands->arguments[0] && pipelines[i].commands->arguments[0][0]) && !strncmp("exit", pipelines[i].commands->arguments[0], 5) && !pipelines[i].commands[1].is_end)
 			exit_pipeline(pipelines, i);
 		else if (i == 0 || !check_last_status(pipelines[i]))
 		{
 			execution_pipeline(pipelines[i].commands);
 			if (pipelines[i].commands->is_end == 2)
-				(env = *(environnement(NULL)), free_pipelines(pipelines), free_dup(env), exit(g_status));
+				(env = *(environnement(NULL)), free_pipelines(pipelines), free_dup(env), rl_clear_history(), exit(g_status));
 		}
 		else if (pipelines[i + 1].commands && pipelines[i + 1].parenthesis > 0)
 		{
