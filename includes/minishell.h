@@ -136,6 +136,8 @@ char	**duplicate_bigarray(char **bigarray);
 void	child_sigint(int sig);
 void	child_sigquit(int sig);
 int		child_signals();
+void	signal_for_wait();
+void	backslash_quit();
 
 char	***environnement(char **new_env);
 t_pipeline	*test(t_pipeline *pipelines);

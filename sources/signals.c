@@ -25,19 +25,40 @@ void	child_sigint(int sig)
 {
 	(void)sig;
 	ft_putstr_fd("\n", 2);
+	exit(99);
 }
 
 void	child_sigquit(int sig)
 {
 	(void)sig;
 	ft_putstr_fd("Quit\n", 2);
+	exit(102);
+}
+
+void	backslash()
+{
+	ft_printf("\n");
+}
+
+void	backslash_quit()
+{
+	ft_putstr_fd("Quit\n", 2);
+}
+
+void	signal_for_wait()
+{
+	signal(SIGINT, backslash);
+	signal(SIGQUIT, backslash_quit);
 }
 
 int	child_signals()
 {
-	if (signal(SIGINT, child_sigint) == SIG_ERR)
-		return (ft_putstr_fd("minishell: SIGINT error\n", 2), 1);
-	if (signal(SIGQUIT, child_sigquit) == SIG_ERR)
-		return (ft_putstr_fd("minishell: SIGQUIT error\n", 2), 1);
+
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	// if (signal(SIGINT, child_sigint) == SIG_ERR)
+	// 	return (ft_putstr_fd("minishell: SIGINT error\n", 2), 1);
+	// if (signal(SIGQUIT, child_sigquit) == SIG_ERR)
+	// 	return (ft_putstr_fd("minishell: SIGQUIT error\n", 2), 1);
 	return (0);
 }

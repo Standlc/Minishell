@@ -76,6 +76,7 @@ int	get_line(t_pipeline *pipelines, char **env)
 			execution_global(pipelines);
 			free_pipelines(pipelines);
 		}
+		hook_signals();
 		line = readline(PROMPT);
 	}
 	new_env = *(environnement(NULL));

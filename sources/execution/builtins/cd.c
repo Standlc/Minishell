@@ -76,6 +76,7 @@ void	cd_ms(t_command *command)
 	char	*old_pwd;
 
 	g_status = 0;
+	str = NULL;
 	if (command->arguments[1] && command->arguments[2])
 		return (g_status = 1, ft_putstr_fd("cd: too many arguments\n", 2));
 	old_pwd = getcwd(NULL, 1024);
@@ -90,7 +91,7 @@ void	cd_ms(t_command *command)
 		if (!str)
 			return (ft_putstr_fd("cd: HOME not set\n", 2), g_status = 1, free(old_pwd));
 		if (chdir(str) == -1)
-			return (ft_putstr_fd("cd: No such directory\n", 2), g_status = 1, free(old_pwd));
+			return (ft_putstr_fd("cd: No such directory\n", 2), g_status = 1, free(old_pwd), free(str));
 	}
-	(env_pwd(old_pwd), free(old_pwd));
+	(env_pwd(old_pwd), free(old_pwd), free(str));
 }

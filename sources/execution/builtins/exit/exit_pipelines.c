@@ -14,6 +14,6 @@ void	exit_pipeline(t_pipeline *pipelines, int i)
 	exit_ms(command);
 	free_dup(env);
 	free_pipelines(pipelines);
-	// rl_clear_history();
+	rl_clear_history();
 	exit(g_status);
 }

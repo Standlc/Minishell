@@ -124,6 +124,5 @@ void	exit_ms(t_command *command)
 		return (g_status = 1, ft_putstr_fd("exit: too many arguments\n", 2));
 	if (i > 4)
 		return (g_status = 127, ft_putstr_fd("exit: too many arguments\n", 2));
-	
 	g_status = value;
 }

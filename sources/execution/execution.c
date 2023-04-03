@@ -61,13 +61,13 @@ void	execution_global(t_pipeline *pipelines)
 	i = 0;
 	while (pipelines[i].commands)
 	{
-		if (!strncmp("exit", pipelines[i].commands->arguments[0], 5) && !pipelines[i].commands[1].is_end)
+		if ((pipelines[i].commands->arguments && pipelines[i].commands->arguments[0] && pipelines[i].commands->arguments[0][0]) && !strncmp("exit", pipelines[i].commands->arguments[0], 5) && !pipelines[i].commands[1].is_end)
 			exit_pipeline(pipelines, i);
 		else if (i == 0 || !check_last_status(pipelines[i]))
 		{
 			execution_pipeline(pipelines[i].commands);
 			if (pipelines[i].commands->is_end == 2)
-				(env = *(environnement(NULL)), free_pipelines(pipelines), free_dup(env), exit(g_status));
+				(env = *(environnement(NULL)), free_pipelines(pipelines), free_dup(env), rl_clear_history(), exit(g_status));
 		}
 		else if (pipelines[i + 1].commands && pipelines[i + 1].parenthesis > 0)
 		{
