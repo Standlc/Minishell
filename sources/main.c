@@ -109,14 +109,14 @@ void	handle_parenthesis_skip(char **line, t_pipeline last, t_heredoc_fds	*heredo
 			skip_parenthesis_pipeline(line, last, heredoc_fds);
 }
 
-int	execute_command_line(t_data *data, char *line)
+int	execute_command_line(char **minishell_env, char *line)
 {
+	t_pipeline		pipeline;
 	char			*line_ptr;
 	t_heredoc_fds	*heredocs_ptr;
-	t_pipeline		pipeline;
 	t_heredoc_fds	*heredoc_fds;
 
-	heredoc_fds = handle_heredocs(data, line);
+	heredoc_fds = handle_heredocs(minishell_env, line);
 	if (!heredoc_fds)
 		return (free(line), 1);
 	heredocs_ptr = heredoc_fds;
@@ -135,7 +135,7 @@ int	execute_command_line(t_data *data, char *line)
 	return (0);
 }
 
-int	get_line(t_data *data)
+int	get_line(char **minishell_env)
 {
 	char			*line;
 
@@ -146,7 +146,7 @@ int	get_line(t_data *data)
 			add_history(line);
 		if (!check_syntax(line))
 		{
-			if (execute_command_line(data, line))
+			if (execute_command_line(minishell_env, line))
 				return (1);
 		}
 		line = readline_handler();
@@ -156,7 +156,7 @@ int	get_line(t_data *data)
 
 int	main(int argc, char **argv, char **env)
 {
-	t_data		data;
+	char	**minishell_env;
 
 	(void)argc;
 	(void)argv;
@@ -167,13 +167,13 @@ int	main(int argc, char **argv, char **env)
 	// }
 	hook_signals();
 	g_status = 0;
-	data.env = duplicate_bigarray(env);
+	minishell_env = duplicate_bigarray(env);
 	if (g_status != 0)
 		exit(g_status);
-	(void)environnement(data.env);
-	get_line(&data);
-	data.env = *(environnement(NULL));
-	free_str_arr(data.env);
+	(void)environnement(minishell_env);
+	get_line(minishell_env);
+	minishell_env = *(environnement(NULL));
+	free_str_arr(minishell_env);
 	rl_clear_history();
 	ft_putstr_fd("exit\n", 1);
 	return (g_status);

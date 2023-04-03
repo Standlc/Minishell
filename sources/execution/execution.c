@@ -53,26 +53,21 @@ int	check_last_status(t_pipeline last)
 	return (-1);
 }
 
-
 void	execute_pipeline(t_pipeline pipeline)
 {
 	char	**env;
 
 	// if (!strncmp("exit", pipeline.commands->arguments[0], 5) && !pipeline.commands[1].is_end)
-	// {
-		// exit_pipeline(pipelines, i);
-	// }
-	// else if (i == 0 || !check_last_status(pipeline))
-	// {
-		execution_pipeline(pipeline.commands);
-		if (pipeline.commands->is_end == 2)
-			(env = *(environnement(NULL)), free_pipeline(pipeline), free_dup(env), exit(g_status));
-	// }
-	// else if (pipelines[i + 1].commands && pipelines[i + 1].parenthesis > 0)
-	// {
-	// 	parenthesis(&pipeline, &i);
-	// 	i++;
-	// }
+	// 			exit_pipeline(pipeline);
+	execution_pipeline(pipeline.commands);
+	if (pipeline.commands->is_end == 2)
+	{
+		free_pipeline(pipeline);
+		env = *(environnement(NULL));
+		free_str_arr(env);
+		rl_clear_history();
+		exit(g_status);
+	}
 }
 
 void	execution_global(t_pipeline *pipelines)

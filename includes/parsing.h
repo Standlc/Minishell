@@ -21,13 +21,13 @@ typedef struct	s_heredoc_fds {
 }				t_heredoc_fds;
 
 typedef struct	s_heredoc_data {
-	t_data			*data;
+	char			**env;
 	char			**limits;
 	t_heredoc_fds	*heredoc_fds;
 }				t_heredoc_data;
 
 
-t_heredoc_fds	*handle_heredocs(t_data *data, char *line);
+t_heredoc_fds	*handle_heredocs(char **minishell_env, char *line);
 t_heredoc_fds	*do_the_heredoc(t_heredoc_fds *heredoc_fds, char **limits);
 int	get_heredoc_amount(char *line);
 char	*get_heredoc_limit(char **line, char *heredoc_limit);

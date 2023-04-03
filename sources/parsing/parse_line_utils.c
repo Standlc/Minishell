@@ -24,7 +24,10 @@ void	get_operator(char **line, t_pipeline *pipeline)
 {
 	skip_spaces(line);
 	if (!is_operator(*line))
+	{
+		pipeline->operator = NONE;
 		return ;
+	}
 	if (!ft_strncmp(*line, "&&", 2))
 		pipeline->operator = AND;
 	else if (!ft_strncmp(*line, "||", 2))

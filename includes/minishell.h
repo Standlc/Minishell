@@ -52,7 +52,6 @@ typedef struct s_pipeline
 
 typedef struct s_data
 {
-	t_pipeline	*pipelines;
 	char		**env;
 }				t_data;
 

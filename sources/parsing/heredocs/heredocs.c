@@ -65,6 +65,7 @@ t_heredoc_fds *get_heredoc_fds(char *line, t_heredoc_fds *heredoc_fds)
 			check_quotes(&line);
 		else if (is_heredoc(line))
 		{
+			heredoc_fds[i].is_end = 0;
 			if (pipe(heredoc_fds[i].fds) == -1)
 				return (free(heredoc_fds), NULL);
 			line += 2;
@@ -85,12 +86,12 @@ void	heredoc_signal_handler(int sig, siginfo_t *sact, void *ptr)
 	(void)sig;
 	(void)sact;
 	heredoc = (t_heredoc_data *)ptr;
-	heredoc->data->env = *(environnement(NULL));
-	free_str_arr(heredoc->data->env);
+	heredoc->env = *(environnement(NULL));
+	free_str_arr(heredoc->env);
+	close_heredoc_fds(heredoc->heredoc_fds);
 	free(heredoc->heredoc_fds);
 	free_str_arr(heredoc->limits);
-	close_heredoc_fds(heredoc->heredoc_fds);
-	// rl_clear_history();
+	rl_clear_history();
 	exit(g_status);
 }
 
@@ -103,19 +104,23 @@ int	heredoc_child(t_heredoc_data *heredoc)
 	sact.sa_sigaction = heredoc_signal_handler;
 	sigaction(SIGINT, &sact, NULL);
 	do_the_heredoc(heredoc->heredoc_fds, heredoc->limits);
+	heredoc->env = *(environnement(NULL));
+	free_str_arr(heredoc->env);
 	free(heredoc->heredoc_fds);
 	free_str_arr(heredoc->limits);
-	close_heredoc_fds(heredoc->heredoc_fds);
+	rl_clear_history();
 	exit(g_status);
 }
 
-t_heredoc_fds	*handle_heredocs(t_data *data, char *line)
+t_heredoc_fds	*handle_heredocs(char **minishell_env, char *line)
 {
 	t_heredoc_data	heredoc;
 	pid_t			pid;
 	int				status_waitpid;
 
-	heredoc.data = data;
+	heredoc.heredoc_fds = NULL;
+	heredoc.limits = NULL;
+	heredoc.env = minishell_env;
 	heredoc.heredoc_fds = get_heredoc_fds(line, heredoc.heredoc_fds);
 	if (!heredoc.heredoc_fds)
 		return (NULL);
@@ -131,7 +136,7 @@ t_heredoc_fds	*handle_heredocs(t_data *data, char *line)
 		if (pid == 0)
 			return (heredoc_child(&heredoc), NULL);
 		else
-			wait(&status_waitpid);
+			waitpid(pid, &status_waitpid, 0);
 		if (WIFSIGNALED(status_waitpid))
 			g_status = 128 + WTERMSIG(status_waitpid);
 		else if (WIFEXITED(status_waitpid))
