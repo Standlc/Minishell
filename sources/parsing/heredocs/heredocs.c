@@ -106,6 +106,7 @@ int	heredoc_child(t_heredoc_data *heredoc)
 	do_the_heredoc(heredoc->heredoc_fds, heredoc->limits);
 	heredoc->env = *(environnement(NULL));
 	free_str_arr(heredoc->env);
+	close_heredoc_fds(heredoc->heredoc_fds);
 	free(heredoc->heredoc_fds);
 	free_str_arr(heredoc->limits);
 	rl_clear_history();

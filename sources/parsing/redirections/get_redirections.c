@@ -48,10 +48,12 @@ int	handle_redirections(char **line, t_command *command, int red_function(t_comm
 		g_status = 1;
 		return (free_str_arr(file_names), print_error("ambiguous redirect: ", line_cpy), 1);
 	}
-	if (file_or_dir_check(file_names[0]) || red_function(command, file_names[0]) == -1)
+	if (red_function(command, file_names[0]) == -1)
 		return (free_str_arr(file_names), 1);
 	return (free_str_arr(file_names), 0);
 }
+
+// AMBIGUOUS REDIRECT IF ENV VAR == NULL
 
 int	get_redirections(char **line, t_command *command, t_heredoc_fds **heredoc_fds)
 {

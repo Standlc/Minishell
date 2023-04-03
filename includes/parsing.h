@@ -15,6 +15,13 @@
 
 # include "minishell.h"
 
+enum e_access_types {
+	ACCESS_NONE,
+	EXEC,
+	WRITE,
+	READ
+};
+
 typedef struct	s_heredoc_fds {
 	int	fds[2];
 	int	is_end;
@@ -83,7 +90,7 @@ char	*dup_line_word(char **line);
 
 void		skip_spaces(char **line);
 void		get_operator(char **line, t_pipeline *pipeline);
-int	file_or_dir_check(char *str);
+int	file_or_dir_check(char *str, int access_type);
 void	*ft_realloc(void *src, int prev_size, int new_size);
 
 void		print_error(char *message, char *line);

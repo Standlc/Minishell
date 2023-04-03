@@ -16,6 +16,8 @@ char	*strjoin_handler(char *str, char *join)
 {
 	char	*temp_ptr;
 
+	if (!join)
+		return (str);
 	temp_ptr = str;
 	str = ft_strjoin(str, join);
 	free(temp_ptr);

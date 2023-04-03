@@ -2,40 +2,35 @@
 
 int	g_status;
 
-void	show_data(t_pipeline *pipelines)
+void	show_data(t_pipeline pipeline)
 {
-	int	i = 0;
 	int	j = 0;
 	int	k = 0;
 
-	while (pipelines[i].commands)
+	if (pipeline.commands)
 	{
-		printf("[\n");
-		j = 0;
-		while (pipelines[i].commands[j].is_end)
+		while (pipeline.commands[j].is_end)
 		{
-			printf("\t{\n");
-			if (pipelines[i].commands[j].arguments)
-				printf("\t\tname: %s\n", pipelines[i].commands[j].arguments[0]);
+			printf("{\n");
+			if (pipeline.commands[j].arguments)
+				printf("\tname: %s\n", pipeline.commands[j].arguments[0]);
 			k = 1;
-			printf("\t\targuments: [");
-			while (pipelines[i].commands[j].arguments && pipelines[i].commands[j].arguments[k])
+			printf("\targuments: [");
+			while (pipeline.commands[j].arguments && pipeline.commands[j].arguments[k])
 			{
-				printf("%s, ", pipelines[i].commands[j].arguments[k]);
+				printf("%s, ", pipeline.commands[j].arguments[k]);
 				k++;
 			}
 			printf("]\n");
-			printf("\t\tinput: %d\n", pipelines[i].commands[j].input_file);
-			printf("\t\touput: %d\n", pipelines[i].commands[j].output_file);
-			printf("\t\tis_end: %d\n", pipelines[i].commands[j].is_end);
-			printf("\t}\n");
+			printf("\tinput: %d\n", pipeline.commands[j].input_file);
+			printf("\touput: %d\n", pipeline.commands[j].output_file);
+			printf("\tis_end: %d\n", pipeline.commands[j].is_end);
+			printf("}\n");
 			j++;
 		}
-		printf("\tparenthesis: %d\n", pipelines[i].parenthesis);
-		printf("\toperator: %d\n", pipelines[i].operator);
-		printf("]\n");
-		i++;
 	}
+	printf("parenthesis: %d\n", pipeline.parenthesis);
+	printf("operator: %d\n", pipeline.operator);
 }
 
 char	***environnement(char **new_env)
@@ -124,8 +119,12 @@ int	execute_command_line(char **minishell_env, char *line)
 	while (*line)
 	{
 		if (get_pipeline(&line, &pipeline, &heredoc_fds))
+		{
+			free_pipeline(pipeline);
 			continue ;
-		execute_pipeline(pipeline);
+		}
+		show_data(pipeline);
+		// execute_pipeline(pipeline);
 		handle_parenthesis_skip(&line, pipeline, heredoc_fds);
 		free_pipeline(pipeline);
 	}

@@ -8,8 +8,8 @@
 // # define BOLD	"\033[1m"
 // # define WHITE	"\033[0m"
 
-# define PROMPT			"\033[1;32m▸  \033[1;36mminishell\033[0m "
-# define PROMPT_ERROR	"\033[1;31m▸  \033[1;36mminishell\033[0m "
+# define PROMPT			"\033[1;32m▸  \033[1;32mminishell\033[0m "
+# define PROMPT_ERROR	"\033[1;31m▸  \033[1;32mminishell\033[0m "
 # define MEM "minishell: Cannot allocate memory\n"
 # define LMIN "-9223372036854775808"
 # define LMAX "9223372036854775807"

@@ -59,18 +59,17 @@ char	**join_arr_strjoin(char **arr1, char **arr2)
 		res[i] = arr1[i];
 		i++;
 	}
-	// if (arr2[0] && arr2[0][0])
-		res[i] = strjoin_handler(arr1[i], arr2[0]);
-	if (!res[i] && errno == ENOMEM)
-		return (free(arr1), free_str_arr(arr2), NULL);
+	res[i] = strjoin_handler(arr1[i], arr2[0]);
 	free(arr2[0]);
+	if (!res[i] && errno == ENOMEM)
+		return (free(arr1), free_str_arr(res), free_str_arr(arr2), NULL);
 	j = 1;
-	while (arr2 && arr2[j])
+	while (arr2[j])
 	{
-		// if (arr2[j][0])
+		if (arr2[j][0])
 			res[j + i] = arr2[j];
-		// else
-		// 	free(arr2[j]);
+		else
+			free(arr2[j]);
 		j++;
 	}
 	return (free(arr1), free(arr2), res);
@@ -93,6 +92,5 @@ char	**join_str_arr(char **dest, char **arr2)
 		dest[dest_size + i] = arr2[i];
 		i++;
 	}
-	// return (ft_calloc(2, sizeof(char **)));
 	return (free(arr2), dest);
 }

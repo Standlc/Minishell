@@ -34,6 +34,16 @@ int	add_char(char **line, char **str)
 	return (*str = res, 0);
 }
 
+int	is_empty_quotes(char *line, char quote_type)
+{
+	int	len;
+
+	len = 0;
+	while (line[len] && line[len] != quote_type)
+		len++;	
+	return (len == 0);
+}
+
 char	**handle_quotes_copy(char **line, char quote_type)
 {
 	char	**str_arr;
@@ -41,6 +51,10 @@ char	**handle_quotes_copy(char **line, char quote_type)
 	str_arr = ft_calloc(2, sizeof(char **));
 	if (!str_arr)
 		return (NULL);
+	str_arr[0] = malloc(1);
+	if (!str_arr[0])
+		return (free(str_arr), NULL);
+	str_arr[0][0] = '\0';
 	*line += 1;
 	while (**line && **line != quote_type)
 	{
@@ -83,7 +97,6 @@ char	**get_line_args(char **line)
 				return (NULL);
 	}
 	skip_spaces(line);
-	// return (ft_calloc(2, sizeof(char **)));
 	return (str_arr);
 }
 
