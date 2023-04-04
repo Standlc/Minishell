@@ -31,6 +31,7 @@ int	fork_command(t_command *command, int i)
 {
 	pid_t	pid;
 
+	pid = 0;
 	if (i != 0 || command[i + 1].is_end || is_child(command[i]))
 	{
 		child_signals();
@@ -86,5 +87,12 @@ void	end_of_pipeline(t_command *commands, int fd[2], int end)
 					g_status = 128 + WTERMSIG(status_w);
 			}
 		}
+	}
+	if (WIFSIGNALED(status_w))
+	{
+		if (WTERMSIG(status_w) == 2)
+			write(1, "\n", 2);
+		if (WTERMSIG(status_w) == 3)
+			write(2, "Quit\n", 6);
 	}
 }

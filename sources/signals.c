@@ -43,8 +43,8 @@ void	backslash_quit(int sig)
 
 void	signal_for_wait(void)
 {
-	signal(SIGINT, backslash);
-	signal(SIGQUIT, backslash_quit);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 int	child_signals()
