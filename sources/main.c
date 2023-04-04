@@ -125,7 +125,7 @@ int	execute_command_line(char **minishell_env, char *line)
 	{
 		if (get_pipeline(&line, &pipeline, &heredoc_fds))
 			continue ;
-		execute_pipeline(pipeline);
+		execute_pipeline(pipeline, &(t_blocks){line_ptr, heredocs_ptr});
 		handle_parenthesis_skip(&line, pipeline, heredoc_fds);
 		free_pipeline(pipeline);
 	}

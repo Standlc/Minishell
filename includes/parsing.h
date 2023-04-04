@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:17 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/03 05:05:43 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 17:30:17 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 
 # include "minishell.h"
 
-typedef struct	s_heredoc_fds {
-	int	fds[2];
-	int	is_end;
-}				t_heredoc_fds;
+// typedef struct	s_heredoc_fds {
+// 	int	fds[2];
+// 	int	is_end;
+// }				t_heredoc_fds;
 
-typedef struct	s_heredoc_data {
-	char			**env;
-	char			**limits;
-	t_heredoc_fds	*heredoc_fds;
-}				t_heredoc_data;
+// typedef struct	s_heredoc_data {
+// 	char			**env;
+// 	char			**limits;
+// 	t_heredoc_fds	*heredoc_fds;
+// }				t_heredoc_data;
 
 
 t_heredoc_fds	*handle_heredocs(char **minishell_env, char *line);

@@ -39,4 +39,21 @@ typedef struct s_pipeline
 	int			parenthesis;
 }				t_pipeline;
 
+typedef struct	s_heredoc_fds {
+	int	fds[2];
+	int	is_end;
+}				t_heredoc_fds;
+
+typedef struct	s_heredoc_data {
+	char			**env;
+	char			**limits;
+	t_heredoc_fds	*heredoc_fds;
+}				t_heredoc_data;
+
+typedef struct s_blocks
+{
+	char			*line_ptr;
+	t_heredoc_fds	*heredoc_ptr;
+}				t_blocks;
+
 #endif

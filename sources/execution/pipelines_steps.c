@@ -80,12 +80,10 @@ void	end_of_pipeline(t_command *commands, int fd[2], int end)
 		{
 			if (waitpid(-1, &status_w, 0) == -1)
 				(perror("minishell: waitpid"), g_status = errno);
-			else if (WIFEXITED(status_w))
-			{
+			if (WIFEXITED(status_w))
 				g_status = WEXITSTATUS(status_w);
-				if (WIFSIGNALED(status_w))
-					g_status = 128 + WTERMSIG(status_w);
-			}
+			if (WIFSIGNALED(status_w))
+				g_status = 128 + WTERMSIG(status_w);
 		}
 	}
 	if (WIFSIGNALED(status_w))
@@ -93,6 +91,6 @@ void	end_of_pipeline(t_command *commands, int fd[2], int end)
 		if (WTERMSIG(status_w) == 2)
 			write(1, "\n", 2);
 		if (WTERMSIG(status_w) == 3)
-			write(2, "Quit\n", 6);
+			write(2, "Quit (core dumped)\n", 20);
 	}
 }
