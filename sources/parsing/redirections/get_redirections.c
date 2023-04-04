@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:54 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 03:11:04 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 15:36:05 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	get_redirections(char **line, t_command *command,
 			if (assign_heredoc_fd(line, command, heredoc_fds))
 				return (1);
 		}
-		else 
+		else
 		{
 			redirection_function = get_red_function(redirect_type);
 			if (handle_redirections(line, command, redirection_function))

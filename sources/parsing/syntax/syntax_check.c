@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:21 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/02 13:42:48 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 15:42:33 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	check_line(char *line, int is_inside_parenthesis, char *line_ptr_cpy)
 			return (print_error("syntax error: unexpected token: ", line), 1);
 		if (check_parenthesis_error(&line, line_ptr_cpy, is_inside_parenthesis))
 			return (1);
-		line += *line && !is_meta_char(line);
+		line += (*line && !is_meta_char(line));
 	}
 	return (0);
 }

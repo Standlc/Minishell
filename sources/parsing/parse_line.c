@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:11 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 03:41:46 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 16:22:41 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	get_arguments(char **line, t_command *command, t_heredoc_fds **heredoc_fds)
 				return (1);
 		}
 		else if (get_redirections(line, command, heredoc_fds))
-				return (1);
+			return (1);
 		skip_spaces(line);
 	}
 	return (0);
@@ -97,29 +97,6 @@ int	get_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds)
 	return (0);
 }
 
-// t_pipeline	*parse_line(char *line, t_heredoc_fds *heredoc_fds)
-// {
-// 	t_pipeline	*pipelines;
-// 	int			i;
-
-// 	pipelines = ft_calloc(get_pipelines_amount(line) + 1, sizeof(t_pipeline));
-// 	if (!pipelines)
-// 		return (NULL);
-// 	i = 0;
-// 	while (*line)
-// 	{
-// 		if (get_pipeline(&line, pipelines + i, &heredoc_fds))
-// 		{
-// 			free_pipelines(pipelines);
-// 			if (errno == ENOMEM)
-// 				return (NULL);
-// 			return (ft_calloc(1, sizeof(t_pipeline)));
-// 		}
-// 		i++;
-// 	}
-// 	return (pipelines);
-// }
-
 // :
 // #
 // $'' $: $=
@@ -128,7 +105,6 @@ int	get_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds)
 // cat a || (cat a && (cat b || cat a) || cat b)
 // cat a || (cat a || ((cat b && cat a) || cat b))
 
-// > "file" > "file" "command" arg < file arg | command " arg < file arg" && "command" arg arg > file | command " arg arg"
 // rev | < a cat > b < 6.c > c | rev &&  < a echo yo > b > a | cat || ls
 // echo "sdf$USER" -> sdfstde-la-
 // echo "sdf$USERsdf" -> sdf

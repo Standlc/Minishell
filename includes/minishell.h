@@ -35,6 +35,7 @@
 # include "parsing.h"
 # include "execution.h"
 
+int			hook_signals(void);
 char		***environnement(char **new_env);
 int			main(int argc, char **argv, char **env);
 

@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:10:10 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 03:19:12 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 15:39:50 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	**replace_wildcard(char **args, char *wildcard, int *insert_index)
 {
 	int		wildcard_matches_size;
-	char	**wildcard_matches = NULL;
+	char	**wildcard_matches;
 
 	wildcard_matches = get_wildcard_matches(wildcard);
 	if (!wildcard_matches)

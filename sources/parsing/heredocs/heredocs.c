@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:36 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 02:18:30 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 17:18:28 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	**get_heredoc_limits(char *line, char **limits)
 	return (limits);
 }
 
-t_heredoc_fds *get_heredoc_fds(char *line, t_heredoc_fds *heredoc_fds)
+t_heredoc_fds	*get_heredoc_fds(char *line, t_heredoc_fds *heredoc_fds)
 {
 	int	i;
 	int	size;
@@ -70,6 +70,12 @@ t_heredoc_fds *get_heredoc_fds(char *line, t_heredoc_fds *heredoc_fds)
 	return (heredoc_fds);
 }
 
+void	handle_sigint_parent(int sig)
+{
+	(void)sig;
+	g_status = 130;
+}
+
 int	fork_and_wait(t_heredoc_data *heredoc)
 {
 	int				status_waitpid;
@@ -80,12 +86,8 @@ int	fork_and_wait(t_heredoc_data *heredoc)
 		return (1);
 	if (pid == 0)
 		heredoc_child(heredoc);
-	signal_for_wait();
+	signal(SIGINT, handle_sigint_parent);
 	waitpid(pid, &status_waitpid, 0);
-	if (WIFSIGNALED(status_waitpid))
-		g_status = 128 + WTERMSIG(status_waitpid);
-	else if (WIFEXITED(status_waitpid))
-		g_status = WEXITSTATUS(status_waitpid);
 	close_heredoc_fds_ins(heredoc->heredoc_fds);
 	return (0);
 }
@@ -114,5 +116,3 @@ t_heredoc_fds	*handle_heredocs(char *line)
 	free_str_arr(heredoc.limits);
 	return (heredoc.heredoc_fds);
 }
-
-// << a"s" -> limit: as

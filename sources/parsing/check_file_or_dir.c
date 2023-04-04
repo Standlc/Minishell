@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_file_or_dir.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/04 15:29:02 by stde-la-          #+#    #+#             */
+/*   Updated: 2023/04/04 16:36:37 by stde-la-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 extern int	g_status;
@@ -27,21 +39,18 @@ int	check_file_accessibility(char *file, int access_type)
 
 int	file_or_dir_check(char *str, int access_type)
 {
-	DIR				*directory;
-
 	if (!str || (access_type == EXEC && (str[0] != '/' && str[0] != '.')))
 		return (0);
 	if (!access(str, F_OK))
 	{
-		if (check_file_accessibility(str, access_type))
-			return (1);
-		directory = opendir(str);
-		if (directory)
-		{
+		if (is_directory(str))
+		{			
 			g_status = 126;
 			print_error("is a directory: ", str);
-			return (closedir(directory), 1);
+			return (1);
 		}
+		if (check_file_accessibility(str, access_type))
+			return (1);
 		return (0);
 	}
 	g_status = 127;

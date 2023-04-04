@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:10:07 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/02 13:10:08 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 16:07:51 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ int	is_matching_chunk(char *wildcard, char *file)
 	int	i;
 
 	i = 0;
-	while (wildcard[i] && file[i] && wildcard[i] != '*' && file[i] == wildcard[i])
+	while (wildcard[i] && file[i]
+		&& wildcard[i] != '*' && file[i] == wildcard[i])
 		i++;
 	return (wildcard[i] == '*' || wildcard[i] == '\0');
 }
@@ -60,7 +61,7 @@ int	compare(char *wildcard, char *file)
 	return (*file == *wildcard);
 }
 
-int	wildcard_matches_amount(char *curr_dir_wildcard, int is_directory_match)
+int	wildcard_matches_amount(char *curr_dir_wildcard, t_wildcard_info *wildcard_info)
 {
 	struct dirent	*entry;
 	int				count;
@@ -73,7 +74,7 @@ int	wildcard_matches_amount(char *curr_dir_wildcard, int is_directory_match)
 	entry = readdir(directory);
 	while (entry)
 	{
-		if (is_match(curr_dir_wildcard, is_directory_match, entry->d_name))
+		if (is_match(curr_dir_wildcard, wildcard_info, entry->d_name))
 			count++;
 		entry = readdir(directory);
 	}
@@ -81,51 +82,27 @@ int	wildcard_matches_amount(char *curr_dir_wildcard, int is_directory_match)
 	return (count);
 }
 
-char	*get_curr_dir_wildcard(char *wildcard, int *is_directory_match)
+char	*parse_wildcard(char *wildcard, t_wildcard_info *wildcard_info)
 {
 	int		i;
 	char	*res;
 
+	wildcard_info->has_prefix = 0;
 	res = malloc(ft_strlen(wildcard) + 1);
 	if (!res)
 		return (NULL);
 	i = 0;
 	if (!ft_strncmp(wildcard, "./", 2))
+	{
+		wildcard_info->has_prefix = 1;
 		wildcard += 2;
+	}
 	while (wildcard[i] && wildcard[i] != '/')
 	{
 		res[i] = wildcard[i];
 		i++;
 	}
-	*is_directory_match = wildcard[i] == '/';
+	wildcard_info->directory_match = wildcard[i] == '/';
 	res[i] = '\0';
 	return (res);
-}
-
-void	sort(char **arr, int size)
-{
-	char	*temp;
-	int		i;
-	int		j;
-	int		k;
-
-	i = 0;
-	while (i < size)
-	{
-		j = 1;
-		while (j < size - i)
-		{
-			k = 0;
-			while (arr[j - 1][k] && arr[j][k] && arr[j - 1][k] == arr[j][k])
-				k++;
-			if (arr[j - 1][k] > arr[j][k])
-			{
-				temp = arr[j - 1];
-				arr[j - 1] = arr[j];
-				arr[j] = temp;
-			}
-			j++;
-		}
-		i++;
-	}
 }

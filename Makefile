@@ -11,7 +11,7 @@ SRC			=	main.c							parsing/parse_line.c parsing/redirections/heredoc.c \
 				execution/builtins/cd.c execution/builtins/echo.c execution/builtins/env.c execution/builtins/exit/exit.c \
 				execution/builtins/exit/exit_pipelines.c execution/builtins/pwd.c execution/builtins/unset.c \
 				execution/builtins/export/export.c execution/builtins/export/complete_env.c		parsing/is_functions/is_functions_3.c	\
-				parsing/check_file_or_dir.c parsing/skip_pipelines.c \
+				parsing/check_file_or_dir.c parsing/skip_pipelines.c parsing/close_heredoc_fds.c singletons.c\
 
 SRCS		=	${addprefix sources/, ${SRC}}
 

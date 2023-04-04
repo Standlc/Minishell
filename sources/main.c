@@ -75,8 +75,8 @@ int	execute_command_line(char *line)
 			break ;
 		else if (!pipeline_error)
 		{
-			show_data(pipeline);
-			// execute_pipeline(pipeline);
+			// show_data(pipeline);
+			execute_pipeline(pipeline);
 		}
 		skip_pipelines_to_not_execute(&line, pipeline, heredoc_fds);
 		free_pipeline(pipeline);
@@ -131,38 +131,3 @@ int	main(int argc, char **argv, char **env)
 	ft_putstr_fd("exit\n", 1);
 	return (g_status);
 }
-
-// WILDCARDS REDIRECTIONS
-// CHECK REDIRECTIONS FILE
-// EXIT: SORTIE STD OU ERROR?
-
-
-// int	get_line(t_data *data)
-// {
-// 	t_heredoc_fds	*heredoc_fds;
-// 	char			*line;
-
-// 	line = readline_handler();
-// 	while (line)
-// 	{
-// 		if (*line)
-// 			add_history(line);
-// 		if (!check_syntax(line))
-// 		{
-// 			heredoc_fds = handle_heredocs(data, line);
-// 			if (!heredoc_fds)
-// 				return (free(line), 1);
-// 			data->pipelines = parse_line(line, heredoc_fds);
-// 			if (!data->pipelines)
-// 				return (free(line), 1);
-// 			close_heredoc_fds_outs(heredoc_fds);
-// 			free(heredoc_fds);
-// 			free(line);
-// 			show_data(data->pipelines);
-// 			// execution_global(data->pipelines);
-// 			free_pipelines(data->pipelines);
-// 		}
-// 		line = readline_handler();
-// 	}
-// 	return (0);
-// }

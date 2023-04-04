@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:42 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/02 13:09:42 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 15:29:38 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	is_operator(char *line)
 
 int	is_meta_char(char *line)
 {
-	return (is_pipe(line) || is_operator(line) || is_quote(*line) || is_redirection(line) || is_parenthesis(line) || *line == '&');
+	return (is_pipe(line) || is_operator(line) || is_quote(*line)
+		|| is_redirection(line) || is_parenthesis(line) || *line == '&');
 }
 
 int	is_wildcard(char *str)

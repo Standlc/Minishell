@@ -14,7 +14,7 @@
 
 int	word_condition(char *line)
 {
-	return (is_white_space(*line) && (!is_meta_char(line) || is_quote(*line)));
+	return (!is_white_space(*line) && (!is_meta_char(line) || is_quote(*line)));
 }
 
 int	word_len(char *line)

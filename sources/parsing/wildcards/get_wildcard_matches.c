@@ -6,16 +6,44 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:10:06 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/02 13:10:06 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 16:25:16 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_match(char *curr_dir_wildcard, int is_directory_match, char *file)
+void	sort(char **arr, int size)
 {
-	if (is_directory_match && !is_directory(file))
-			return (0);
+	char	*temp;
+	int		i;
+	int		j;
+	int		k;
+
+	i = 0;
+	while (i < size)
+	{
+		j = 1;
+		while (j < size - i)
+		{
+			k = 0;
+			while (arr[j - 1][k] && arr[j][k] && arr[j - 1][k] == arr[j][k])
+				k++;
+			if (arr[j - 1][k] > arr[j][k])
+			{
+				temp = arr[j - 1];
+				arr[j - 1] = arr[j];
+				arr[j] = temp;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+int	is_match(char *curr_dir_wildcard, t_wildcard_info *wildcard_info, char *file)
+{
+	if (wildcard_info->directory_match && !is_directory(file))
+		return (0);
 	if (curr_dir_wildcard[0] != '.' && file[0] == '.')
 		return (0);
 	if (curr_dir_wildcard[0] != '*')
@@ -29,16 +57,27 @@ int	is_match(char *curr_dir_wildcard, int is_directory_match, char *file)
 	return (0);
 }
 
-int	add_match(char **match, int is_directory_match, char *entry_name)
+int	add_match(char **match, t_wildcard_info *wildcard_info, char *entry_name)
 {
-	if (is_directory_match)
-		*match = strjoin_handler(ft_strdup(entry_name), "/");
-	else
-		*match = ft_strdup(entry_name);
+	char	*temp;
+	
+	*match = ft_strdup(entry_name);
+	if (!*match)
+		return (1);
+	if (wildcard_info->has_prefix)
+	{
+		temp = *match;
+		*match = ft_strjoin("./", *match);
+		free(temp);
+		if (!*match)
+			return (1);
+	}
+	if (wildcard_info->directory_match)
+		*match = strjoin_handler(*match, "/");
 	return (*match == NULL);
 }
 
-char	**read_dir(char *wildcard, char **matches, int is_directory_match)
+char	**read_dir(char *wildcard, char **matches, t_wildcard_info *wildcard_info)
 {
 	DIR				*directory;
 	struct dirent	*entry;
@@ -51,9 +90,9 @@ char	**read_dir(char *wildcard, char **matches, int is_directory_match)
 	i = 0;
 	while (entry)
 	{
-		if (is_match(wildcard, is_directory_match, entry->d_name))
+		if (is_match(wildcard, wildcard_info, entry->d_name))
 		{
-			if (add_match(matches + i, is_directory_match, entry->d_name))
+			if (add_match(matches + i, wildcard_info, entry->d_name))
 				return (NULL);
 			i++;
 		}
@@ -65,17 +104,19 @@ char	**read_dir(char *wildcard, char **matches, int is_directory_match)
 
 char	**get_wildcard_matches(char *wildcard)
 {
-	int		is_directory_match;
-	char	*curr_dir_wildcard;
-	char	**matches;
+	t_wildcard_info	wildcard_info;
+	char			*curr_dir_wildcard;
+	char			**matches;
+	int				size;
 
-	curr_dir_wildcard = get_curr_dir_wildcard(wildcard, &is_directory_match);
+	curr_dir_wildcard = parse_wildcard(wildcard, &wildcard_info);
 	if (!curr_dir_wildcard)
 		return (NULL);
-	matches = ft_calloc(wildcard_matches_amount(curr_dir_wildcard, is_directory_match) + 1, sizeof(char **));
+	size = wildcard_matches_amount(curr_dir_wildcard, &wildcard_info);
+	matches = ft_calloc(size + 1, sizeof(char **));
 	if (!matches)
 		return (free(curr_dir_wildcard), NULL);
-	matches = read_dir(curr_dir_wildcard, matches, is_directory_match);
+	matches = read_dir(curr_dir_wildcard, matches, &wildcard_info);
 	free(curr_dir_wildcard);
 	if (!matches)
 		return (NULL);

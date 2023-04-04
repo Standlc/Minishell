@@ -1,8 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   skip_pipelines.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/04 15:30:21 by stde-la-          #+#    #+#             */
+/*   Updated: 2023/04/04 16:24:31 by stde-la-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 extern int	g_status;
 
-int	skip_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds)
+int	skip_pipeline(char **line, t_pipeline *pipeline,
+	t_heredoc_fds **heredoc_fds)
 {
 	pipeline->parenthesis = 0;
 	handle_parenthesis(line, pipeline, '(');
@@ -44,10 +57,13 @@ void	skip_pipeline_group(char **line, t_heredoc_fds *heredoc_fds)
 	}
 }
 
-void	skip_pipelines_to_not_execute(char **line, t_pipeline last, t_heredoc_fds *heredoc_fds)
+void	skip_pipelines_to_not_execute(char **line, t_pipeline last,
+	t_heredoc_fds *heredoc_fds)
 {
+	if (!**line)
+		return ;
 	if (last.operator == AND && g_status)
-			skip_pipeline_group(line, heredoc_fds);
+		skip_pipeline_group(line, heredoc_fds);
 	else if (last.operator == OR && !g_status)
-			skip_pipeline_group(line, heredoc_fds);
+		skip_pipeline_group(line, heredoc_fds);
 }

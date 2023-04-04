@@ -34,7 +34,8 @@ void	print_line_component(char *line)
 	write(2, "`", 1);
 	if (is_operator(line) || is_redirection(line) == 2)
 		write(2, line, 2);
-	else if (is_pipe(line) || *line == '&' || is_redirection(line) == 1 || is_parenthesis(line))
+	else if (is_pipe(line) || *line == '&'
+		|| is_redirection(line) == 1 || is_parenthesis(line))
 		write (2, line, 1);
 	else
 	{
