@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:11 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 16:22:41 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 21:06:58 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	get_command(char **line, t_command *command, t_heredoc_fds **heredoc_fds)
 		command->arguments = handle_widlcards(command->arguments);
 		if (!command->arguments)
 			return (1);
-		if (file_or_dir_check(command->arguments[0], EXEC))
+		if (file_or_dir_check(command->arguments[0], EXEC, 1))
 			return (1);
 	}
 	*line += is_pipe(*line);
@@ -74,6 +74,16 @@ void	handle_parenthesis(char **line, t_pipeline *pipeline, char parenthesis)
 	}
 }
 
+void	skip_to_end_of_pipeline(char **line, t_pipeline *pipeline)
+{
+	if (!**line)
+		return ;
+	handle_parenthesis(line, pipeline, ')');
+	while (**line && !is_operator(*line))
+		*line += 1;
+	get_operator(line, pipeline);
+}
+
 int	get_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds)
 {
 	int	i;
@@ -89,7 +99,7 @@ int	get_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds)
 	while (**line && !is_operator(*line))
 	{
 		if (get_command(line, pipeline->commands + i, heredoc_fds))
-			return (1);
+			return (skip_to_end_of_pipeline(line, pipeline), 1);
 		handle_parenthesis(line, pipeline, ')');
 		i++;
 	}

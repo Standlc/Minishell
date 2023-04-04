@@ -66,7 +66,6 @@ void	parenthesis(t_pipeline *pipelines, int *index);
 
 void	execution_pipeline(t_command *commands);
 int		check_last_status(t_pipeline last);
-void	execution_global(t_pipeline *pipelines);
 
 int		bigarray_len(char **bigarray);
 void	free_dup(char **dup_bigarray);
@@ -78,6 +77,6 @@ int		child_signals(void);
 void	signal_for_wait(void);
 //void	backslash_quit(void);
 
-void	execute_pipeline(t_pipeline pipeline);
+void	execute_pipeline(t_pipeline pipeline, t_blocks *blocks);
 
 #endif

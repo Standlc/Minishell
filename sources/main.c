@@ -33,15 +33,6 @@ void	show_data(t_pipeline pipeline)
 	printf("operator: %d\n", pipeline.operator);
 }
 
-char	***environnement(char **new_env)
-{
-	static char	**env = NULL;
-
-	if (new_env)
-		env = new_env;
-	return (&env);
-}
-
 char	*readline_handler(void)
 {
 	char	*prompt;
@@ -55,17 +46,29 @@ char	*readline_handler(void)
 	return (line);
 }
 
-int	execute_command_line(char *line)
+int	check_signal_stop(t_pipeline *pipeline)
+{
+	int	i;
+	
+	if (!pipeline->commands)
+		return (0);
+	i = 0;
+	while (pipeline->commands[i].is_end)
+	{
+		if (pipeline->commands[i].signal_stop)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	execute_command_line(char *line, t_heredoc_fds *heredoc_fds)
 {
 	int				pipeline_error;
 	t_pipeline		pipeline;
 	char			*line_ptr;
 	t_heredoc_fds	*heredocs_ptr;
-	t_heredoc_fds	*heredoc_fds;
 
-	heredoc_fds = handle_heredocs(line);
-	if (!heredoc_fds)
-		return (free(line), 1);
 	heredocs_ptr = heredoc_fds;
 	line_ptr = line;
 	while (*line)
@@ -75,21 +78,21 @@ int	execute_command_line(char *line)
 			break ;
 		else if (!pipeline_error)
 		{
+			execute_pipeline(pipeline, &(t_blocks){line_ptr, heredocs_ptr});
 			// show_data(pipeline);
-			execute_pipeline(pipeline);
 		}
+		if (check_signal_stop(&pipeline))
+			return (free_pipeline(pipeline), 0);
 		skip_pipelines_to_not_execute(&line, pipeline, heredoc_fds);
 		free_pipeline(pipeline);
 	}
-	close_heredoc_fds_outs(heredocs_ptr);
-	free(heredocs_ptr);
-	free(line_ptr);
 	return (0);
 }
 
 int	start_minishell(void)
 {
 	char			*line;
+	t_heredoc_fds	*heredoc_fds;
 
 	line = readline_handler();
 	while (line)
@@ -98,8 +101,16 @@ int	start_minishell(void)
 			add_history(line);
 		if (!check_syntax(line))
 		{
-			if (execute_command_line(line))
-				return (1);
+			heredoc_fds = handle_heredocs(line);
+			if (!heredoc_fds)
+				return (free(line), 1);
+			if (g_status == SIGINT_HEREDOC)
+				g_status = 130;
+			else if (execute_command_line(line, heredoc_fds))
+				return (close_heredoc_fds(heredoc_fds), free(heredoc_fds), 1);
+			close_heredoc_fds_outs(heredoc_fds);
+			free(heredoc_fds);
+			free(line);
 		}
 		hook_signals();
 		line = readline_handler();
@@ -131,3 +142,4 @@ int	main(int argc, char **argv, char **env)
 	ft_putstr_fd("exit\n", 1);
 	return (g_status);
 }
+// export GHOST=123 | env | grep GHOST

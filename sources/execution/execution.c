@@ -60,7 +60,7 @@ int	check_last_status(t_pipeline last)
 	return (-1);
 }
 
-void	execute_pipeline(t_pipeline pipeline)
+void	execute_pipeline(t_pipeline pipeline, t_blocks *blocks)
 {
 	char	**env;
 
@@ -73,31 +73,9 @@ void	execute_pipeline(t_pipeline pipeline)
 		env = *(environnement(NULL));
 		free_str_arr(env);
 		rl_clear_history();
+		free(blocks->line_ptr);
+		close_heredoc_fds_ins(blocks->heredoc_ptr);
+		free(blocks->heredoc_ptr);
 		exit(g_status);
-	}
-}
-
-void	execution_global(t_pipeline *pipelines)
-{
-	int		i;
-	char	**env;
-
-	i = 0;
-	while (pipelines[i].commands)
-	{
-		if ((pipelines[i].commands->arguments && pipelines[i].commands->arguments[0] && pipelines[i].commands->arguments[0][0]) && !strncmp("exit", pipelines[i].commands->arguments[0], 5) && !pipelines[i].commands[1].is_end)
-			exit_pipeline(pipelines, i);
-		else if (i == 0 || !check_last_status(pipelines[i]))
-		{
-			execution_pipeline(pipelines[i].commands);
-			if (pipelines[i].commands->is_end == 2)
-				(env = *(environnement(NULL)), free_pipelines(pipelines), free_dup(env), rl_clear_history(), exit(g_status));
-		}
-		else if (pipelines[i + 1].commands && pipelines[i + 1].parenthesis > 0)
-		{
-			parenthesis(&pipelines[i], &i);
-			i++;
-		}
-		i++;
 	}
 }

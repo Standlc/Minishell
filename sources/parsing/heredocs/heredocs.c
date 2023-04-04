@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:36 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 17:18:28 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 19:47:36 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ t_heredoc_fds	*get_heredoc_fds(char *line, t_heredoc_fds *heredoc_fds)
 void	handle_sigint_parent(int sig)
 {
 	(void)sig;
-	g_status = 130;
+	printf("^C\n");
+	g_status = -1;
 }
 
 int	fork_and_wait(t_heredoc_data *heredoc)
@@ -88,6 +89,7 @@ int	fork_and_wait(t_heredoc_data *heredoc)
 		heredoc_child(heredoc);
 	signal(SIGINT, handle_sigint_parent);
 	waitpid(pid, &status_waitpid, 0);
+	hook_signals();
 	close_heredoc_fds_ins(heredoc->heredoc_fds);
 	return (0);
 }

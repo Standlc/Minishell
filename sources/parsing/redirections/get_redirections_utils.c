@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:52 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 16:27:51 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 20:27:26 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ extern int	g_status;
 
 int	handle_simple_left_redirection(t_command *command, char *file)
 {
-	if (file_or_dir_check(file, READ))
+	if (file_or_dir_check(file, READ, 0))
 		return (-1);
 	if (command->input_file > 2)
 		close(command->input_file);
@@ -31,7 +31,7 @@ int	handle_simple_left_redirection(t_command *command, char *file)
 
 int	handle_simple_right_redirection(t_command *command, char *file)
 {
-	if (file_or_dir_check(file, WRITE))
+	if (file_or_dir_check(file, WRITE, 0))
 		return (-1);
 	if (command->output_file != 1)
 		close(command->output_file);
@@ -46,7 +46,7 @@ int	handle_simple_right_redirection(t_command *command, char *file)
 
 int	handle_double_right_redirection(t_command *command, char *file)
 {
-	if (file_or_dir_check(file, WRITE))
+	if (file_or_dir_check(file, WRITE, 0))
 		return (-1);
 	if (command->output_file != 1)
 		close(command->output_file);

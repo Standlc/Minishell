@@ -29,16 +29,14 @@ void	pipeline_start(t_command *commands, int fd[2])
 
 int	fork_command(t_command *command, int i)
 {
-	pid_t	pid;
-
 	if (i != 0 || command[i + 1].is_end || is_child(command[i]))
 	{
-		child_signals();
-		pid = fork();
-		if (pid == -1)
+		command[i].pid = fork();
+		if (command[i].pid == -1)
 			return (g_status = errno, perror("minishell: fork"), 1);
-		if (pid == 0)
+		if (command[i].pid == 0)
 		{
+			child_signals();
 			execution_command(command);
 			close_file(command->output_file);
 			close_file(command->input_file);
@@ -70,20 +68,28 @@ void	end_of_pipeline(t_command *commands, int fd[2], int end)
 	int	status_w;
 
 	i = -1;
-	signal_for_wait();
+	status_w = 0;
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	if (commands[1].is_end && close(fd[0]) == -1)
 		(perror("minishell: close"), g_status = errno);
 	while (commands[++i].is_end && i < end)
 	{
-		if ((i != 0 || commands[i + 1].is_end) || is_child(commands[i]))
+		if (i != 0 || commands[i + 1].is_end || is_child(commands[i]))
 		{
-			if (waitpid(-1, &status_w, 0) == -1)
+			if (waitpid(commands[i].pid, &status_w, 0) == -1)
 				(perror("minishell: waitpid"), g_status = errno);
-			else if (WIFEXITED(status_w))
-			{
+			if (WIFEXITED(status_w))
 				g_status = WEXITSTATUS(status_w);
-				if (WIFSIGNALED(status_w))
-					g_status = 128 + WTERMSIG(status_w);
+			if (WIFSIGNALED(status_w))
+				g_status = 128 + WTERMSIG(status_w);
+			if (WIFSIGNALED(status_w))
+			{
+				commands[i].signal_stop = 1;
+				if (WTERMSIG(status_w) == 2)
+					write(1, "\n", 2);
+				if (WTERMSIG(status_w) == 3)
+					write(2, "Quit (core dumped)\n", 20);
 			}
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:17 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 16:09:34 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 20:23:59 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,6 @@
 # define PARSING_H
 
 # include "minishell.h"
-
-enum e_access_types {
-	ACCESS_NONE,
-	EXEC,
-	WRITE,
-	READ
-};
-
-typedef struct	s_heredoc_fds {
-	int	fds[2];
-	int	is_end;
-}				t_heredoc_fds;
-
-typedef struct	s_heredoc_data {
-	char			**limits;
-	t_heredoc_fds	*heredoc_fds;
-}				t_heredoc_data;
-
-typedef struct	s_wildcard_info {
-	int	directory_match;
-	int	has_prefix;
-}				t_wildcard_info;
 
 t_heredoc_fds	*handle_heredocs(char *line);
 int				get_heredoc_amount(char *line);
@@ -101,7 +79,7 @@ char			*dup_line_word(char **line);
 
 void			skip_spaces(char **line);
 void			get_operator(char **line, t_pipeline *pipeline);
-int				file_or_dir_check(char *str, int access_type);
+int				file_or_dir_check(char *str, int access_type, int is_command_name);
 void			*ft_realloc(void *src, int prev_size, int new_size);
 
 void			print_error(char *message, char *line);

@@ -1,37 +1,57 @@
-SRC			=	main.c							parsing/parse_line.c parsing/redirections/heredoc.c \
-				parsing/parse_line_utils.c				close_program.c \
-				signals.c						parsing/print_error.c parsing/array_methods/join_str_arr.c parsing/array_methods/insert.c \
-				parsing/redirections/get_redirections.c			parsing/syntax/syntax_check.c parsing/line_methods/env_var.c \
-				parsing/line_methods/get_line_args.c parsing/line_methods/dup_word.c parsing/is_functions/is_functions_1.c parsing/ft_realloc.c \
-				parsing/is_functions/is_functions_2.c	parsing/redirections/get_redirections_utils.c \
-				parsing/syntax/utils.c 	parsing/syntax/check_parenthesis.c \
-				parsing/wildcards/wildcards.c parsing/wildcards/get_wildcard_matches.c parsing/wildcards/utils.c 					parsing/heredocs/heredocs.c parsing/heredocs/heredocs_utils.c \
-				parsing/heredocs/heredoc_child.c execution/execution.c execution/for_dup.c execution/parenthesis.c execution/execute_command.c\
-				execution/another.c execution/path.c execution/pipe.c execution/pipelines_steps.c\
-				execution/builtins/cd.c execution/builtins/echo.c execution/builtins/env.c execution/builtins/exit/exit.c \
-				execution/builtins/exit/exit_pipelines.c execution/builtins/pwd.c execution/builtins/unset.c \
-				execution/builtins/export/export.c execution/builtins/export/complete_env.c		parsing/is_functions/is_functions_3.c	\
-				parsing/check_file_or_dir.c parsing/skip_pipelines.c parsing/close_heredoc_fds.c singletons.c\
+SRC_EXPORT					=	export.c complete_env.c
 
-SRCS		=	${addprefix sources/, ${SRC}}
+SRC_EXIT					=	exit.c exit_pipelines.c
 
-OBJ			=	${addprefix binaries/, ${SRC}}
+SRC_BUILTINS				=	${addprefix export/, ${SRC_EXPORT}} ${addprefix exit/, ${SRC_EXIT}} \
+								cd.c echo.c env.c pwd.c unset.c
 
-OBJS		=	$(OBJ:%.c=%.o)
+SRC_EXECUTION				=	${addprefix builtins/, ${SRC_BUILTINS}} \
+								another.c execute_command.c execution.c for_dup.c \
+								parenthesis.c path.c pipe.c pipelines_steps.c
 
-INCLUDES	=	Libft/includes/gnl Libft/includes/libc Libft/includes/ptf includes/
+SRC_ARRAY_METHODS			=	join_str_arr.c insert.c
 
-HEADERS 		=	includes/minishell.h includes/parsing.h
+SRC_HEREDOCS				=	heredocs.c heredocs_utils.c heredoc_child.c
 
-NAME		=	minishell
+SRC_IS_FUNCTIONS			=	is_functions_1.c is_functions_2.c is_functions_3.c
 
-CC			=	cc
+SRC_LINE_METHODS			=	dup_word.c env_var.c get_line_args.c
 
-CFLAGS		=	-g3 -Wall -Wextra #-Werror
+SRC_REDIRECTIONS			=	get_redirections.c get_redirections_utils.c heredoc.c
 
-RM			=	rm -f
+SRC_SYNTAX					=	check_parenthesis.c syntax_check.c utils.c
 
-MAKEFLAGS 	+= --no-print-directory
+SRC_WILDCARDS				=	get_wildcard_matches.c utils.c wildcards.c
+
+SRC_PARSING					=	${addprefix array_methods/, ${SRC_ARRAY_METHODS}} ${addprefix heredocs/, ${SRC_HEREDOCS}} \
+								${addprefix is_functions/, ${SRC_IS_FUNCTIONS}} ${addprefix line_methods/, ${SRC_LINE_METHODS}} \
+								${addprefix redirections/, ${SRC_REDIRECTIONS}} ${addprefix syntax/, ${SRC_SYNTAX}} \
+								${addprefix wildcards/, ${SRC_WILDCARDS}} \
+								ft_realloc.c parse_line.c parse_line_utils.c print_error.c close_heredoc_fds.c skip_pipelines.c \
+								check_file_or_dir.c \
+
+SRC							=	${addprefix execution/, ${SRC_EXECUTION}} ${addprefix parsing/, ${SRC_PARSING}} \
+								main.c close_program.c signals.c singletons.c
+
+SRCS						=	${addprefix sources/, ${SRC}}
+
+OBJ							=	${addprefix binaries/, ${SRC}}
+
+OBJS						=	$(OBJ:%.c=%.o)
+
+INCLUDES					=	Libft/includes/gnl Libft/includes/libc Libft/includes/ptf includes/
+
+HEADERS 					=	includes/minishell.h includes/parsing.h
+
+NAME						=	minishell
+
+CC							=	cc
+
+CFLAGS						=	-g3 -Wall -Wextra -Werror
+
+RM							=	rm -f
+
+MAKEFLAGS					+= --no-print-directory
 
 binaries/%.o : sources/%.c ${HEADERS} Libft/libft.a Makefile | binaries
 		@mkdir -p $(@D)

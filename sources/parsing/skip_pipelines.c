@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 15:30:21 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 16:24:31 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 20:55:51 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,18 @@ void	skip_pipeline_group(char **line, t_heredoc_fds *heredoc_fds)
 		if (skip_pipeline(line, &curr, &heredoc_fds))
 			continue ;
 		if (parenthesis == 0 && curr.parenthesis < 0)
-			return ;
+			break ;
 		parenthesis += curr.parenthesis;
 		if (!parenthesis)
-			return ;
+			break ;
 	}
+	skip_pipelines_to_not_execute(line, curr, heredoc_fds);
+}
+
+void	skip_rest_of_line(char **line)
+{
+	while (**line)
+		*line += 1;
 }
 
 void	skip_pipelines_to_not_execute(char **line, t_pipeline last,
@@ -62,6 +69,11 @@ void	skip_pipelines_to_not_execute(char **line, t_pipeline last,
 {
 	if (!**line)
 		return ;
+	if (g_status == 130 || g_status == 131)
+	{
+		skip_rest_of_line(line);
+		return ;
+	}
 	if (last.operator == AND && g_status)
 		skip_pipeline_group(line, heredoc_fds);
 	else if (last.operator == OR && !g_status)
