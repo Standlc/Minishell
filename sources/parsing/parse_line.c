@@ -6,19 +6,27 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:11 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/03 16:18:20 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 03:41:46 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	arguments_conditions(char *line)
+{
+	return (!is_pipe(line) && !is_operator(line) && !is_parenthesis(line));
+}
+
 int	get_arguments(char **line, t_command *command, t_heredoc_fds **heredoc_fds)
 {
-	while (**line && !is_pipe(*line) && !is_operator(*line) && !is_parenthesis(*line))
+	char	**args;
+
+	while (**line && arguments_conditions(*line))
 	{
 		if (!is_redirection(*line))
 		{
-			command->arguments = join_str_arr(command->arguments, get_line_args(line));
+			args = get_line_args(line);
+			command->arguments = join_str_arr(command->arguments, args);
 			if (!command->arguments)
 				return (1);
 		}
@@ -43,23 +51,25 @@ int	get_command(char **line, t_command *command, t_heredoc_fds **heredoc_fds)
 	if (command->arguments)
 	{
 		command->arguments = handle_widlcards(command->arguments);
-		if (!command->arguments || file_or_dir_check(command->arguments[0], EXEC))
+		if (!command->arguments)
+			return (1);
+		if (file_or_dir_check(command->arguments[0], EXEC))
 			return (1);
 	}
 	*line += is_pipe(*line);
 	return (0);
 }
 
-void	handle_parenthesis(char **line, t_pipeline *pipeline, char parenthesis_type, int increment)
+void	handle_parenthesis(char **line, t_pipeline *pipeline, char parenthesis)
 {
 	skip_spaces(line);
-	if (**line != parenthesis_type)
+	if (**line != parenthesis)
 		return ;
 	skip_spaces(line);
-	while (**line == parenthesis_type)
+	while (**line == parenthesis)
 	{
 		*line += 1;
-		pipeline->parenthesis += increment;
+		pipeline->parenthesis += parenthesis == '(' * 2 - 1;
 		skip_spaces(line);
 	}
 }
@@ -70,7 +80,7 @@ int	get_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds)
 	int	size;
 
 	pipeline->parenthesis = 0;
-	handle_parenthesis(line, pipeline, '(', 1);
+	handle_parenthesis(line, pipeline, '(');
 	size = get_pipeline_commands_amount(*line);
 	pipeline->commands = ft_calloc(size + 1, sizeof(t_command));
 	if (!pipeline->commands)
@@ -80,35 +90,35 @@ int	get_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds)
 	{
 		if (get_command(line, pipeline->commands + i, heredoc_fds))
 			return (1);
-		handle_parenthesis(line, pipeline, ')', -1);
+		handle_parenthesis(line, pipeline, ')');
 		i++;
 	}
 	get_operator(line, pipeline);
 	return (0);
 }
 
-t_pipeline	*parse_line(char *line, t_heredoc_fds *heredoc_fds)
-{
-	t_pipeline	*pipelines;
-	int			i;
+// t_pipeline	*parse_line(char *line, t_heredoc_fds *heredoc_fds)
+// {
+// 	t_pipeline	*pipelines;
+// 	int			i;
 
-	pipelines = ft_calloc(get_pipelines_amount(line) + 1, sizeof(t_pipeline));
-	if (!pipelines)
-		return (NULL);
-	i = 0;
-	while (*line)
-	{
-		if (get_pipeline(&line, pipelines + i, &heredoc_fds))
-		{
-			free_pipelines(pipelines);
-			if (errno == ENOMEM)
-				return (NULL);
-			return (ft_calloc(1, sizeof(t_pipeline)));
-		}
-		i++;
-	}
-	return (pipelines);
-}
+// 	pipelines = ft_calloc(get_pipelines_amount(line) + 1, sizeof(t_pipeline));
+// 	if (!pipelines)
+// 		return (NULL);
+// 	i = 0;
+// 	while (*line)
+// 	{
+// 		if (get_pipeline(&line, pipelines + i, &heredoc_fds))
+// 		{
+// 			free_pipelines(pipelines);
+// 			if (errno == ENOMEM)
+// 				return (NULL);
+// 			return (ft_calloc(1, sizeof(t_pipeline)));
+// 		}
+// 		i++;
+// 	}
+// 	return (pipelines);
+// }
 
 // :
 // #

@@ -6,13 +6,20 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:33 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/03 01:48:35 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 02:22:20 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_write(int fd, char *heredoc_line)
+char	*get_heredoc_limit(char **line, char *heredoc_limit)
+{
+	skip_spaces(line);
+	heredoc_limit = dup_line_word(line);
+	return (heredoc_limit);
+}
+
+int	write_to_heredoc_fd(int fd, char *heredoc_line)
 {
 	char	**env_var_values;
 
@@ -25,18 +32,16 @@ int	handle_write(int fd, char *heredoc_line)
 				return (1);
 			write(fd, env_var_values[0], ft_strlen(env_var_values[0]));
 			free_str_arr(env_var_values);
+			continue ;
 		}
-		else
-		{
-			write(fd, heredoc_line, 1);
-			heredoc_line++;
-		}
+		write(fd, heredoc_line, 1);
+		heredoc_line++;
 	}
 	write(fd, "\n", 1);
 	return (0);
 }
 
-int	read_heredoc(int fd, char *limit)
+int	read_user_input(int fd, char *limit)
 {
 	int		limit_len;
 	char	*heredoc_line;
@@ -47,7 +52,7 @@ int	read_heredoc(int fd, char *limit)
 	{
 		if (!ft_strncmp(limit, heredoc_line, limit_len + 1))
 			return (0);
-		else if (handle_write(fd, heredoc_line))
+		else if (write_to_heredoc_fd(fd, heredoc_line))
 			return (free(heredoc_line), 1);
 		free(heredoc_line);
 		heredoc_line = readline("> ");
@@ -55,14 +60,14 @@ int	read_heredoc(int fd, char *limit)
 	return (0);
 }
 
-t_heredoc_fds	*do_the_heredoc(t_heredoc_fds *heredoc_fds, char **limits)
+t_heredoc_fds	*do_the_heredocs(t_heredoc_fds *heredoc_fds, char **limits)
 {
 	int		i;
 
 	i = 0;
 	while (limits[i])
 	{
-		if (read_heredoc(heredoc_fds[i].fds[1], limits[i]))
+		if (read_user_input(heredoc_fds[i].fds[1], limits[i]))
 			return (close_heredoc_fds(heredoc_fds), NULL);
 		close(heredoc_fds[i].fds[1]);
 		close(heredoc_fds[i].fds[0]);

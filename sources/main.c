@@ -55,77 +55,30 @@ char	*readline_handler(void)
 	return (line);
 }
 
-int	skip_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds)
+int	execute_command_line(char *line)
 {
-	pipeline->parenthesis = 0;
-	handle_parenthesis(line, pipeline, '(', 1);
-	while (**line && !is_operator(*line))
-	{
-		if (is_quote(**line))
-			check_quotes(line);
-		else if (is_heredoc(*line))
-		{
-			close((**heredoc_fds).fds[0]);
-			(**heredoc_fds).fds[0] = 0;
-			*heredoc_fds += 1;
-			skip_special_symbol(line);
-		}
-		handle_parenthesis(line, pipeline, ')', -1);
-		*line += !is_parenthesis(*line);
-	}
-	get_operator(line, pipeline);
-	return (0);
-}
-
-void	skip_parenthesis_pipeline(char **line, t_pipeline last, t_heredoc_fds	*heredoc_fds)
-{
-	t_pipeline	curr;
-	int			parenthesis;
-
-	if (last.parenthesis)
-		parenthesis = 1;
-	else
-		parenthesis = 0;
-	while (**line)
-	{
-		if (get_pipeline(line, &curr, &heredoc_fds))
-			continue ;
-		parenthesis += curr.parenthesis;
-		if (!parenthesis)
-			return ;
-	}
-}
-
-void	handle_parenthesis_skip(char **line, t_pipeline last, t_heredoc_fds	*heredoc_fds)
-{
-	if (last.operator == AND && g_status)
-			skip_parenthesis_pipeline(line, last, heredoc_fds);
-	else if (last.operator == OR && !g_status)
-			skip_parenthesis_pipeline(line, last, heredoc_fds);
-}
-
-int	execute_command_line(char **minishell_env, char *line)
-{
+	int				pipeline_error;
 	t_pipeline		pipeline;
 	char			*line_ptr;
 	t_heredoc_fds	*heredocs_ptr;
 	t_heredoc_fds	*heredoc_fds;
 
-	heredoc_fds = handle_heredocs(minishell_env, line);
+	heredoc_fds = handle_heredocs(line);
 	if (!heredoc_fds)
 		return (free(line), 1);
 	heredocs_ptr = heredoc_fds;
 	line_ptr = line;
 	while (*line)
 	{
-		if (get_pipeline(&line, &pipeline, &heredoc_fds))
+		pipeline_error = get_pipeline(&line, &pipeline, &heredoc_fds);
+		if (pipeline_error && errno == ENOMEM)
+			break ;
+		else if (!pipeline_error)
 		{
-			free_pipeline(pipeline);
-			continue ;
+			show_data(pipeline);
+			// execute_pipeline(pipeline);
 		}
-		show_data(pipeline);
-		// execute_pipeline(pipeline);
-		handle_parenthesis_skip(&line, pipeline, heredoc_fds);
+		skip_pipelines_to_not_execute(&line, pipeline, heredoc_fds);
 		free_pipeline(pipeline);
 	}
 	close_heredoc_fds_outs(heredocs_ptr);
@@ -134,7 +87,7 @@ int	execute_command_line(char **minishell_env, char *line)
 	return (0);
 }
 
-int	get_line(char **minishell_env)
+int	start_minishell(void)
 {
 	char			*line;
 
@@ -145,7 +98,7 @@ int	get_line(char **minishell_env)
 			add_history(line);
 		if (!check_syntax(line))
 		{
-			if (execute_command_line(minishell_env, line))
+			if (execute_command_line(line))
 				return (1);
 		}
 		hook_signals();
@@ -171,7 +124,7 @@ int	main(int argc, char **argv, char **env)
 	if (g_status != 0)
 		exit(g_status);
 	(void)environnement(minishell_env);
-	get_line(minishell_env);
+	start_minishell();
 	minishell_env = *(environnement(NULL));
 	free_str_arr(minishell_env);
 	rl_clear_history();

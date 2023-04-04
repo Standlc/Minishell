@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:54 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/03 13:54:47 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 03:11:04 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ void	*get_red_function(int redirect_type)
 	return (handle_simple_left_redirection);
 }
 
-int	handle_redirections(char **line, t_command *command, int red_function(t_command *, char *))
+int	handle_redirections(char **line, t_command *command,
+	int red_function(t_command *, char *))
 {
 	char	*line_cpy;
 	char	**file_names;
@@ -46,18 +47,20 @@ int	handle_redirections(char **line, t_command *command, int red_function(t_comm
 	if (str_arr_size(file_names) != 1)
 	{
 		g_status = 1;
-		return (free_str_arr(file_names), print_error("ambiguous redirect: ", line_cpy), 1);
+		free_str_arr(file_names);
+		print_error("ambiguous redirect: ", line_cpy);
+		return (1);
 	}
 	if (red_function(command, file_names[0]) == -1)
 		return (free_str_arr(file_names), 1);
 	return (free_str_arr(file_names), 0);
 }
 
-// AMBIGUOUS REDIRECT IF ENV VAR == NULL
-
-int	get_redirections(char **line, t_command *command, t_heredoc_fds **heredoc_fds)
+int	get_redirections(char **line, t_command *command,
+	t_heredoc_fds **heredoc_fds)
 {
 	int		redirect_type;
+	void	*redirection_function;
 
 	while (is_redirection(*line))
 	{
@@ -69,8 +72,12 @@ int	get_redirections(char **line, t_command *command, t_heredoc_fds **heredoc_fd
 			if (assign_heredoc_fd(line, command, heredoc_fds))
 				return (1);
 		}
-		else if (handle_redirections(line, command, get_red_function(redirect_type)))
+		else 
+		{
+			redirection_function = get_red_function(redirect_type);
+			if (handle_redirections(line, command, redirection_function))
 				return (1);
+		}
 		skip_spaces(line);
 	}
 	return (0);

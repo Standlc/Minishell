@@ -58,5 +58,3 @@ int	handle_double_right_redirection(t_command *command, char *file)
 	}
 	return (command->output_file);
 }
-
-// CHECK PERMISSION DENIED ACCESS 

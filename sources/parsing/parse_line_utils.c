@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:10:14 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/03 16:08:10 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 03:37:09 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ extern int	g_status;
 
 void	skip_spaces(char **line)
 {
-	while (**line == ' ' || **line == '\t')
+	while (is_white_space(**line))
 		*line += 1;
 }
 
@@ -34,52 +34,6 @@ void	get_operator(char **line, t_pipeline *pipeline)
 		pipeline->operator = OR;
 	*line += 2;
 	skip_spaces(line);
-}
-
-int	check_file_accessibility(char *file, int access_type)
-{
-	if (access_type == EXEC && access(file, X_OK))
-	{
-		g_status = 126;
-		print_error("permission denied: ", file);
-		return (1);
-	}
-	else if (access_type == WRITE && access(file, W_OK))
-	{
-		g_status = 1;
-		print_error("permission denied: ", file);
-		return (1);
-	}
-	else if (access_type == READ && access(file, R_OK))
-	{		
-		g_status = 1;
-		print_error("permission denied: ", file);
-		return (1);
-	}
-	return (0);
-}
-
-int	file_or_dir_check(char *str, int access_type)
-{
-	DIR				*directory;
-
-	if (!str || (access_type == EXEC && (str[0] != '/' && str[0] != '.')))
-		return (0);
-	if (!access(str, F_OK))
-	{
-		if (check_file_accessibility(str, access_type))
-			return (1);
-		directory = opendir(str);
-		if (directory)
-		{
-			g_status = 126;
-			print_error("is a directory: ", str);
-			return (closedir(directory), 1);
-		}
-		return (0);
-	}
-	g_status = 127;
-	return (print_error("no such file or directory: ", str), 1);
 }
 
 int	get_pipeline_commands_amount(char *line)

@@ -14,11 +14,6 @@
 # define LMIN "-9223372036854775808"
 # define LMAX "9223372036854775807"
 
-typedef struct s_data
-{
-	char		**env;
-}				t_data;
-
 # include <signal.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -41,7 +36,6 @@ typedef struct s_data
 # include "execution.h"
 
 char		***environnement(char **new_env);
-int			get_line(char **minishell_env);
 int			main(int argc, char **argv, char **env);
 
 #endif

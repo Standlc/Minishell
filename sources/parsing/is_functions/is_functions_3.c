@@ -1,31 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc.c                                          :+:      :+:    :+:   */
+/*   is_functions_3.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/02 13:09:56 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/03 05:12:20 by stde-la-         ###   ########.fr       */
+/*   Created: 2023/04/04 03:35:37 by stde-la-          #+#    #+#             */
+/*   Updated: 2023/04/04 03:36:38 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	assign_heredoc_fd(char **line, t_command *command,
-	t_heredoc_fds **heredoc_fds)
+int	is_white_space(char c)
 {
-	char		*heredoc_limit;
-
-	if (command->input_file > 2)
-		close(command->input_file);
-	command->input_file = (**heredoc_fds).fds[0];
-	(**heredoc_fds).fds[0] = 0;
-	*heredoc_fds += 1;
-	heredoc_limit = NULL;
-	heredoc_limit = get_heredoc_limit(line, heredoc_limit);
-	if (!heredoc_limit)
-		return (1);
-	free(heredoc_limit);
-	return (0);
+	return ((c >= 9 && c <= 13) || c == ' ');
 }

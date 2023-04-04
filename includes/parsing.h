@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:17 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/03 05:05:43 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 04:48:16 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,24 @@ typedef struct	s_heredoc_fds {
 }				t_heredoc_fds;
 
 typedef struct	s_heredoc_data {
-	char			**env;
 	char			**limits;
 	t_heredoc_fds	*heredoc_fds;
 }				t_heredoc_data;
 
 
-t_heredoc_fds	*handle_heredocs(char **minishell_env, char *line);
-t_heredoc_fds	*do_the_heredoc(t_heredoc_fds *heredoc_fds, char **limits);
+void	rl_clear_history(void);
+
+t_heredoc_fds	*handle_heredocs(char *line);
 int	get_heredoc_amount(char *line);
 char	*get_heredoc_limit(char **line, char *heredoc_limit);
+t_heredoc_fds	*do_the_heredocs(t_heredoc_fds *heredoc_fds, char **limits);
+void	heredoc_child(t_heredoc_data *heredoc);
+char	*get_heredoc_limit(char **line, char *heredoc_limit);
 
-t_pipeline	*parse_line(char *line, t_heredoc_fds *heredoc_fds);
+void	skip_pipelines_to_not_execute(char **line, t_pipeline last, t_heredoc_fds *heredoc_fds);
+
 int	get_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds);
-void	handle_parenthesis(char **line, t_pipeline *pipeline, char parenthesis_type, int increment);
+void	handle_parenthesis(char **line, t_pipeline *pipeline, char parenthesis);
 
 char		**get_line_args(char **line);
 char	**handle_env_var(char **line, int is_inside_quotes);
@@ -50,13 +54,16 @@ char	*dup_line_word(char **line);
 int	get_pipeline_commands_amount(char *line);
 int	get_pipelines_amount(char *line);
 
-int			add_char(char **line, char **str);
+int			add_char(char **line, char **str, int is_str_arr);
 
 int			str_arr_size(char **arr);
-char	**join_arr_strjoin(char **arr1, char **arr2);
+char	**join_arr_strjoin(char **dest, char **arr2);
 char	**join_str_arr(char **dest, char **arr2);
 char	**str_arr_dup(char **src);
+int		strjoin_str_arr(char **str_arr, char *join);
 char	**insert_str_arr_at_index(char **arr1, char **arr2, int index);
+void	mem_cpy_str_arr(char **dest, char **src);
+void	mem_cpy_str_arr_upto(char **dest, char **src, int up_to);
 
 int			check_syntax(char *line);
 int	check_line(char *line, int is_inside_parenthesis, char *line_ptr_cpy);
@@ -79,6 +86,7 @@ int			is_meta_char(char *line);
 int			is_wildcard(char *str);
 int			is_heredoc(char *line);
 int	is_directory(char *file);
+int	is_white_space(char c);
 
 int			get_redirections(char **line, t_command *command, t_heredoc_fds **heredoc_fds);
 int			handle_simple_right_redirection(t_command *command, char *file);

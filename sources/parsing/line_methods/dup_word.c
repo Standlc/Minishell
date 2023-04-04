@@ -12,13 +12,18 @@
 
 #include "minishell.h"
 
+int	word_condition(char *line)
+{
+	return (is_white_space(*line) && (!is_meta_char(line) || is_quote(*line)));
+}
+
 int	word_len(char *line)
 {
 	int		len;
 	char	quote_type;
 
 	len = 0;
-	while (*line && *line != ' ' && (!is_meta_char(line) || is_quote(*line)))
+	while (*line && word_condition(line))
 	{
 		if (is_quote(*line))
 		{
@@ -62,7 +67,7 @@ char	*dup_line_word(char **line)
 	if (!str)
 		return (NULL);
 	i = 0;
-	while (**line && **line != ' ' && (!is_meta_char(*line) || is_quote(**line)))
+	while (**line && word_condition(*line))
 	{
 		if (is_quote(**line))
 			strcpy_quotes(line, str, &i);

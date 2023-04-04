@@ -6,20 +6,13 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:36 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/03 02:19:42 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 02:18:30 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 extern int	g_status;
-
-char	*get_heredoc_limit(char **line, char *heredoc_limit)
-{
-	skip_spaces(line);
-	heredoc_limit = dup_line_word(line);
-	return (heredoc_limit);
-}
 
 char	**get_heredoc_limits(char *line, char **limits)
 {
@@ -69,8 +62,6 @@ t_heredoc_fds *get_heredoc_fds(char *line, t_heredoc_fds *heredoc_fds)
 			if (pipe(heredoc_fds[i].fds) == -1)
 				return (free(heredoc_fds), NULL);
 			line += 2;
-			while (*line && !is_heredoc(line) && !is_quote(*line))
-				line++;
 			i++;
 		}
 		else
@@ -79,49 +70,31 @@ t_heredoc_fds *get_heredoc_fds(char *line, t_heredoc_fds *heredoc_fds)
 	return (heredoc_fds);
 }
 
-void	heredoc_signal_handler(int sig, siginfo_t *sact, void *ptr)
+int	fork_and_wait(t_heredoc_data *heredoc)
 {
-	t_heredoc_data	*heredoc;
+	int				status_waitpid;
+	pid_t			pid;
 
-	(void)sig;
-	(void)sact;
-	heredoc = (t_heredoc_data *)ptr;
-	heredoc->env = *(environnement(NULL));
-	free_str_arr(heredoc->env);
-	close_heredoc_fds(heredoc->heredoc_fds);
-	free(heredoc->heredoc_fds);
-	free_str_arr(heredoc->limits);
-	rl_clear_history();
-	exit(g_status);
+	pid = fork();
+	if (pid == -1)
+		return (1);
+	if (pid == 0)
+		heredoc_child(heredoc);
+	signal_for_wait();
+	waitpid(pid, &status_waitpid, 0);
+	if (WIFSIGNALED(status_waitpid))
+		g_status = 128 + WTERMSIG(status_waitpid);
+	else if (WIFEXITED(status_waitpid))
+		g_status = WEXITSTATUS(status_waitpid);
+	close_heredoc_fds_ins(heredoc->heredoc_fds);
+	return (0);
 }
 
-int	heredoc_child(t_heredoc_data *heredoc)
-{
-	struct sigaction	sact;
-
-    sact.sa_flags = 0;
-    sigemptyset(&sact.sa_mask);
-	sact.sa_sigaction = heredoc_signal_handler;
-	sigaction(SIGINT, &sact, NULL);
-	do_the_heredoc(heredoc->heredoc_fds, heredoc->limits);
-	heredoc->env = *(environnement(NULL));
-	free_str_arr(heredoc->env);
-	close_heredoc_fds(heredoc->heredoc_fds);
-	free(heredoc->heredoc_fds);
-	free_str_arr(heredoc->limits);
-	rl_clear_history();
-	exit(g_status);
-}
-
-t_heredoc_fds	*handle_heredocs(char **minishell_env, char *line)
+t_heredoc_fds	*handle_heredocs(char *line)
 {
 	t_heredoc_data	heredoc;
-	pid_t			pid;
-	int				status_waitpid;
 
 	heredoc.heredoc_fds = NULL;
-	heredoc.limits = NULL;
-	heredoc.env = minishell_env;
 	heredoc.heredoc_fds = get_heredoc_fds(line, heredoc.heredoc_fds);
 	if (!heredoc.heredoc_fds)
 		return (NULL);
@@ -131,21 +104,12 @@ t_heredoc_fds	*handle_heredocs(char **minishell_env, char *line)
 		return (free(heredoc.heredoc_fds), NULL);
 	if (!heredoc.heredoc_fds[0].is_end)
 	{
-		pid = fork();
-		if (pid == -1)
-			return (NULL);
-		if (pid == 0)
-			return (heredoc_child(&heredoc), NULL);
-		else
+		if (fork_and_wait(&heredoc))
 		{
-			signal_for_wait();
-			waitpid(pid, &status_waitpid, 0);
+			free_str_arr(heredoc.limits);
+			free(heredoc.heredoc_fds);
+			return (NULL);
 		}
-		if (WIFSIGNALED(status_waitpid))
-			g_status = 128 + WTERMSIG(status_waitpid);
-		else if (WIFEXITED(status_waitpid))
-			g_status = WEXITSTATUS(status_waitpid);
-		close_heredoc_fds_ins(heredoc.heredoc_fds);
 	}
 	free_str_arr(heredoc.limits);
 	return (heredoc.heredoc_fds);
