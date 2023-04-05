@@ -13,7 +13,13 @@
 #ifndef PARSING_H
 # define PARSING_H
 
+# define RED_ERROR 2
+# define WILDSTAR 1
+
 # include "minishell.h"
+
+// void rl_clear_history(void);
+// void rl_replace_line(char *s, int n);
 
 t_heredoc_fds	*handle_heredocs(char *line);
 int				get_heredoc_amount(char *line);
@@ -24,6 +30,7 @@ char			*get_heredoc_limit(char **line, char *heredoc_limit);
 t_heredoc_data	get_heredoc_data(t_heredoc_data *curr);
 
 void			skip_pipelines_to_not_execute(char **line, t_pipeline last, t_heredoc_fds *heredoc_fds);
+void			skip_command(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds);
 
 int				get_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds);
 void			handle_parenthesis(char **line, t_pipeline *pipeline, char parenthesis);
@@ -79,7 +86,7 @@ char			*dup_line_word(char **line);
 
 void			skip_spaces(char **line);
 void			get_operator(char **line, t_pipeline *pipeline);
-int				file_or_dir_check(char *str, int access_type, int is_command_name);
+int				file_or_dir_check(t_command *command, char *str, int access_type, int is_command_name);
 void			*ft_realloc(void *src, int prev_size, int new_size);
 
 void			print_error(char *message, char *line);

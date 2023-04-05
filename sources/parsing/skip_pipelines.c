@@ -14,12 +14,10 @@
 
 extern int	g_status;
 
-int	skip_pipeline(char **line, t_pipeline *pipeline,
+void	skip_command(char **line, t_pipeline *pipeline,
 	t_heredoc_fds **heredoc_fds)
 {
-	pipeline->parenthesis = 0;
-	handle_parenthesis(line, pipeline, '(');
-	while (**line && !is_operator(*line))
+	while (**line && !is_pipe(*line) && !is_operator(*line))
 	{
 		if (is_quote(**line))
 			check_quotes(line);
@@ -34,6 +32,18 @@ int	skip_pipeline(char **line, t_pipeline *pipeline,
 			handle_parenthesis(line, pipeline, ')');
 		else
 			*line += 1;
+	}
+	*line += is_pipe(*line);
+}
+
+int	skip_pipeline(char **line, t_pipeline *pipeline,
+	t_heredoc_fds **heredoc_fds)
+{
+	pipeline->parenthesis = 0;
+	handle_parenthesis(line, pipeline, '(');
+	while (**line && !is_operator(*line))
+	{
+		skip_command(line, pipeline, heredoc_fds);
 	}
 	get_operator(line, pipeline);
 	return (0);

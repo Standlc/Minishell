@@ -18,9 +18,9 @@ int	is_matching_chunk(char *wildcard, char *file)
 
 	i = 0;
 	while (wildcard[i] && file[i]
-		&& wildcard[i] != '*' && file[i] == wildcard[i])
+		&& wildcard[i] != WILDSTAR && file[i] == wildcard[i])
 		i++;
-	return (wildcard[i] == '*' || wildcard[i] == '\0');
+	return (wildcard[i] == WILDSTAR || wildcard[i] == '\0');
 }
 
 int	stuff_stuff(char *wildcard, char *file)
@@ -32,16 +32,16 @@ int	stuff_stuff(char *wildcard, char *file)
 		file++;
 		wildcard++;
 	}
-	if (*wildcard == '*')
+	if (*wildcard == WILDSTAR)
 		return (compare(wildcard, file));
 	return (*file == *wildcard);
 }
 
 int	compare(char *wildcard, char *file)
 {
-	if (*wildcard == '*')
+	if (*wildcard == WILDSTAR)
 	{
-		while (*wildcard == '*')
+		while (*wildcard == WILDSTAR)
 			wildcard++;
 		if (!*wildcard)
 			return (1);
@@ -56,7 +56,7 @@ int	compare(char *wildcard, char *file)
 		file++;
 		wildcard++;
 	}
-	if (*wildcard == '*')
+	if (*wildcard == WILDSTAR)
 		return (compare(wildcard, file));
 	return (*file == *wildcard);
 }

@@ -34,7 +34,7 @@ int	is_wildcard(char *str)
 		str += 2;
 	while (*str)
 	{
-		has_wildcard += *str == '*';
+		has_wildcard += *str == WILDSTAR;
 		slash_count += *str == '/';
 		if (slash_count && *str && *str != '/')
 			return (0);
@@ -54,7 +54,7 @@ int	is_heredoc(char *line)
 
 int	is_directory(char *file)
 {
-	DIR				*directory;
+	DIR		*directory;
 
 	directory = opendir(file);
 	if (directory)

@@ -20,7 +20,10 @@ int	add_char(char **line, char **str, int is_str_arr)
 	join = ft_calloc(2, sizeof(char));
 	if (!join)
 		return (1);
-	join[0] = **line;
+	if (!is_str_arr || (is_str_arr && **line != '*'))
+		join[0] = **line;
+	else
+		join[0] = WILDSTAR;
 	last_index = str_arr_size(str) * is_str_arr;
 	if (last_index)
 		last_index--;
@@ -100,6 +103,3 @@ char	**get_line_args(char **line)
 	}
 	return (str_arr);
 }
-
-// truc="s -a"
-// l$truc != l"$truc"

@@ -14,51 +14,49 @@
 
 extern int	g_status;
 
-int	check_file_accessibility(char *file, int access_type)
+int	check_file_accessibility(t_command *command, char *file, int access_type)
 {
 	if (access_type == EXEC && access(file, X_OK))
 	{
-		g_status = 126;
+		command->status = 126;
 		print_error("permission denied: ", file);
 		return (1);
 	}
 	else if (access_type == WRITE && access(file, W_OK))
 	{
-		g_status = 1;
+		command->status = 1;
 		print_error("permission denied: ", file);
 		return (1);
 	}
 	else if (access_type == READ && access(file, R_OK))
 	{		
-		g_status = 1;
+		command->status = 1;
 		print_error("permission denied: ", file);
 		return (1);
 	}
 	return (0);
 }
 
-int	file_or_dir_check(char *str, int access_type, int is_command_name)
+int	file_or_dir_check(t_command *command, char *str,
+	int access_type, int is_command_name)
 {
-	int dir_type;
-
-	dir_type = str[0] == '/';
 	if (!str || (access_type == EXEC && (str[0] != '/' && str[0] != '.')))
 		return (0);
-	if (!access(str, F_OK))
+	if (!access(str, F_OK) || access_type == WRITE)
 	{
-		if (is_directory(str))
-		{			
+		if (is_directory(str) && access_type == WRITE)
+		{
 			g_status = 126;
 			print_error("is a directory: ", str);
 			return (1);
 		}
-		if (check_file_accessibility(str, access_type))
+		if (!access(str, F_OK) && check_file_accessibility(command, str, access_type))
 			return (1);
 		return (0);
 	}
 	if (is_command_name)
-		g_status = 127;
+		command->status = 127;
 	else
-		g_status = 1;
+		command->status = 1;
 	return (print_error("no such file or directory: ", str), 1);
 }

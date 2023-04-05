@@ -46,7 +46,7 @@ int	is_match(char *curr_dir_wildcard, t_wildcard_info *wildcard_info, char *file
 		return (0);
 	if (curr_dir_wildcard[0] != '.' && file[0] == '.')
 		return (0);
-	if (curr_dir_wildcard[0] != '*')
+	if (curr_dir_wildcard[0] != WILDSTAR)
 		return (compare(curr_dir_wildcard, file));
 	while (*file)
 	{

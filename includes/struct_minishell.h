@@ -41,6 +41,7 @@ typedef struct s_command
 	int		is_end;
 	pid_t	pid;
 	int		signal_stop;
+	int		status;
 }				t_command;
 
 typedef struct s_pipeline

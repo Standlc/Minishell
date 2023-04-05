@@ -31,16 +31,21 @@ void	free_pipeline(t_pipeline pipeline)
 	int	j;
 
 	j = 0;
-	while (pipeline.commands[j].is_end)
+	while (pipeline.commands && pipeline.commands[j].is_end)
 	{
 		free_str_arr(pipeline.commands[j].arguments);
+		pipeline.commands[j].arguments = NULL;
 		if (pipeline.commands[j].input_file > 2)
 			close(pipeline.commands[j].input_file);
 		if (pipeline.commands[j].output_file > 2)
 			close(pipeline.commands[j].output_file);
+		pipeline.commands[j].input_file = 0;
+		pipeline.commands[j].output_file = 1;
 		j++;
 	}
-	free(pipeline.commands);
+	if (pipeline.commands)
+		free(pipeline.commands);
+	pipeline.commands = NULL;
 }
 
 void	free_pipelines(t_pipeline *pipelines)

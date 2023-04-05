@@ -74,13 +74,10 @@ int	execute_command_line(char *line, t_heredoc_fds *heredoc_fds)
 	while (*line)
 	{
 		pipeline_error = get_pipeline(&line, &pipeline, &heredoc_fds);
-		if (pipeline_error && errno == ENOMEM)
-			break ;
-		else if (!pipeline_error)
-		{
+		if (pipeline_error == ENOMEM)
+			return (ENOMEM);
+		if (pipeline.commands)
 			execute_pipeline(pipeline, &(t_blocks){line_ptr, heredocs_ptr});
-			// show_data(pipeline);
-		}
 		if (check_signal_stop(&pipeline))
 			return (free_pipeline(pipeline), 0);
 		skip_pipelines_to_not_execute(&line, pipeline, heredoc_fds);
@@ -142,4 +139,8 @@ int	main(int argc, char **argv, char **env)
 	ft_putstr_fd("exit\n", 1);
 	return (g_status);
 }
+
 // export GHOST=123 | env | grep GHOST
+
+// void rl_clear_history(void){}
+// void rl_replace_line(char *s, int n){(void)s;(void)n;}

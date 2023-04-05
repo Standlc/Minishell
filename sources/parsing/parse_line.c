@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern int	g_status;
+
 int	arguments_conditions(char *line)
 {
 	return (!is_pipe(line) && !is_operator(line) && !is_parenthesis(line));
@@ -20,29 +22,36 @@ int	arguments_conditions(char *line)
 int	get_arguments(char **line, t_command *command, t_heredoc_fds **heredoc_fds)
 {
 	char	**args;
+	int		status;
 
-	while (**line && arguments_conditions(*line))
+	status = 0;
+	while (**line && arguments_conditions(*line) && !status)
 	{
-		if (!is_redirection(*line))
+		if (!is_redirection(*line) && !status)
 		{
 			args = get_line_args(line);
 			command->arguments = join_str_arr(command->arguments, args);
 			if (!command->arguments)
-				return (1);
+				return (ENOMEM);
 		}
-		else if (get_redirections(line, command, heredoc_fds))
-			return (1);
+		else
+			status = get_redirections(line, command, heredoc_fds);
 		skip_spaces(line);
 	}
-	return (0);
+	return (status);
 }
 
-int	get_command(char **line, t_command *command, t_heredoc_fds **heredoc_fds)
+int	get_command(char **line, t_pipeline *pipeline, t_command *command, t_heredoc_fds **heredoc_fds)
 {
+	int	status;
+
 	command->output_file = 1;
 	command->is_end = 1;
-	if (get_arguments(line, command, heredoc_fds))
-		return (1);
+	status = get_arguments(line, command, heredoc_fds);
+	if (status == ENOMEM)
+		return (ENOMEM);
+	if (command->status)
+		return (skip_command(line, pipeline, heredoc_fds), 0);
 	if (str_arr_size(command->arguments) == 0)
 	{
 		free_str_arr(command->arguments);
@@ -52,9 +61,8 @@ int	get_command(char **line, t_command *command, t_heredoc_fds **heredoc_fds)
 	{
 		command->arguments = handle_widlcards(command->arguments);
 		if (!command->arguments)
-			return (1);
-		if (file_or_dir_check(command->arguments[0], EXEC, 1))
-			return (1);
+			return (ENOMEM);
+		file_or_dir_check(command, command->arguments[0], EXEC, 1);
 	}
 	*line += is_pipe(*line);
 	return (0);
@@ -74,20 +82,36 @@ void	handle_parenthesis(char **line, t_pipeline *pipeline, char parenthesis)
 	}
 }
 
-void	skip_to_end_of_pipeline(char **line, t_pipeline *pipeline)
+void	check_last_command_status(t_pipeline *pipeline)
 {
-	if (!**line)
-		return ;
-	handle_parenthesis(line, pipeline, ')');
-	while (**line && !is_operator(*line))
-		*line += 1;
-	get_operator(line, pipeline);
+	int	i;
+
+	i = 0;
+	while (pipeline->commands && pipeline->commands[i].is_end)
+	{
+		if (pipeline->commands[i].status)
+		{
+			free_str_arr(pipeline->commands[i].arguments);
+			pipeline->commands[i].arguments = NULL;
+		}
+		if (!pipeline->commands[i + 1].is_end && pipeline->commands[i].status)
+		{
+			g_status = pipeline->commands[i].status;
+			if (i == 0)
+			{
+				free_pipeline(*pipeline);
+				pipeline->commands = NULL;
+			}
+		}
+		i++;
+	}
 }
 
 int	get_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds)
 {
 	int	i;
 	int	size;
+	int	status;
 
 	pipeline->parenthesis = 0;
 	handle_parenthesis(line, pipeline, '(');
@@ -98,12 +122,14 @@ int	get_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds)
 	i = 0;
 	while (**line && !is_operator(*line))
 	{
-		if (get_command(line, pipeline->commands + i, heredoc_fds))
-			return (skip_to_end_of_pipeline(line, pipeline), 1);
+		status = get_command(line, pipeline, pipeline->commands + i, heredoc_fds);
+		if (status == ENOMEM)
+			return (ENOMEM);
 		handle_parenthesis(line, pipeline, ')');
 		i++;
 	}
 	get_operator(line, pipeline);
+	check_last_command_status(pipeline);
 	return (0);
 }
 

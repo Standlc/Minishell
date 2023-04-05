@@ -55,3 +55,5 @@ char	**handle_widlcards(char **curr_args)
 	}
 	return (free_str_arr(curr_args), new_args);
 }
+
+// echo "*"

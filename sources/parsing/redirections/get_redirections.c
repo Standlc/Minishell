@@ -39,6 +39,7 @@ int	handle_redirections(char **line, t_command *command,
 {
 	char	*line_cpy;
 	char	**file_names;
+	int		status;
 
 	line_cpy = *line;
 	file_names = handle_widlcards(get_line_args(line));
@@ -51,9 +52,8 @@ int	handle_redirections(char **line, t_command *command,
 		print_error("ambiguous redirect: ", line_cpy);
 		return (1);
 	}
-	if (red_function(command, file_names[0]) == -1)
-		return (free_str_arr(file_names), 1);
-	return (free_str_arr(file_names), 0);
+	status = red_function(command, file_names[0]);
+	return (free_str_arr(file_names), status);
 }
 
 int	get_redirections(char **line, t_command *command,
@@ -61,8 +61,10 @@ int	get_redirections(char **line, t_command *command,
 {
 	int		redirect_type;
 	void	*redirection_function;
+	int		status;
 
-	while (is_redirection(*line))
+	status = 0;
+	while (!status && is_redirection(*line))
 	{
 		redirect_type = get_redirect_type(line);
 		skip_special_symbol(line);
@@ -75,10 +77,9 @@ int	get_redirections(char **line, t_command *command,
 		else
 		{
 			redirection_function = get_red_function(redirect_type);
-			if (handle_redirections(line, command, redirection_function))
-				return (1);
+			status = handle_redirections(line, command, redirection_function);
 		}
 		skip_spaces(line);
 	}
-	return (0);
+	return (status);
 }

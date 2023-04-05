@@ -73,7 +73,7 @@ t_heredoc_fds	*get_heredoc_fds(char *line, t_heredoc_fds *heredoc_fds)
 void	handle_sigint_parent(int sig)
 {
 	(void)sig;
-	printf("^C\n");
+	ft_putstr_fd("^C\n", 1);
 	g_status = -1;
 }
 

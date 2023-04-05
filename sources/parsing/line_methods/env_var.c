@@ -55,6 +55,18 @@ char	**split_handler(char *s, char c)
 	return (split);
 }
 
+void	replace_wild_char(char *str)
+{
+	if (!str)
+		return ;
+	while (*str)
+	{
+		if (*str == '*')
+			*str = WILDSTAR;
+		str++;
+	}
+}
+
 char	**handle_env_var(char **line, int is_inside_quotes)
 {
 	char	*env_var_value;
@@ -73,29 +85,6 @@ char	**handle_env_var(char **line, int is_inside_quotes)
 		return (NULL);
 	if (is_inside_quotes)
 		return (split_handler(env_var_value, '\0'));
+	replace_wild_char(env_var_value);
 	return (split_handler(env_var_value, ' '));
 }
-
-// char	**var_concatenation(char **split)
-// {
-// 	char	*ptr_cpy;
-// 	char	**env_var_values;
-// 	int		i;
-
-// 	if (!split)
-// 		return (NULL);
-// 	env_var_values = ft_calloc(2, sizeof(char **));
-// 	if (!env_var_values)
-// 		return (free_str_arr(split), NULL);
-// 	i = 0;
-// 	while (split[i])
-// 	{
-// 		ptr_cpy = split[i];
-// 		env_var_values = join_str_arr(env_var_values, get_line_args(&ptr_cpy));
-// 		if (!env_var_values)
-// 			return (NULL);
-// 		i++;
-// 	}
-// 	free_str_arr(split);
-// 	return (env_var_values);
-// }
