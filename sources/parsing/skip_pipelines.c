@@ -14,6 +14,31 @@
 
 extern int	g_status;
 
+void	check_last_command_status(t_pipeline *pipeline)
+{
+	int	i;
+
+	i = 0;
+	while (pipeline->commands && pipeline->commands[i].is_end)
+	{
+		if (pipeline->commands[i].status)
+		{
+			free_str_arr(pipeline->commands[i].arguments);
+			pipeline->commands[i].arguments = NULL;
+		}
+		if (!pipeline->commands[i + 1].is_end && pipeline->commands[i].status)
+		{
+			g_status = pipeline->commands[i].status;
+			if (i == 0)
+			{
+				free_pipeline(*pipeline);
+				pipeline->commands = NULL;
+			}
+		}
+		i++;
+	}
+}
+
 void	skip_command(char **line, t_pipeline *pipeline,
 	t_heredoc_fds **heredoc_fds)
 {
@@ -68,12 +93,6 @@ void	skip_pipeline_group(char **line, t_heredoc_fds *heredoc_fds)
 	skip_pipelines_to_not_execute(line, curr, heredoc_fds);
 }
 
-void	skip_rest_of_line(char **line)
-{
-	while (**line)
-		*line += 1;
-}
-
 void	skip_pipelines_to_not_execute(char **line, t_pipeline last,
 	t_heredoc_fds *heredoc_fds)
 {
@@ -81,7 +100,8 @@ void	skip_pipelines_to_not_execute(char **line, t_pipeline last,
 		return ;
 	if (g_status == 130 || g_status == 131)
 	{
-		skip_rest_of_line(line);
+		while (**line)
+			*line += 1;
 		return ;
 	}
 	if (last.operator == AND && g_status)

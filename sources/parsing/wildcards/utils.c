@@ -61,7 +61,8 @@ int	compare(char *wildcard, char *file)
 	return (*file == *wildcard);
 }
 
-int	wildcard_matches_amount(char *curr_dir_wildcard, t_wildcard_info *wildcard_info)
+int	wildcard_matches_amount(char *curr_dir_wildcard,
+	t_wildcard_info *wildcard_info)
 {
 	struct dirent	*entry;
 	int				count;

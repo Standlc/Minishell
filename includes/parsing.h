@@ -31,6 +31,7 @@ t_heredoc_data	get_heredoc_data(t_heredoc_data *curr);
 
 void			skip_pipelines_to_not_execute(char **line, t_pipeline last, t_heredoc_fds *heredoc_fds);
 void			skip_command(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds);
+void			check_last_command_status(t_pipeline *pipeline);
 
 int				get_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds);
 void			handle_parenthesis(char **line, t_pipeline *pipeline, char parenthesis);
@@ -86,7 +87,7 @@ char			*dup_line_word(char **line);
 
 void			skip_spaces(char **line);
 void			get_operator(char **line, t_pipeline *pipeline);
-int				file_or_dir_check(t_command *command, char *str, int access_type, int is_command_name);
+int				file_or_dir_check(t_command *command, char *str, int access_type);
 void			*ft_realloc(void *src, int prev_size, int new_size);
 
 void			print_error(char *message, char *line);

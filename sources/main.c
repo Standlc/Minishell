@@ -76,8 +76,10 @@ int	execute_command_line(char *line, t_heredoc_fds *heredoc_fds)
 		pipeline_error = get_pipeline(&line, &pipeline, &heredoc_fds);
 		if (pipeline_error == ENOMEM)
 			return (ENOMEM);
+		// printf("status: %d\n", g_status);
 		if (pipeline.commands)
 			execute_pipeline(pipeline, &(t_blocks){line_ptr, heredocs_ptr});
+		// printf("status: %d\n", g_status);
 		if (check_signal_stop(&pipeline))
 			return (free_pipeline(pipeline), 0);
 		skip_pipelines_to_not_execute(&line, pipeline, heredoc_fds);

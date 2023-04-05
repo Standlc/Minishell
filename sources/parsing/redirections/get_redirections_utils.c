@@ -16,7 +16,7 @@ extern int	g_status;
 
 int	handle_simple_left_redirection(t_command *command, char *file)
 {
-	if (file_or_dir_check(command, file, READ, 0))
+	if (file_or_dir_check(command, file, READ))
 		return (RED_ERROR);
 	if (command->input_file > 2)
 		close(command->input_file);
@@ -31,7 +31,7 @@ int	handle_simple_left_redirection(t_command *command, char *file)
 
 int	handle_simple_right_redirection(t_command *command, char *file)
 {
-	if (file_or_dir_check(command, file, WRITE, 0))
+	if (file_or_dir_check(command, file, WRITE))
 		return (RED_ERROR);
 	if (command->output_file != 1)
 		close(command->output_file);
@@ -46,7 +46,7 @@ int	handle_simple_right_redirection(t_command *command, char *file)
 
 int	handle_double_right_redirection(t_command *command, char *file)
 {
-	if (file_or_dir_check(command, file, WRITE, 0))
+	if (file_or_dir_check(command, file, WRITE))
 		return (RED_ERROR);
 	if (command->output_file != 1)
 		close(command->output_file);

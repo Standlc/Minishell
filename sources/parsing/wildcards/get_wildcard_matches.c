@@ -40,7 +40,8 @@ void	sort(char **arr, int size)
 	}
 }
 
-int	is_match(char *curr_dir_wildcard, t_wildcard_info *wildcard_info, char *file)
+int	is_match(char *curr_dir_wildcard,
+	t_wildcard_info *wildcard_info, char *file)
 {
 	if (wildcard_info->directory_match && !is_directory(file))
 		return (0);
@@ -60,7 +61,7 @@ int	is_match(char *curr_dir_wildcard, t_wildcard_info *wildcard_info, char *file
 int	add_match(char **match, t_wildcard_info *wildcard_info, char *entry_name)
 {
 	char	*temp;
-	
+
 	*match = ft_strdup(entry_name);
 	if (!*match)
 		return (1);
@@ -77,7 +78,8 @@ int	add_match(char **match, t_wildcard_info *wildcard_info, char *entry_name)
 	return (*match == NULL);
 }
 
-char	**read_dir(char *wildcard, char **matches, t_wildcard_info *wildcard_info)
+char	**read_dir(char *wildcard, char **matches,
+	t_wildcard_info *wildcard_info)
 {
 	DIR				*directory;
 	struct dirent	*entry;
