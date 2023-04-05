@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/05 19:18:57 by svan-de-          #+#    #+#             */
+/*   Updated: 2023/04/05 19:26:51 by svan-de-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 extern int	g_status;
@@ -64,7 +76,9 @@ void	execute_pipeline(t_pipeline pipeline, t_blocks *blocks)
 {
 	int		exit_value;
 
-	if (pipeline.commands->arguments && !strncmp("exit", pipeline.commands->arguments[0], 5) && !pipeline.commands[1].is_end)
+	if (pipeline.commands->arguments
+		&& !strncmp("exit", pipeline.commands->arguments[0], 5)
+		&& !pipeline.commands[1].is_end)
 	{
 		exit_value = exit_ms(pipeline.commands);
 		if (exit_value)

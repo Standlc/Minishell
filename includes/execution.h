@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/05 19:37:39 by svan-de-          #+#    #+#             */
+/*   Updated: 2023/04/05 19:37:40 by svan-de-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef EXECUTION_H
 # define EXECUTION_H
 
@@ -8,7 +20,7 @@ int		exit_max(char *value, char *max);
 int		exit_min(char *value, char *min);
 int		strcmp_for_exit(char *value, char *min, char *max);
 long	ft_atoi_exit(char *str);
-int     exit_ms(t_command *command);
+int		exit_ms(t_command *command);
 
 int		directory_exist(char *dir);
 void	env_ms(t_command *command);
@@ -60,6 +72,7 @@ void	pipeline_start(t_command *commands, int fd[2]);
 int		fork_command(t_command *command, int i);
 int		until_last_command(t_command *commands, int fd[2]);
 int		is_child(t_command command);
+void	call_to_waitpid(t_command *commands, int i);
 void	end_of_pipeline(t_command *commands, int fd[2], int end);
 
 void	parenthesis(t_pipeline *pipelines, int *index);
@@ -73,9 +86,8 @@ char	**duplicate_bigarray(char **bigarray);
 
 void	child_sigint(int sig);
 void	child_sigquit(int sig);
-int		child_signals(void);
+void	child_signals(void);
 void	signal_for_wait(void);
-//void	backslash_quit(void);
 
 void	execute_pipeline(t_pipeline pipeline, t_blocks *blocks);
 
