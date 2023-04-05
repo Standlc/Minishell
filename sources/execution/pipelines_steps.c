@@ -29,12 +29,12 @@ void	pipeline_start(t_command *commands, int fd[2])
 
 int	fork_command(t_command *command, int i)
 {
-	if (i != 0 || command[i + 1].is_end || is_child(command[i]))
+	if (i != 0 || command[1].is_end || is_child(command[0]))
 	{
-		command[i].pid = fork();
-		if (command[i].pid == -1)
+		command->pid = fork();
+		if (command->pid == -1)
 			return (g_status = errno, perror("minishell: fork"), 1);
-		if (command[i].pid == 0)
+		if (command->pid == 0)
 		{
 			child_signals();
 			execution_command(command);
@@ -82,9 +82,8 @@ void	end_of_pipeline(t_command *commands, int fd[2], int end)
 			if (WIFEXITED(status_w))
 				g_status = WEXITSTATUS(status_w);
 			if (WIFSIGNALED(status_w))
-				g_status = 128 + WTERMSIG(status_w);
-			if (WIFSIGNALED(status_w))
 			{
+				g_status = 128 + WTERMSIG(status_w);
 				commands[i].signal_stop = 1;
 				if (WTERMSIG(status_w) == 2)
 					write(1, "\n", 2);

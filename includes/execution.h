@@ -3,12 +3,12 @@
 
 # include "minishell.h"
 
-void	exit_pipeline(t_pipeline *pipelines, int i);
+void	exit_process(t_pipeline pipeline, t_blocks *blocks);
 int		exit_max(char *value, char *max);
 int		exit_min(char *value, char *min);
 int		strcmp_for_exit(char *value, char *min, char *max);
 long	ft_atoi_exit(char *str);
-void	exit_ms(t_command *command);
+int     exit_ms(t_command *command);
 
 int		directory_exist(char *dir);
 void	env_ms(t_command *command);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_file_or_dir.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 15:29:02 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 20:23:50 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/04 22:39:17 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ int	check_file_accessibility(char *file, int access_type)
 
 int	file_or_dir_check(char *str, int access_type, int is_command_name)
 {
-	int dir_type;
+	// int dir_type;
 
-	dir_type = str[0] == '/';
+	// dir_type = str[0] == '/';
 	if (!str || (access_type == EXEC && (str[0] != '/' && str[0] != '.')))
 		return (0);
 	if (!access(str, F_OK))

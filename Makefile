@@ -1,6 +1,6 @@
 SRC_EXPORT					=	export.c complete_env.c
 
-SRC_EXIT					=	exit.c exit_pipelines.c
+SRC_EXIT					=	exit.c exit_process.c
 
 SRC_BUILTINS				=	${addprefix export/, ${SRC_EXPORT}} ${addprefix exit/, ${SRC_EXIT}} \
 								cd.c echo.c env.c pwd.c unset.c
