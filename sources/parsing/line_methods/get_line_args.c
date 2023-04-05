@@ -24,7 +24,10 @@ int	add_char(char **line, char **str, int is_str_arr)
 		join[0] = **line;
 	else
 		join[0] = WILDSTAR;
-	last_index = str_arr_size(str) * is_str_arr;
+	if (is_str_arr)
+		last_index = str_arr_size(str);
+	else
+		last_index = 0;
 	if (last_index)
 		last_index--;
 	str[last_index] = strjoin_handler(str[last_index], join);

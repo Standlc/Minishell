@@ -121,6 +121,9 @@ int	main(int argc, char **argv, char **env)
 	return (g_status);
 }
 
+// << limit + ^D
+// echo $"sfbdb"
+
 // false && (false || true)
 // g_status= 130 ^C
 

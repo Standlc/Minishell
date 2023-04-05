@@ -56,14 +56,14 @@ char	**split_handler(char *s, char c)
 	return (split);
 }
 
-void	replace_wild_char(char *str)
+void	replace_chars(char *str, char c, char replace_with)
 {
 	if (!str)
 		return ;
 	while (*str)
 	{
-		if (*str == '*')
-			*str = WILDSTAR;
+		if (*str == c)
+			*str = replace_with;
 		str++;
 	}
 }
@@ -81,11 +81,11 @@ char	**handle_env_var(char **line, int is_inside_quotes)
 		env_var_value = ft_itoa(g_status);
 	else
 		env_var_value = getenv_ms(env_var_name);
-	(free(env_var_name), env_var_name = NULL);
+	free(env_var_name);
 	if (!env_var_value && errno == ENOMEM)
 		return (NULL);
 	if (is_inside_quotes)
 		return (split_handler(env_var_value, '\0'));
-	replace_wild_char(env_var_value);
+	replace_chars(env_var_value, '*', WILDSTAR);
 	return (split_handler(env_var_value, ' '));
 }

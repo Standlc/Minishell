@@ -25,8 +25,7 @@ int	assign_heredoc_fd(char **line, t_command *command,
 	heredoc_limit = NULL;
 	heredoc_limit = get_heredoc_limit(line, heredoc_limit);
 	if (!heredoc_limit)
-		return (1);
+		return (ENOMEM);
 	free(heredoc_limit);
-	heredoc_limit = NULL;
 	return (0);
 }

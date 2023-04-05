@@ -44,7 +44,7 @@ int	handle_redirections(char **line, t_command *command,
 	line_cpy = *line;
 	file_names = handle_widlcards(get_line_args(line));
 	if (!file_names)
-		return (1);
+		return (ENOMEM);
 	if (str_arr_size(file_names) != 1)
 	{
 		command->status = 1;

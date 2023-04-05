@@ -110,6 +110,7 @@ int				is_match(char *curr_dir_wildcard,
 					t_wildcard_info *wildcard_info, char *file);
 int				wildcard_matches_amount(char *curr_dir_wildcard,
 					t_wildcard_info *wildcard_info);
+void			replace_chars(char *str, char c, char replace_with);
 
 void			free_pipelines(t_pipeline *pipelines);
 void			free_pipeline(t_pipeline pipeline);

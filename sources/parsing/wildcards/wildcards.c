@@ -23,6 +23,8 @@ char	**replace_wildcard(char **args, char *wildcard, int *insert_index)
 	wildcard_matches_size = str_arr_size(wildcard_matches);
 	if (wildcard_matches[0])
 		args = insert_str_arr_at_index(args, wildcard_matches, *insert_index);
+	else
+		replace_chars(args[*insert_index], WILDSTAR, '*');
 	*insert_index += (!wildcard_matches_size + wildcard_matches_size);
 	free(wildcard_matches);
 	wildcard_matches = NULL;
