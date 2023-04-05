@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredocs.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:36 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 19:47:36 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/05 21:47:33 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ t_heredoc_fds	*get_heredoc_fds(char *line, t_heredoc_fds *heredoc_fds)
 		{
 			heredoc_fds[i].is_end = 0;
 			if (pipe(heredoc_fds[i].fds) == -1)
-				return (free(heredoc_fds), NULL);
+				return (free(heredoc_fds), heredoc_fds = NULL, NULL);
 			line += 2;
 			i++;
 		}
@@ -105,13 +105,14 @@ t_heredoc_fds	*handle_heredocs(char *line)
 	heredoc.limits = NULL;
 	heredoc.limits = get_heredoc_limits(line, heredoc.limits);
 	if (!heredoc.limits)
-		return (free(heredoc.heredoc_fds), NULL);
+		return (free(heredoc.heredoc_fds), heredoc.heredoc_fds = NULL, NULL);
 	if (!heredoc.heredoc_fds[0].is_end)
 	{
 		if (fork_and_wait(&heredoc))
 		{
 			free_str_arr(heredoc.limits);
 			free(heredoc.heredoc_fds);
+			heredoc.heredoc_fds = NULL;
 			return (NULL);
 		}
 	}

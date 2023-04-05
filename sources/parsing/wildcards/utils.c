@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:10:07 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 16:07:51 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/05 21:54:58 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	wildcard_matches_amount(char *curr_dir_wildcard,
 
 	directory = opendir(".");
 	if (!directory)
-		return (printf("error\n"), 1);
+		return (ft_putstr_fd("error\n", 2), 1);
 	count = 0;
 	entry = readdir(directory);
 	while (entry)

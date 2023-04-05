@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_realloc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:10:12 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 15:33:07 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/05 21:42:37 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,6 @@ void	*ft_realloc(void *src, int prev_size, int new_size)
 		i++;
 	}
 	free(src);
+	src = NULL;
 	return (res);
 }

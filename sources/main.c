@@ -6,7 +6,7 @@
 /*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 19:31:14 by svan-de-          #+#    #+#             */
-/*   Updated: 2023/04/05 19:36:37 by svan-de-         ###   ########.fr       */
+/*   Updated: 2023/04/05 21:32:33 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,16 @@ int	start_minishell(void)
 		{
 			heredoc_fds = handle_heredocs(line);
 			if (!heredoc_fds)
-				return (free(line), 1);
+				return (free(line), line = NULL, 1);
 			if (g_status == SIGINT_HEREDOC)
 				g_status = 130;
 			else if (execute_command_line(line, heredoc_fds))
 				return (close_heredoc_fds(heredoc_fds), free(heredoc_fds), 1);
 			close_heredoc_fds_outs(heredoc_fds);
 			free(heredoc_fds);
+			heredoc_fds = NULL;
 			free(line);
+			line = NULL;
 		}
 		hook_signals();
 		line = readline_handler();

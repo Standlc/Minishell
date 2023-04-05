@@ -19,6 +19,8 @@ void	duplicate_for_streams(t_command *command)
 	if (dup2(command->input_file, 0) == -1
 		|| dup2(command->output_file, 1) == -1)
 		perror("minishell: dup2");
+	close_file(command->output_file);
+	close_file(command->input_file);
 	close_file(command->close_pipe[0]);
 	close_file(command->close_pipe[1]);
 }

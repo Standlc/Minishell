@@ -23,7 +23,9 @@ void	exit_process(t_pipeline pipeline, t_blocks *blocks)
 	free_str_arr(env);
 	rl_clear_history();
 	free(blocks->line_ptr);
+	blocks->line_ptr = NULL;
 	close_heredoc_fds_ins(blocks->heredoc_ptr);
 	free(blocks->heredoc_ptr);
+	blocks->heredoc_ptr = NULL;
 	exit(g_status);
 }

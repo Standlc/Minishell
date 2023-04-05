@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_wildcard_matches.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:10:06 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 16:25:16 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/05 21:50:14 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	add_match(char **match, t_wildcard_info *wildcard_info, char *entry_name)
 	{
 		temp = *match;
 		*match = ft_strjoin("./", *match);
-		free(temp);
+		(free(temp), temp = NULL);
 		if (!*match)
 			return (1);
 	}
@@ -117,9 +117,9 @@ char	**get_wildcard_matches(char *wildcard)
 	size = wildcard_matches_amount(curr_dir_wildcard, &wildcard_info);
 	matches = ft_calloc(size + 1, sizeof(char **));
 	if (!matches)
-		return (free(curr_dir_wildcard), NULL);
+		return (free(curr_dir_wildcard), curr_dir_wildcard = NULL, NULL);
 	matches = read_dir(curr_dir_wildcard, matches, &wildcard_info);
-	free(curr_dir_wildcard);
+	(free(curr_dir_wildcard), curr_dir_wildcard = NULL);
 	if (!matches)
 		return (NULL);
 	sort(matches, str_arr_size(matches));

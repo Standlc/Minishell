@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:10:18 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 04:31:24 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/05 21:43:01 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ char	*strjoin_handler(char *str, char *join)
 	temp_ptr = str;
 	str = ft_strjoin(str, join);
 	free(temp_ptr);
+	temp_ptr = NULL;
 	return (str);
 }
 
