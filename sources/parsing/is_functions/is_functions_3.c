@@ -16,3 +16,15 @@ int	is_white_space(char c)
 {
 	return ((c >= 9 && c <= 13) || c == ' ');
 }
+
+int	has_dot_slash_prefix(char *str)
+{
+	skip_spaces(&str);
+	return (!ft_strncmp(str, "./", 2));
+}
+
+int	has_slash_prefix(char *str)
+{
+	skip_spaces(&str);
+	return (*str == '.' || *str == '/');
+}

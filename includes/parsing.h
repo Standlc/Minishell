@@ -76,6 +76,8 @@ int				is_wildcard(char *str);
 int				is_heredoc(char *line);
 int				is_directory(char *file);
 int				is_white_space(char c);
+int				has_dot_slash_prefix(char *str);
+int				has_slash_prefix(char *str);
 
 int				get_redirections(char **line, t_command *command, t_heredoc_fds **heredoc_fds);
 int				handle_simple_right_redirection(t_command *command, char *file);

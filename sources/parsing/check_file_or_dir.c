@@ -39,8 +39,7 @@ int	check_file_access(t_command *command, char *file, int access_type)
 
 int	check_is_directory_str(char *str)
 {
-	if (!str)
-		return (0);
+	skip_spaces(&str);
 	while (*str == '.')
 		str++;
 	while (*str == '/')
@@ -54,9 +53,22 @@ int	check_is_directory_str(char *str)
 	return (0);
 }
 
+void	handle_dir_error(t_command *command, char *str, int access_type)
+{
+	if (has_dot_slash_prefix(str))
+		command->status = 127;
+	else if (access_type == EXEC)
+		command->status = 126;
+	else
+		command->status = 1;
+	print_error("is a directory: ", str);
+}
+
 int	file_or_dir_check(t_command *command, char *str, int access_type)
 {
-	if (!str || (access_type == EXEC && (str[0] != '/' && str[0] != '.')))
+	if (!str
+		|| (access_type == EXEC
+			&& !has_dot_slash_prefix(str) && !has_slash_prefix(str)))
 		return (0);
 	if (access_type == WRITE && check_is_directory_str(str))
 	{
@@ -66,13 +78,8 @@ int	file_or_dir_check(t_command *command, char *str, int access_type)
 	if (!access(str, F_OK))
 	{
 		if (is_directory(str))
-		{
-			command->status = 1;
-			return (print_error("is a directory: ", str), 1);
-		}
-		if (!access(str, F_OK) && check_file_access(command, str, access_type))
-			return (1);
-		return (0);
+			return (handle_dir_error(command, str, access_type), 1);
+		return (check_file_access(command, str, access_type));
 	}
 	if (access_type == EXEC)
 		command->status = 127;
