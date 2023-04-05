@@ -64,11 +64,12 @@ void	execute_pipeline(t_pipeline pipeline, t_blocks *blocks)
 {
 	int		exit_value;
 
-	if (!strncmp("exit", pipeline.commands->arguments[0], 5) && !pipeline.commands[1].is_end)
+	if (pipeline.commands->arguments && !strncmp("exit", pipeline.commands->arguments[0], 5) && !pipeline.commands[1].is_end)
 	{
 		exit_value = exit_ms(pipeline.commands);
 		if (exit_value)
 			exit_process(pipeline, blocks);
+		return ;
 	}
 	execution_pipeline(pipeline.commands);
 	if (pipeline.commands->is_end == 2)
