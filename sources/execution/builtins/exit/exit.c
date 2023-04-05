@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/05 19:18:22 by svan-de-          #+#    #+#             */
+/*   Updated: 2023/04/05 19:25:11 by svan-de-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 extern int	g_status;
@@ -124,7 +136,8 @@ int	exit_ms(t_command *command)
 	if (i == 3)
 		return (g_status = 1, ft_putstr_fd("exit: too many arguments\n", 2), 0);
 	if (i > 4)
-		return (g_status = 127, ft_putstr_fd("exit: too many arguments\n", 2), 0);
+		return (g_status = 127,
+			ft_putstr_fd("exit: too many arguments\n", 2), 0);
 	g_status = value;
 	return (1);
 }

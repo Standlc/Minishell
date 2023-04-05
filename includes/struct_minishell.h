@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   struct_minishell.h                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/05 19:40:59 by svan-de-          #+#    #+#             */
+/*   Updated: 2023/04/05 19:40:59 by svan-de-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef STRUCT_MINISHELL_H
 # define STRUCT_MINISHELL_H
 
@@ -51,7 +63,7 @@ typedef struct s_pipeline
 	int			parenthesis;
 }				t_pipeline;
 
-typedef struct	s_heredoc_fds {
+typedef struct s_heredoc_fds {
 	int	fds[2];
 	int	is_end;
 }				t_heredoc_fds;
@@ -62,12 +74,12 @@ typedef struct s_blocks
 	t_heredoc_fds	*heredoc_ptr;
 }				t_blocks;
 
-typedef struct	s_heredoc_data {
+typedef struct s_heredoc_data {
 	char			**limits;
 	t_heredoc_fds	*heredoc_fds;
 }				t_heredoc_data;
 
-typedef struct	s_wildcard_info {
+typedef struct s_wildcard_info {
 	int	directory_match;
 	int	has_prefix;
 }				t_wildcard_info;

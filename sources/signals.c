@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signals.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/05 19:31:11 by svan-de-          #+#    #+#             */
+/*   Updated: 2023/04/05 19:44:49 by svan-de-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	handle_sigint(int sig)
@@ -16,39 +28,14 @@ int	hook_signals(void)
 	return (0);
 }
 
-void	child_sigint(int sig)
-{
-	(void)sig;
-	ft_putstr_fd("\n", 2);
-	exit(99);
-}
-
-void	child_sigquit(int sig)
-{
-	(void)sig;
-	ft_putstr_fd("Quit\n", 2);
-	exit(102);
-}
-
-void	backslash()
-{
-	ft_printf("\n");
-}
-
-void	backslash_quit(int sig)
-{
-	(void)sig;
-	ft_putstr_fd("Quit (core dumped)\n", 2);
-}
-
 void	signal_for_wait(void)
 {
-	signal(SIGINT, backslash);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 }
 
-int	child_signals()
+void	child_signals(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	return (0);
 }

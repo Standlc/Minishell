@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipeline_steps.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/05 19:18:45 by svan-de-          #+#    #+#             */
+/*   Updated: 2023/04/05 19:18:45 by svan-de-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 extern int	g_status;
@@ -60,36 +72,4 @@ int	until_last_command(t_command *commands, int fd[2])
 	if (commands[i].position == 0)
 		i = multi_pipes(commands, &fd[0]);
 	return (i);
-}
-
-void	end_of_pipeline(t_command *commands, int fd[2], int end)
-{
-	int	i;
-	int	status_w;
-
-	i = -1;
-	status_w = 0;
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
-	if (commands[1].is_end && close(fd[0]) == -1)
-		(perror("minishell: close"), g_status = errno);
-	while (commands[++i].is_end && i < end)
-	{
-		if (i != 0 || commands[i + 1].is_end || is_child(commands[i]))
-		{
-			if (waitpid(commands[i].pid, &status_w, 0) == -1)
-				(perror("minishell: waitpid"), g_status = errno);
-			if (WIFEXITED(status_w))
-				g_status = WEXITSTATUS(status_w);
-			if (WIFSIGNALED(status_w))
-			{
-				g_status = 128 + WTERMSIG(status_w);
-				commands[i].signal_stop = 1;
-				if (WTERMSIG(status_w) == 2)
-					write(1, "\n", 2);
-				if (WTERMSIG(status_w) == 3)
-					write(2, "Quit (core dumped)\n", 20);
-			}
-		}
-	}
 }

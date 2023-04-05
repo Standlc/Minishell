@@ -1,37 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/05 19:31:14 by svan-de-          #+#    #+#             */
+/*   Updated: 2023/04/05 19:36:37 by svan-de-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	g_status;
-
-void	show_data(t_pipeline pipeline)
-{
-	int	j = 0;
-	int	k = 0;
-
-	if (pipeline.commands)
-	{
-		while (pipeline.commands[j].is_end)
-		{
-			printf("{\n");
-			if (pipeline.commands[j].arguments)
-				printf("\tname: %s\n", pipeline.commands[j].arguments[0]);
-			k = 1;
-			printf("\targuments: [");
-			while (pipeline.commands[j].arguments && pipeline.commands[j].arguments[k])
-			{
-				printf("%s, ", pipeline.commands[j].arguments[k]);
-				k++;
-			}
-			printf("]\n");
-			printf("\tinput: %d\n", pipeline.commands[j].input_file);
-			printf("\touput: %d\n", pipeline.commands[j].output_file);
-			printf("\tis_end: %d\n", pipeline.commands[j].is_end);
-			printf("}\n");
-			j++;
-		}
-	}
-	printf("parenthesis: %d\n", pipeline.parenthesis);
-	printf("operator: %d\n", pipeline.operator);
-}
 
 char	*readline_handler(void)
 {
@@ -121,11 +102,11 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	// if (!isatty(0) || !isatty(1) || !isatty(2))
-	// {
-	// 	ft_putstr_fd("stdin, stdout or stderr have been changed\n", 2);
-	// 	return (ENOTTY);
-	// }
+	if (!isatty(0) || !isatty(1) || !isatty(2))
+	{
+		ft_putstr_fd("stdin, stdout or stderr have been changed\n", 2);
+		return (ENOTTY);
+	}
 	hook_signals();
 	g_status = 0;
 	minishell_env = duplicate_bigarray(env);
@@ -139,8 +120,3 @@ int	main(int argc, char **argv, char **env)
 	ft_putstr_fd("exit\n", 1);
 	return (g_status);
 }
-
-// export GHOST=123 | env | grep GHOST
-
-// void rl_clear_history(void){}
-// void rl_replace_line(char *s, int n){(void)s;(void)n;}

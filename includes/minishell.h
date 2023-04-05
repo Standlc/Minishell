@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/05 19:41:06 by svan-de-          #+#    #+#             */
+/*   Updated: 2023/04/05 19:41:24 by svan-de-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -33,7 +45,7 @@
 # include "libft.h"
 # include "get_next_line.h"
 # include "ft_printf.h"
-#include "struct_minishell.h"
+# include "struct_minishell.h"
 # include "parsing.h"
 # include "execution.h"
 
