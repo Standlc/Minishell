@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_file_or_dir.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 15:29:02 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 22:39:17 by marvin           ###   ########.fr       */
+/*   Updated: 2023/04/05 21:33:10 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ int	file_or_dir_check(t_command *command, char *str, int access_type)
 			return (handle_dir_error(command, str, access_type), 1);
 		return (check_file_access(command, str, access_type));
 	}
+	if (access_type == WRITE)
+		return (0);
 	if (access_type == EXEC)
 		command->status = 127;
 	else

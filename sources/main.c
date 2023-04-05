@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 19:31:14 by svan-de-          #+#    #+#             */
-/*   Updated: 2023/04/05 19:36:37 by svan-de-         ###   ########.fr       */
+/*   Updated: 2023/04/05 22:20:05 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,15 @@ int	g_status;
 
 char	*readline_handler(void)
 {
+	// char	*arrow_color;
 	char	*prompt;
 	char	*line;
 
-	if (g_status)
+	if (g_status)	
 		prompt = PROMPT_ERROR;
 	else
 		prompt = PROMPT;
+	// ft_printf("%c%s%s%s%s %c", RL_PROMPT_START_IGNORE, arrow_color, "▸", "minishell", WHITE, RL_PROMPT_END_IGNORE);
 	line = readline(prompt);
 	return (line);
 }
@@ -120,3 +122,23 @@ int	main(int argc, char **argv, char **env)
 	ft_putstr_fd("exit\n", 1);
 	return (g_status);
 }
+
+// false && (false || true)
+// g_status= 130 ^C
+
+// echo lol | wc
+// cat << eof (ctrl+D)
+// cat << eof << eof (ctrl+C => ^C^C)
+// cat + ctrl+\ (maybe not a problem)
+// export VAR="echo lol >file" (conditional jump)
+// wildcards should ignore case
+// abc | abc | abc | abc | abc | abc
+// echo $"SHLVL"
+
+/*
+echo xd > lol > lol2 > lol3
+minishell: close: Bad file descriptor
+double free or corruption (out)
+double free or corruption (out)
+double free or corruption (out)
+*/

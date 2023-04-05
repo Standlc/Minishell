@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:11 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 21:06:58 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/05 22:19:48 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	get_command(char **line, t_pipeline *pipeline,
 
 	command->output_file = 1;
 	command->is_end = 1;
+	command->status = 0;
+	command->signal_stop = 0;
 	status = get_arguments(line, command, heredoc_fds);
 	if (status == ENOMEM)
 		return (ENOMEM);
@@ -78,7 +80,7 @@ void	handle_parenthesis(char **line, t_pipeline *pipeline, char parenthesis)
 	while (**line == parenthesis)
 	{
 		*line += 1;
-		pipeline->parenthesis += parenthesis == '(' * 2 - 1;
+		pipeline->parenthesis += (parenthesis == '(') * 2 - 1;
 		skip_spaces(line);
 	}
 }
@@ -91,9 +93,11 @@ int	get_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds)
 	pipeline->parenthesis = 0;
 	handle_parenthesis(line, pipeline, '(');
 	size = get_pipeline_commands_amount(*line);
+	// printf(": %d\n", size);
 	pipeline->commands = ft_calloc(size + 1, sizeof(t_command));
 	if (!pipeline->commands)
 		return (1);
+	pipeline->commands[size].is_end = 0;
 	i = 0;
 	while (**line && !is_operator(*line))
 	{

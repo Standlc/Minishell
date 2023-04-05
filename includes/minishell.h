@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 19:41:06 by svan-de-          #+#    #+#             */
-/*   Updated: 2023/04/05 19:41:24 by svan-de-         ###   ########.fr       */
+/*   Updated: 2023/04/05 21:40:59 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 
 # define PROMPT			"\033[1;32m▸  \033[1;32mminishell\033[0m "
 # define PROMPT_ERROR	"\033[1;31m▸  \033[1;32mminishell\033[0m "
-// # define PROMPT			">minishell$>"
-// # define PROMPT_ERROR	"xminishell$>"
+// # define PROMPT			"> minishell $>"
+// # define PROMPT_ERROR	"x minishell $>"
 # define MEM "minishell: Cannot allocate memory\n"
 # define LMIN "-9223372036854775808"
 # define LMAX "9223372036854775807"

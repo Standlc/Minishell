@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   close_program.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:10:24 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/05 19:34:44 by svan-de-         ###   ########.fr       */
+/*   Updated: 2023/04/05 21:27:26 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,4 @@ void	free_pipeline(t_pipeline pipeline)
 	if (pipeline.commands)
 		free(pipeline.commands);
 	pipeline.commands = NULL;
-}
-
-void	free_pipelines(t_pipeline *pipelines)
-{
-	int	i;
-
-	i = 0;
-	while (pipelines[i].commands)
-	{
-		free_pipeline(pipelines[i]);
-		i++;
-	}
-	free(pipelines);
 }
