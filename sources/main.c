@@ -49,7 +49,7 @@ char	*readline_handler(void)
 int	check_signal_stop(t_pipeline *pipeline)
 {
 	int	i;
-	
+
 	if (!pipeline->commands)
 		return (0);
 	i = 0;
