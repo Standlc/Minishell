@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredocs_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:33 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 02:22:20 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/05 21:46:08 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ int	read_user_input(int fd, char *limit)
 		if (!ft_strncmp(limit, heredoc_line, limit_len + 1))
 			return (0);
 		else if (write_to_heredoc_fd(fd, heredoc_line))
-			return (free(heredoc_line), 1);
-		free(heredoc_line);
+			return (free(heredoc_line), heredoc_line = NULL, 1);
+		(free(heredoc_line), heredoc_line = NULL);
 		heredoc_line = readline("> ");
 	}
 	return (0);

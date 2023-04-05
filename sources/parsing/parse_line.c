@@ -48,12 +48,10 @@ int	get_command(char **line, t_pipeline *pipeline,
 
 	command->output_file = 1;
 	command->is_end = 1;
-	command->status = 0;
-	command->signal_stop = 0;
 	status = get_arguments(line, command, heredoc_fds);
 	if (status == ENOMEM)
 		return (ENOMEM);
-	if (command->status)
+	if (status)
 		return (skip_command(line, pipeline, heredoc_fds), 0);
 	if (str_arr_size(command->arguments) == 0)
 	{
@@ -93,11 +91,9 @@ int	get_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds)
 	pipeline->parenthesis = 0;
 	handle_parenthesis(line, pipeline, '(');
 	size = get_pipeline_commands_amount(*line);
-	// printf(": %d\n", size);
 	pipeline->commands = ft_calloc(size + 1, sizeof(t_command));
 	if (!pipeline->commands)
 		return (1);
-	pipeline->commands[size].is_end = 0;
 	i = 0;
 	while (**line && !is_operator(*line))
 	{

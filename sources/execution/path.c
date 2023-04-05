@@ -25,18 +25,20 @@ void	free_split(char **split)
 		while (i >= 0)
 		{
 			free(split[i]);
+			split[i] = NULL;
 			i--;
 		}
 		free(split);
+		split = NULL;
 	}
 }
 
 void	*free_path(char **paths, char *fill_path, char *final_path)
 {
 	if (fill_path)
-		free(fill_path);
+		(free(fill_path), fill_path = NULL);
 	if (final_path)
-		free(final_path);
+		(free(final_path), final_path = NULL);
 	free_split(paths);
 	return (NULL);
 }
@@ -48,8 +50,8 @@ char	*good_path(char **paths, char *fill_path, char *final_path, char *cmd)
 	i = 0;
 	while (paths[i])
 	{
-		free(final_path);
-		free(fill_path);
+		(free(final_path), final_path = NULL);
+		(free(fill_path), final_path = NULL);
 		fill_path = ft_strjoin(paths[i], "/");
 		if (!fill_path)
 			return (free_path(paths, NULL, final_path));

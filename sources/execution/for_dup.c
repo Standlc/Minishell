@@ -35,9 +35,11 @@ void	free_dup(char **dup_bigarray)
 	while (i >= 0)
 	{
 		free(dup_bigarray[i]);
+		dup_bigarray[i] = NULL;
 		i--;
 	}
 	free(dup_bigarray);
+	dup_bigarray = NULL;
 }
 
 char	**duplicate_bigarray(char **bigarray)

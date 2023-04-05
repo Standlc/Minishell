@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:56 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/03 05:12:20 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/05 21:49:33 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,6 @@ int	assign_heredoc_fd(char **line, t_command *command,
 	if (!heredoc_limit)
 		return (1);
 	free(heredoc_limit);
+	heredoc_limit = NULL;
 	return (0);
 }

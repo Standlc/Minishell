@@ -23,6 +23,7 @@ void	replace_variable(char **new, char *argument, int lign)
 	if (!new)
 		return (g_status = 12, ft_putstr_fd(MEM, 2));
 	free(tmp);
+	tmp = NULL;
 }
 
 int	is_variable(char **new, char *argument)

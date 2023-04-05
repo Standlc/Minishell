@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 19:31:14 by svan-de-          #+#    #+#             */
-/*   Updated: 2023/04/05 22:20:05 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/05 22:21:51 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,13 @@ int	g_status;
 
 char	*readline_handler(void)
 {
-	// char	*arrow_color;
 	char	*prompt;
 	char	*line;
 
-	if (g_status)	
+	if (g_status)
 		prompt = PROMPT_ERROR;
 	else
 		prompt = PROMPT;
-	// ft_printf("%c%s%s%s%s %c", RL_PROMPT_START_IGNORE, arrow_color, "▸", "minishell", WHITE, RL_PROMPT_END_IGNORE);
 	line = readline(prompt);
 	return (line);
 }
@@ -83,13 +81,13 @@ int	start_minishell(void)
 		{
 			heredoc_fds = handle_heredocs(line);
 			if (!heredoc_fds)
-				return (free(line), 1);
+				return (free(line), line = NULL, 1);
 			if (g_status == SIGINT_HEREDOC)
 				g_status = 130;
 			else if (execute_command_line(line, heredoc_fds))
 				return (close_heredoc_fds(heredoc_fds), free(heredoc_fds), 1);
 			close_heredoc_fds_outs(heredoc_fds);
-			free(heredoc_fds);
+			(free(heredoc_fds), heredoc_fds = NULL);
 			free(line);
 		}
 		hook_signals();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   insert.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 15:29:18 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 15:29:19 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/05 21:43:44 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,10 @@ char	**insert_str_arr_at_index(char **arr1, char **arr2, int index)
 		return (NULL);
 	mem_cpy_str_arr_upto(res, arr1, index);
 	free(arr1[index]);
+	arr1[index] = NULL;
 	mem_cpy_str_arr(res + index, arr2);
 	mem_cpy_str_arr(res + index + arr2_size, arr1 + index + 1);
 	free(arr1);
+	arr1 = NULL;
 	return (res);
 }

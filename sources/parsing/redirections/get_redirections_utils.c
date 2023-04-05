@@ -26,7 +26,7 @@ int	handle_simple_left_redirection(t_command *command, char *file)
 		command->status = errno;
 		print_error("could not open file: ", file);
 	}
-	return (command->input_file);
+	return (command->input_file == -1);
 }
 
 int	handle_simple_right_redirection(t_command *command, char *file)
@@ -41,7 +41,7 @@ int	handle_simple_right_redirection(t_command *command, char *file)
 		command->status = errno;
 		print_error("could not open file: ", file);
 	}
-	return (command->output_file);
+	return (command->output_file == -1);
 }
 
 int	handle_double_right_redirection(t_command *command, char *file)
@@ -56,5 +56,5 @@ int	handle_double_right_redirection(t_command *command, char *file)
 		command->status = errno;
 		print_error("could not open file: ", file);
 	}
-	return (command->output_file);
+	return (command->output_file == -1);
 }

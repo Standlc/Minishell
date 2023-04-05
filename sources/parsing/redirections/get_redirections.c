@@ -47,7 +47,7 @@ int	handle_redirections(char **line, t_command *command,
 		return (1);
 	if (str_arr_size(file_names) != 1)
 	{
-		g_status = 1;
+		command->status = 1;
 		free_str_arr(file_names);
 		print_error("ambiguous redirect: ", line_cpy);
 		return (1);

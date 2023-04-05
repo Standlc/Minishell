@@ -20,10 +20,10 @@
 # define BOLD	"\033[1m"
 # define WHITE	"\033[0m"
 
-# define PROMPT			"\033[1;32m▸  \033[1;32mminishell\033[0m "
-# define PROMPT_ERROR	"\033[1;31m▸  \033[1;32mminishell\033[0m "
-// # define PROMPT			"> minishell $>"
-// # define PROMPT_ERROR	"x minishell $>"
+# define PROMPT			"\001\033[1;32m\002▸ \
+\001\033[1;32m\002minishell\001\033[0m\002 "
+# define PROMPT_ERROR	"\001\033[1;31m\002▸ \
+\001\033[1;32m\002minishell\001\033[0m\002 "
 # define MEM "minishell: Cannot allocate memory\n"
 # define LMIN "-9223372036854775808"
 # define LMAX "9223372036854775807"

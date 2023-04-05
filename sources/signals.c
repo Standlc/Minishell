@@ -19,10 +19,8 @@ void	handle_sigint(int sig)
 	(void)sig;
 	g_status = 130;
 	ft_putstr_fd("\n", 2);
-	rl_replace_line("", 0);
-	// rl_on_new_line();
-	// rl_redisplay();
-	ft_putstr_fd(PROMPT_ERROR, 2);
+	rl_on_new_line();
+	rl_redisplay();
 }
 
 int	hook_signals(void)

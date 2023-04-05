@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_var.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:47 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/03 00:51:38 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/05 21:48:24 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ char	**split_handler(char *s, char c)
 		return (ft_calloc(2, sizeof(char **)));
 	split = ft_split(s, c);
 	free(s);
+	s = NULL;
 	return (split);
 }
 
@@ -80,7 +81,7 @@ char	**handle_env_var(char **line, int is_inside_quotes)
 		env_var_value = ft_itoa(g_status);
 	else
 		env_var_value = getenv_ms(env_var_name);
-	free(env_var_name);
+	(free(env_var_name), env_var_name = NULL);
 	if (!env_var_value && errno == ENOMEM)
 		return (NULL);
 	if (is_inside_quotes)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:10:10 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 15:39:50 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/05 21:53:36 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ char	**replace_wildcard(char **args, char *wildcard, int *insert_index)
 		args = insert_str_arr_at_index(args, wildcard_matches, *insert_index);
 	*insert_index += (!wildcard_matches_size + wildcard_matches_size);
 	free(wildcard_matches);
+	wildcard_matches = NULL;
 	return (args);
 }
 
@@ -55,5 +56,3 @@ char	**handle_widlcards(char **curr_args)
 	}
 	return (free_str_arr(curr_args), new_args);
 }
-
-// echo "*"

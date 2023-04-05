@@ -6,7 +6,7 @@
 /*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:10:24 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/05 21:27:26 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/05 22:22:28 by stde-la-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	free_str_arr(char **str_arr)
 	while (str_arr && str_arr[i])
 	{
 		free(str_arr[i]);
+		str_arr[i] = NULL;
 		i++;
 	}
 	if (str_arr)

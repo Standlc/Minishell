@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join_str_arr.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 13:09:30 by stde-la-          #+#    #+#             */
-/*   Updated: 2023/04/04 05:00:13 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/05 21:45:01 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	strjoin_str_arr(char **str_arr, char *join)
 		last_index--;
 	str_arr[last_index] = strjoin_handler(str_arr[last_index], join);
 	free(join);
+	join = NULL;
 	if (!str_arr[last_index] && errno == ENOMEM)
 		return (1);
 	return (0);
@@ -81,10 +82,10 @@ char	**join_arr_strjoin(char **dest, char **arr2)
 		if (arr2[j][0])
 			dest[j + last_index] = arr2[j];
 		else
-			free(arr2[j]);
+			(free(arr2[j]), arr2[j] = NULL);
 		j++;
 	}
-	return (free(arr2), dest);
+	return (free(arr2), arr2 = NULL, dest);
 }
 
 char	**join_str_arr(char **dest, char **arr2)
@@ -98,5 +99,5 @@ char	**join_str_arr(char **dest, char **arr2)
 	if (!dest)
 		return (free_str_arr(arr2), NULL);
 	mem_cpy_str_arr(dest + dest_size, arr2);
-	return (free(arr2), dest);
+	return (free(arr2), arr2 = NULL, dest);
 }

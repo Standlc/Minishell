@@ -6,7 +6,7 @@
 /*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 19:18:26 by svan-de-          #+#    #+#             */
-/*   Updated: 2023/04/05 19:18:26 by svan-de-         ###   ########.fr       */
+/*   Updated: 2023/04/05 22:02:28 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,20 @@ void	complete_env_pwd(t_command *command, char *old_pwd, char *pwd)
 	command->position = 2;
 	command->arguments = malloc(sizeof(char *) * 4);
 	if (!command->arguments)
-		return (ft_putstr_fd(MEM, 2), free(pwd));
+		return (ft_putstr_fd(MEM, 2), free(pwd), pwd = NULL, (void)0);
 	command->arguments[0] = malloc(1);
 	command->arguments[0][0] = '\0';
 	command->arguments[1] = ft_strjoin("PWD=", pwd);
 	if (!command->arguments[1])
-		return (ft_putstr_fd(MEM, 2), free(command->arguments), free(pwd));
+		return (ft_putstr_fd(MEM, 2), free(command->arguments),
+			command->arguments = NULL, free(pwd), pwd = NULL, (void)0);
 	if (old_pwd)
 	{
 		command->arguments[2] = ft_strjoin("OLDPWD=", old_pwd);
 		if (!command->arguments[2])
 			return (ft_putstr_fd(MEM, 2), free(command->arguments[1]),
-				free(command->arguments), free(pwd));
+				command->arguments[1] = NULL, free(command->arguments),
+				command->arguments = NULL, free(pwd), pwd = NULL, (void)0);
 	}
 	else
 		command->arguments[2] = NULL;
@@ -81,6 +83,7 @@ void	env_pwd(char *old_pwd)
 	else
 		complete_env_pwd(&export_pwd, old_pwd, pwd);
 	free(pwd);
+	pwd = NULL;
 }
 
 void	cd_ms(t_command *command)
@@ -97,17 +100,17 @@ void	cd_ms(t_command *command)
 	{
 		if (chdir(command->arguments[1]) == -1)
 			return (ft_putstr_fd("cd: No such directory\n", 2),
-				g_status = 1, free(old_pwd));
+				g_status = 1, free(old_pwd), old_pwd = NULL, (void)0);
 	}
 	else
 	{
 		str = getenv_ms("HOME");
 		if (!str)
 			return (ft_putstr_fd("cd: HOME not set\n", 2),
-				g_status = 1, free(old_pwd));
+				g_status = 1, free(old_pwd), old_pwd = NULL, (void)0);
 		if (chdir(str) == -1)
-			return (ft_putstr_fd("cd: No such directory\n", 2),
-				g_status = 1, free(old_pwd), free(str));
+			return (ft_putstr_fd("cd: No such directory\n", 2), g_status = 1,
+				free(old_pwd), old_pwd = NULL, free(str), str = NULL, (void)0);
 	}
-	(env_pwd(old_pwd), free(old_pwd), free(str));
+	(env_pwd(old_pwd), free(old_pwd), old_pwd = NULL, free(str), str = NULL);
 }
