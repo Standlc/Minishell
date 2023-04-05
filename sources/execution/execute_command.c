@@ -28,7 +28,7 @@ void	execution_command(t_command *command)
 	if (!ft_strncmp(command->arguments[0], "unset", 6))
 		return (unset_ms(command));
 	if (!ft_strncmp(command->arguments[0], "exit", 5))
-		return (exit_ms(command));
+		return ((void)exit_ms(command));
 	if (!ft_strncmp(command->arguments[0], "echo", 5))
 		return (echo_ms(command));
 	if (!ft_strncmp(command->arguments[0], "pwd", 4))

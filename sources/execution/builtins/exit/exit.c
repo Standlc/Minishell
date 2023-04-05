@@ -103,7 +103,7 @@ long	ft_atoi_exit(char *str)
 	return (result);
 }
 
-void	exit_ms(t_command *command)
+int	exit_ms(t_command *command)
 {
 	long	value;
 	int		i;
@@ -119,11 +119,12 @@ void	exit_ms(t_command *command)
 			(value = ft_atoi_exit(command->arguments[1]));
 		else
 			return (g_status = 2,
-				ft_putstr_fd("exit: numeric argument required\n", 2));
+				ft_putstr_fd("exit: numeric argument required\n", 2), 1);
 	}
 	if (i == 3)
-		return (g_status = 1, ft_putstr_fd("exit: too many arguments\n", 2));
+		return (g_status = 1, ft_putstr_fd("exit: too many arguments\n", 2), 0);
 	if (i > 4)
-		return (g_status = 127, ft_putstr_fd("exit: too many arguments\n", 2));
+		return (g_status = 127, ft_putstr_fd("exit: too many arguments\n", 2), 0);
 	g_status = value;
+	return (1);
 }

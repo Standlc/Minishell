@@ -1,15 +1,17 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-// # define NC		"\033[0m"
-// # define CYAN	"\033[1;36m"
-// # define GREEN	"\033[1;32m"
-// # define RED	"\033[1;31m"
-// # define BOLD	"\033[1m"
-// # define WHITE	"\033[0m"
+# define NC		"\033[0m"
+# define CYAN	"\033[1;36m"
+# define GREEN	"\033[1;32m"
+# define RED	"\033[1;31m"
+# define BOLD	"\033[1m"
+# define WHITE	"\033[0m"
 
 # define PROMPT			"\033[1;32m▸  \033[1;32mminishell\033[0m "
 # define PROMPT_ERROR	"\033[1;31m▸  \033[1;32mminishell\033[0m "
+// # define PROMPT			">minishell$>"
+// # define PROMPT_ERROR	"xminishell$>"
 # define MEM "minishell: Cannot allocate memory\n"
 # define LMIN "-9223372036854775808"
 # define LMAX "9223372036854775807"

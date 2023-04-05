@@ -62,20 +62,16 @@ int	check_last_status(t_pipeline last)
 
 void	execute_pipeline(t_pipeline pipeline, t_blocks *blocks)
 {
-	char	**env;
+	int		exit_value;
 
-	// if (!strncmp("exit", pipeline.commands->arguments[0], 5) && !pipeline.commands[1].is_end)
-	// 			exit_pipeline(pipeline);
+	if (pipeline.commands->arguments && !strncmp("exit", pipeline.commands->arguments[0], 5) && !pipeline.commands[1].is_end)
+	{
+		exit_value = exit_ms(pipeline.commands);
+		if (exit_value)
+			exit_process(pipeline, blocks);
+		return ;
+	}
 	execution_pipeline(pipeline.commands);
 	if (pipeline.commands->is_end == 2)
-	{
-		free_pipeline(pipeline);
-		env = *(environnement(NULL));
-		free_str_arr(env);
-		rl_clear_history();
-		free(blocks->line_ptr);
-		close_heredoc_fds_ins(blocks->heredoc_ptr);
-		free(blocks->heredoc_ptr);
-		exit(g_status);
-	}
+		exit_process(pipeline, blocks);
 }
