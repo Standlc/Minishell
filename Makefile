@@ -9,7 +9,7 @@ SRC_PIPELINE_STEPS	=	pipeline_steps.c end_of_pipeline.c
 
 SRC_EXECUTION		=	${addprefix builtins/, ${SRC_BUILTINS}} ${addprefix pipeline_steps/, ${SRC_PIPELINE_STEPS}} \
 						another.c execute_command.c execution.c for_dup.c \
-						parenthesis.c path.c pipe.c
+						path.c pipe.c
 
 SRC_ARRAY_METHODS	=	join_str_arr.c insert.c
 

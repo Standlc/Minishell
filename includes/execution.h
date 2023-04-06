@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 19:37:39 by svan-de-          #+#    #+#             */
-/*   Updated: 2023/04/05 19:37:40 by svan-de-         ###   ########.fr       */
+/*   Updated: 2023/04/06 02:59:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,7 @@ int		is_child(t_command command);
 void	call_to_waitpid(t_command *commands, int i);
 void	end_of_pipeline(t_command *commands, int fd[2], int end);
 
-void	parenthesis(t_pipeline *pipelines, int *index);
-
 void	execution_pipeline(t_command *commands);
-int		check_last_status(t_pipeline last);
 
 int		bigarray_len(char **bigarray);
 void	free_dup(char **dup_bigarray);
