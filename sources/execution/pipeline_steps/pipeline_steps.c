@@ -18,11 +18,11 @@ int	is_child(t_command command)
 {
 	if (!command.arguments || !command.arguments[0] || !command.arguments[0][0])
 		return (1);
-	if (!strncmp(command.arguments[0], "cd", 3))
+	if (!ft_strncmp(command.arguments[0], "cd", 3))
 		return (0);
-	if (!strncmp(command.arguments[0], "export", 7))
+	if (!ft_strncmp(command.arguments[0], "export", 7))
 		return (0);
-	if (!strncmp(command.arguments[0], "unset", 6))
+	if (!ft_strncmp(command.arguments[0], "unset", 6))
 		return (0);
 	return (1);
 }

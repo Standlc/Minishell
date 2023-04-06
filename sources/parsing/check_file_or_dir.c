@@ -65,7 +65,7 @@ int	check_write_access_type(t_command *command, char *str, int access_type)
 		if (is_directory(str))
 		{
 			command->status = 1;
-			return (print_error_arg("is a directory", str), 1);
+			return (print_error_arg(": is a directory", str), 1);
 		}
 		return (check_file_access(command, str, access_type));
 	}
@@ -77,7 +77,7 @@ int	check_exec_access_type(t_command *command, char *str, int access_type)
 	if (!ft_strncmp(str, ".", 2))
 	{
 		command->status = 2;
-		return (print_error_arg("filename argument required", "."), 1);
+		return (print_error_arg(": filename argument required", "."), 1);
 	}
 	if (!has_dot_slash_prefix(str)
 		&& !has_slash_prefix(str) && !check_is_directory_str(str))

@@ -73,22 +73,30 @@ t_heredoc_fds	*get_heredoc_fds(char *line, t_heredoc_fds *heredoc_fds)
 void	handle_sigint_parent(int sig)
 {
 	(void)sig;
-	ft_putstr_fd("^C\n", 1);
+	if (g_status != SIGINT_HEREDOC)
+		ft_putstr_fd("^C\n", 1);
 	g_status = SIGINT_HEREDOC;
 }
 
 int	fork_and_wait(t_heredoc_data *heredoc)
 {
+	int		i;
 	pid_t	pid;
 	int		wait_status;
 
-	pid = fork();
-	if (pid == -1)
-		return (errno);
-	if (pid == 0)
-		heredoc_child(heredoc);
+	get_heredoc_data(heredoc);
 	signal(SIGINT, handle_sigint_parent);
-	wait_status = waitpid(pid, NULL, 0);
+	i = 0;
+	while (heredoc->limits[i] && g_status != SIGINT_HEREDOC)
+	{
+		pid = fork();
+		if (pid == -1)
+			return (errno);
+		if (pid == 0)
+			heredoc_child(heredoc->limits[i], heredoc->heredoc_fds[i].fds[1]);
+		wait_status = waitpid(pid, NULL, 0);
+		i++;
+	}
 	hook_signals();
 	close_heredoc_fds_ins(heredoc->heredoc_fds);
 	return (wait_status);
@@ -111,10 +119,13 @@ t_heredoc_fds	*handle_heredocs(char *line)
 		if (fork_and_wait(&heredoc) == -1)
 		{
 			free_str_arr(heredoc.limits);
+			heredoc.limits = NULL;
+			close_heredoc_fds(heredoc.heredoc_fds);
 			free(heredoc.heredoc_fds);
 			return (NULL);
 		}
 	}
 	free_str_arr(heredoc.limits);
+	heredoc.limits = NULL;
 	return (heredoc.heredoc_fds);
 }

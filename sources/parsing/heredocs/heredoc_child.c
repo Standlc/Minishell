@@ -29,22 +29,21 @@ void	exit_heredoc(int sig)
 	exit(0);
 }
 
-void	heredoc_child(t_heredoc_data *heredoc)
+void	heredoc_child(char *limit, int fd)
 {
 	int	status;
 	int	i;
 
 	i = 0;
-	get_heredoc_data(heredoc);
 	signal(SIGINT, exit_heredoc);
-	status = do_the_heredocs(heredoc->heredoc_fds, heredoc->limits, &i);
+	status = read_user_input(fd, limit);
 	if (status == ENOMEM)
 		perror("minishell: malloc");
 	else if (status == -1)
 	{
 		ft_putstr_fd("minishell: warning: ", 2);
 		ft_putstr_fd("here-document delimited by end-of-file (wanted `", 2);
-		ft_putstr_fd(heredoc->limits[i - 1], 2);
+		ft_putstr_fd(limit, 2);
 		ft_putstr_fd("')\n", 2);
 	}
 	exit_heredoc(0);

@@ -23,7 +23,8 @@ int				get_heredoc_amount(char *line);
 char			*get_heredoc_limit(char **line, char *heredoc_limit);
 int				do_the_heredocs(t_heredoc_fds *heredoc_fds,
 					char **limits, int *i);
-void			heredoc_child(t_heredoc_data *heredoc);
+void			heredoc_child(char *limit, int fd);
+int				read_user_input(int fd, char *limit);
 char			*get_heredoc_limit(char **line, char *heredoc_limit);
 t_heredoc_data	get_heredoc_data(t_heredoc_data *curr);
 

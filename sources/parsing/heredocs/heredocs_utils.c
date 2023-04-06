@@ -60,25 +60,6 @@ int	read_user_input(int fd, char *limit)
 	return (-1);
 }
 
-int	do_the_heredocs(t_heredoc_fds *heredoc_fds, char **limits, int *i)
-{
-	int		status;
-
-	status = 0;
-	while (limits[*i] && status != -1)
-	{
-		status = read_user_input(heredoc_fds[*i].fds[1], limits[*i]);
-		if (status == ENOMEM)
-			return (ENOMEM);
-		close(heredoc_fds[*i].fds[1]);
-		close(heredoc_fds[*i].fds[0]);
-		heredoc_fds[*i].fds[1] = 0;
-		heredoc_fds[*i].fds[0] = 0;
-		*i += 1;
-	}
-	return (status);
-}
-
 int	get_heredoc_amount(char *line)
 {
 	int	count;

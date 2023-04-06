@@ -37,7 +37,7 @@ int	is_variable(char **new, char *argument)
 		j = 0;
 		while (new[i][j] != '=')
 			j++;
-		if (!strncmp(new[i], argument, j))
+		if (!ft_strncmp(new[i], argument, j))
 			return (i);
 		i++;
 	}
