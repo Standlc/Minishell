@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 19:31:14 by svan-de-          #+#    #+#             */
-/*   Updated: 2023/04/06 01:57:12 by marvin           ###   ########.fr       */
+/*   Updated: 2023/04/06 19:07:22 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int	execute_command_line(char *line, t_heredoc_fds *heredoc_fds)
 	t_heredoc_fds	*heredocs_ptr;
 
 	heredocs_ptr = heredoc_fds;
+	get_heredoc_fds_data(heredocs_ptr);
 	line_ptr = line;
 	while (*line)
 	{
@@ -102,11 +103,11 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	// if (!isatty(0) || !isatty(1) || !isatty(2))
-	// {
-	// 	ft_putstr_fd("stdin, stdout or stderr have been changed\n", 2);
-	// 	return (ENOTTY);
-	// }
+	if (!isatty(0) || !isatty(1) || !isatty(2))
+	{
+		ft_putstr_fd("stdin, stdout or stderr have been changed\n", 2);
+		return (ENOTTY);
+	}
 	hook_signals();
 	g_status = 0;
 	minishell_env = duplicate_bigarray(env);
@@ -120,10 +121,3 @@ int	main(int argc, char **argv, char **env)
 	ft_putstr_fd("exit\n", 1);
 	return (g_status);
 }
-
-// echo $$""
-// echo $"SHLVL"
-
-// cat << eof << eof (ctrl+C => ^C^C)
-// cat + ctrl+\ (maybe not a problem)
-// export VAR="echo lol >file" (conditional jump)

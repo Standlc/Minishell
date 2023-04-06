@@ -6,7 +6,7 @@
 /*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 19:40:59 by svan-de-          #+#    #+#             */
-/*   Updated: 2023/04/05 19:40:59 by svan-de-         ###   ########.fr       */
+/*   Updated: 2023/04/06 18:07:17 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef struct s_pipeline
 	int			parenthesis;
 }				t_pipeline;
 
-typedef struct s_heredoc_fds {
+typedef struct t_heredoc_fds {
 	int	fds[2];
 	int	is_end;
 }				t_heredoc_fds;

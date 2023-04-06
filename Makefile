@@ -7,8 +7,10 @@ SRC_BUILTINS		=	${addprefix export/, ${SRC_EXPORT}} ${addprefix exit/, ${SRC_EXI
 
 SRC_PIPELINE_STEPS	=	pipeline_steps.c end_of_pipeline.c
 
+SRC_ANOTHER			=	another.c validate_command.c
+
 SRC_EXECUTION		=	${addprefix builtins/, ${SRC_BUILTINS}} ${addprefix pipeline_steps/, ${SRC_PIPELINE_STEPS}} \
-						another.c execute_command.c execution.c for_dup.c \
+						${addprefix another/, ${SRC_ANOTHER}} execute_command.c execution.c for_dup.c \
 						path.c pipe.c
 
 SRC_ARRAY_METHODS	=	join_str_arr.c insert.c

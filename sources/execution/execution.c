@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 19:18:57 by svan-de-          #+#    #+#             */
-/*   Updated: 2023/04/06 02:57:13 by marvin           ###   ########.fr       */
+/*   Updated: 2023/04/06 17:08:47 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	execute_pipeline(t_pipeline pipeline, t_blocks *blocks)
 			exit_process(pipeline, blocks);
 		return ;
 	}
+	(void)get_pipeline_singleton(&pipeline);
 	execution_pipeline(pipeline.commands);
 	if (pipeline.commands->is_end == 2)
 		exit_process(pipeline, blocks);

@@ -6,7 +6,7 @@
 /*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 19:18:30 by svan-de-          #+#    #+#             */
-/*   Updated: 2023/04/05 19:18:30 by svan-de-         ###   ########.fr       */
+/*   Updated: 2023/04/06 17:11:21 by svan-de-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,6 @@ void	validate_n(t_command *command, int *i)
 			break ;
 		(*i)++;
 	}
-}
-
-void	close_file(int fd)
-{
-	if (fd < 3)
-		return ;
-	if (close(fd) == -1)
-		perror("minishell: close");
 }
 
 void	echo_ms(t_command *command)

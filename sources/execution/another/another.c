@@ -14,25 +14,52 @@
 
 extern int	g_status;
 
+void	close_file(int fd)
+{
+	if (fd < 3)
+		return ;
+	close(fd);
+}
+
+void	close_all(t_pipeline pipeline)
+{
+	int				i;
+	t_heredoc_fds	*heredoc_fds;
+
+	i = 0;
+	while (pipeline.commands[i].is_end)
+	{
+		close_file(pipeline.commands[i].output_file);
+		close_file(pipeline.commands[i].input_file);
+		close_file(pipeline.commands[i].close_pipe[0]);
+		close_file(pipeline.commands[i].close_pipe[1]);
+		i++;
+	}
+	heredoc_fds = get_heredoc_fds_data(NULL);
+	close_heredoc_fds(heredoc_fds);
+}
+
 void	duplicate_for_streams(t_command *command)
 {
 	if (dup2(command->input_file, 0) == -1
 		|| dup2(command->output_file, 1) == -1)
 		perror("minishell: dup2");
-	close_file(command->output_file);
-	close_file(command->input_file);
-	close_file(command->close_pipe[0]);
-	close_file(command->close_pipe[1]);
+	close_all(get_pipeline_singleton(NULL));
 }
 
-int	valide_argument_for_path(char *argument)
+void	error_command(char *arguments)
 {
-	if (argument[0] == '/'
-		|| (argument[0] == '.' && argument[1] == '/')
-		|| (argument[0] == '.' && argument[1] == '.'
-			&& argument[1] == '/'))
-		return (1);
-	return (0);
+	char	*str;
+
+	g_status = 127;
+	str = ft_strjoin("minishell: `", arguments);
+	if (!str)
+		return (g_status = ENOMEM, perror("minishell:"));
+	str = strjoin_handler(str, "': command not found\n");
+	if (!str)
+		return (g_status = ENOMEM, perror("minishell:"));
+	ft_putstr_fd(str, 2);
+	free(str);
 }
 
 void	another_command(t_command *command)
@@ -41,19 +68,22 @@ void	another_command(t_command *command)
 	char	**env;
 
 	env = *(environnement(NULL));
-	if (valide_argument_for_path(command->arguments[0]))
-			path = command->arguments[0];
+	if (!valide_argument_for_path(command->arguments[0]))
+		return (error_command(command->arguments[0]));
+	if (valide_command(command->arguments[0]))
+		path = ft_strdup(command->arguments[0]);
 	else
 		path = path_for_execve(env, command->arguments[0]);
 	if (!path)
 	{
-		g_status = 127;
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(command->arguments[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		return ;
+		free(path);
+		path = NULL;
+		return (error_command(command->arguments[0]));
 	}
 	duplicate_for_streams(command);
 	if (execve(path, command->arguments, env) == -1)
+	{
 		ft_putstr_fd("minishell: execve failed\n", 2);
+		(free(path), path = NULL);
+	}
 }
