@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 19:31:14 by svan-de-          #+#    #+#             */
-/*   Updated: 2023/04/05 22:21:51 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/06 01:57:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,11 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	if (!isatty(0) || !isatty(1) || !isatty(2))
-	{
-		ft_putstr_fd("stdin, stdout or stderr have been changed\n", 2);
-		return (ENOTTY);
-	}
+	// if (!isatty(0) || !isatty(1) || !isatty(2))
+	// {
+	// 	ft_putstr_fd("stdin, stdout or stderr have been changed\n", 2);
+	// 	return (ENOTTY);
+	// }
 	hook_signals();
 	g_status = 0;
 	minishell_env = duplicate_bigarray(env);

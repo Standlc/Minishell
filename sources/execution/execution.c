@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svan-de- <svan-de-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 19:18:57 by svan-de-          #+#    #+#             */
-/*   Updated: 2023/04/05 19:26:51 by svan-de-         ###   ########.fr       */
+/*   Updated: 2023/04/06 02:57:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,25 +51,6 @@ void	execution_pipeline(t_command *commands)
 	if (g_status != flag)
 		return ;
 	return (execution_while(commands, fd));
-}
-
-int	check_last_status(t_pipeline last)
-{
-	if (last.operator == AND)
-	{
-		if (g_status)
-			return (1);
-		if (!g_status)
-			return (0);
-	}
-	if (last.operator == OR)
-	{
-		if (g_status)
-			return (0);
-		if (!g_status)
-			return (1);
-	}
-	return (-1);
 }
 
 void	execute_pipeline(t_pipeline pipeline, t_blocks *blocks)

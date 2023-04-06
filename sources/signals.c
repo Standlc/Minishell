@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stde-la- <stde-la-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 19:31:11 by svan-de-          #+#    #+#             */
-/*   Updated: 2023/04/05 21:51:04 by stde-la-         ###   ########.fr       */
+/*   Updated: 2023/04/06 02:10:17 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	handle_sigint(int sig)
 	(void)sig;
 	g_status = 130;
 	ft_putstr_fd("\n", 2);
+	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
 }
