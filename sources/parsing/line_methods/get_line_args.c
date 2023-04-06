@@ -33,7 +33,6 @@ int	add_char(char **line, char **str, int is_str_arr)
 	str[last_index] = strjoin_handler(str[last_index], join);
 	*line += 1;
 	free(join);
-	join = NULL;
 	return (str[last_index] == NULL);
 }
 
@@ -63,14 +62,14 @@ char	*handle_quotes(char **line, char quote_type)
 		{
 			env_var_value = handle_env_var(line, 1);
 			if (!env_var_value)
-				return (free(str), str = NULL, NULL);
+				return (free(str), NULL);
 			str = strjoin_handler(str, env_var_value[0]);
 			free_str_arr(env_var_value);
 			if (!str)
 				return (NULL);
 		}
 		else if (add_char(line, &str, 0))
-			return (free(str), str = NULL, NULL);
+			return (free(str), NULL);
 	}
 	*line += 1;
 	return (str);

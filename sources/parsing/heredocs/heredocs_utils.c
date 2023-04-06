@@ -53,29 +53,30 @@ int	read_user_input(int fd, char *limit)
 		if (!ft_strncmp(limit, heredoc_line, limit_len + 1))
 			return (0);
 		else if (write_to_heredoc_fd(fd, heredoc_line))
-			return (free(heredoc_line), heredoc_line = NULL, 1);
-		(free(heredoc_line), heredoc_line = NULL);
+			return (free(heredoc_line), ENOMEM);
+		free(heredoc_line);
 		heredoc_line = readline("> ");
 	}
-	return (0);
+	return (-1);
 }
 
-t_heredoc_fds	*do_the_heredocs(t_heredoc_fds *heredoc_fds, char **limits)
+int	do_the_heredocs(t_heredoc_fds *heredoc_fds, char **limits, int *i)
 {
-	int		i;
+	int		status;
 
-	i = 0;
-	while (limits[i])
+	status = 0;
+	while (limits[*i] && status != -1)
 	{
-		if (read_user_input(heredoc_fds[i].fds[1], limits[i]))
-			return (close_heredoc_fds(heredoc_fds), NULL);
-		close(heredoc_fds[i].fds[1]);
-		close(heredoc_fds[i].fds[0]);
-		heredoc_fds[i].fds[1] = 0;
-		heredoc_fds[i].fds[0] = 0;
-		i++;
+		status = read_user_input(heredoc_fds[*i].fds[1], limits[*i]);
+		if (status == ENOMEM)
+			return (ENOMEM);
+		close(heredoc_fds[*i].fds[1]);
+		close(heredoc_fds[*i].fds[0]);
+		heredoc_fds[*i].fds[1] = 0;
+		heredoc_fds[*i].fds[0] = 0;
+		*i += 1;
 	}
-	return (heredoc_fds);
+	return (status);
 }
 
 int	get_heredoc_amount(char *line)

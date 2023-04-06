@@ -81,13 +81,13 @@ int	start_minishell(void)
 		{
 			heredoc_fds = handle_heredocs(line);
 			if (!heredoc_fds)
-				return (free(line), line = NULL, 1);
+				return (free(line), 1);
 			if (g_status == SIGINT_HEREDOC)
 				g_status = 130;
 			else if (execute_command_line(line, heredoc_fds))
 				return (close_heredoc_fds(heredoc_fds), free(heredoc_fds), 1);
 			close_heredoc_fds_outs(heredoc_fds);
-			(free(heredoc_fds), heredoc_fds = NULL);
+			free(heredoc_fds);
 			free(line);
 		}
 		hook_signals();
@@ -121,25 +121,13 @@ int	main(int argc, char **argv, char **env)
 	return (g_status);
 }
 
-// << limit + ^D
+// . => minishell: .: filename argument required
+// wildcards should ignore case
+// echo $$""
 // echo $"sfbdb"
+// echo $"SHLVL"
 
-// false && (false || true)
-// g_status= 130 ^C
-
-// echo lol | wc
 // cat << eof (ctrl+D)
 // cat << eof << eof (ctrl+C => ^C^C)
 // cat + ctrl+\ (maybe not a problem)
 // export VAR="echo lol >file" (conditional jump)
-// wildcards should ignore case
-// abc | abc | abc | abc | abc | abc
-// echo $"SHLVL"
-
-/*
-echo xd > lol > lol2 > lol3
-minishell: close: Bad file descriptor
-double free or corruption (out)
-double free or corruption (out)
-double free or corruption (out)
-*/

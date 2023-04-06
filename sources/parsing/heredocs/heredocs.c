@@ -74,24 +74,24 @@ void	handle_sigint_parent(int sig)
 {
 	(void)sig;
 	ft_putstr_fd("^C\n", 1);
-	g_status = -1;
+	g_status = SIGINT_HEREDOC;
 }
 
 int	fork_and_wait(t_heredoc_data *heredoc)
 {
-	int				status_waitpid;
-	pid_t			pid;
+	pid_t	pid;
+	int		wait_status;
 
 	pid = fork();
 	if (pid == -1)
-		return (1);
+		return (errno);
 	if (pid == 0)
 		heredoc_child(heredoc);
 	signal(SIGINT, handle_sigint_parent);
-	waitpid(pid, &status_waitpid, 0);
+	wait_status = waitpid(pid, NULL, 0);
 	hook_signals();
 	close_heredoc_fds_ins(heredoc->heredoc_fds);
-	return (0);
+	return (wait_status);
 }
 
 t_heredoc_fds	*handle_heredocs(char *line)
@@ -105,14 +105,13 @@ t_heredoc_fds	*handle_heredocs(char *line)
 	heredoc.limits = NULL;
 	heredoc.limits = get_heredoc_limits(line, heredoc.limits);
 	if (!heredoc.limits)
-		return (free(heredoc.heredoc_fds), heredoc.heredoc_fds = NULL, NULL);
+		return (free(heredoc.heredoc_fds), NULL);
 	if (!heredoc.heredoc_fds[0].is_end)
 	{
-		if (fork_and_wait(&heredoc))
+		if (fork_and_wait(&heredoc) == -1)
 		{
 			free_str_arr(heredoc.limits);
 			free(heredoc.heredoc_fds);
-			heredoc.heredoc_fds = NULL;
 			return (NULL);
 		}
 	}

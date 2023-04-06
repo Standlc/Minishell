@@ -18,10 +18,14 @@
 
 # include "minishell.h"
 
+void	rl_clear_history(void);
+void	rl_replace_line(char *s, int n);
+
 t_heredoc_fds	*handle_heredocs(char *line);
 int				get_heredoc_amount(char *line);
 char			*get_heredoc_limit(char **line, char *heredoc_limit);
-t_heredoc_fds	*do_the_heredocs(t_heredoc_fds *heredoc_fds, char **limits);
+int				do_the_heredocs(t_heredoc_fds *heredoc_fds,
+					char **limits, int *i);
 void			heredoc_child(t_heredoc_data *heredoc);
 char			*get_heredoc_limit(char **line, char *heredoc_limit);
 t_heredoc_data	get_heredoc_data(t_heredoc_data *curr);
@@ -112,7 +116,6 @@ int				wildcard_matches_amount(char *curr_dir_wildcard,
 					t_wildcard_info *wildcard_info);
 void			replace_chars(char *str, char c, char replace_with);
 
-void			free_pipelines(t_pipeline *pipelines);
 void			free_pipeline(t_pipeline pipeline);
 void			free_str_arr(char **str_arr);
 void			close_heredoc_fds_ins(t_heredoc_fds *heredoc_fds);
