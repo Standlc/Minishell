@@ -18,9 +18,6 @@
 
 # include "minishell.h"
 
-void	rl_clear_history(void);
-void	rl_replace_line(char *s, int n);
-
 t_heredoc_fds	*handle_heredocs(char *line);
 int				get_heredoc_amount(char *line);
 char			*get_heredoc_limit(char **line, char *heredoc_limit);
@@ -83,6 +80,7 @@ int				is_wildcard(char *str);
 int				is_heredoc(char *line);
 int				is_directory(char *file);
 int				is_white_space(char c);
+int				is_env_var_heredoc(char *line, char quote_type);
 int				has_dot_slash_prefix(char *str);
 int				has_slash_prefix(char *str);
 
@@ -103,6 +101,7 @@ int				file_or_dir_check(t_command *command, char *str,
 void			*ft_realloc(void *src, int prev_size, int new_size);
 
 void			print_error(char *message, char *line);
+void			print_error_arg(char *message, char *line);
 char			*strjoin_handler(char *str, char *join);
 
 char			**handle_widlcards(char **args);

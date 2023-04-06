@@ -40,10 +40,24 @@ void	print_line_component(char *line)
 		write (2, line, 1);
 	else
 	{
-		while (*line && *line != ' ' && (!is_meta_char(line) || *line == '*'))
+		while (*line && !is_white_space(*line)
+			&& (!is_meta_char(line) || *line == '*'))
 			write(2, line++, 1);
 	}
 	write(2, "'", 1);
+}
+
+void	print_error_arg(char *message, char *arg)
+{
+	ft_putstr_fd("minishell: ", 2);
+	if (arg)
+	{
+		write(2, "`", 1);
+		ft_putstr_fd(arg, 2);
+		write(2, "'", 1);
+	}
+	ft_putstr_fd(message, 2);
+	ft_putstr_fd("\n", 2);
 }
 
 void	print_error(char *message, char *line)

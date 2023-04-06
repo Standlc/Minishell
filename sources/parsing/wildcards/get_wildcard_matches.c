@@ -26,9 +26,10 @@ void	sort(char **arr, int size)
 		while (j < size - i)
 		{
 			k = 0;
-			while (arr[j - 1][k] && arr[j][k] && arr[j - 1][k] == arr[j][k])
+			while (ft_tolower(arr[j - 1][k]) && ft_tolower(arr[j][k])
+				&& ft_tolower(arr[j - 1][k]) == ft_tolower(arr[j][k]))
 				k++;
-			if (arr[j - 1][k] > arr[j][k])
+			if (ft_tolower(arr[j - 1][k]) > ft_tolower(arr[j][k]))
 			{
 				temp = arr[j - 1];
 				arr[j - 1] = arr[j];

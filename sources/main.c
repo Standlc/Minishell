@@ -86,7 +86,7 @@ int	start_minishell(void)
 				g_status = 130;
 			else if (execute_command_line(line, heredoc_fds))
 				return (close_heredoc_fds(heredoc_fds), free(heredoc_fds), 1);
-			close_heredoc_fds_outs(heredoc_fds);
+			close_heredoc_fds(heredoc_fds);
 			free(heredoc_fds);
 			free(line);
 		}
@@ -121,13 +121,9 @@ int	main(int argc, char **argv, char **env)
 	return (g_status);
 }
 
-// . => minishell: .: filename argument required
-// wildcards should ignore case
 // echo $$""
-// echo $"sfbdb"
 // echo $"SHLVL"
 
-// cat << eof (ctrl+D)
 // cat << eof << eof (ctrl+C => ^C^C)
 // cat + ctrl+\ (maybe not a problem)
 // export VAR="echo lol >file" (conditional jump)

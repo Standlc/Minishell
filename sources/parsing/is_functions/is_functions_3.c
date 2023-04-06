@@ -20,11 +20,23 @@ int	is_white_space(char c)
 int	has_dot_slash_prefix(char *str)
 {
 	skip_spaces(&str);
-	return (!ft_strncmp(str, "./", 2));
+	while (*str == '.')
+		str++;
+	return (*str == '/');
 }
 
 int	has_slash_prefix(char *str)
 {
 	skip_spaces(&str);
-	return (*str == '.' || *str == '/');
+	return (*str == '/');
+}
+
+int	is_env_var_heredoc(char *line, char quote_type)
+{
+	if (*line != '$')
+		return (0);
+	if (!ft_isalnum(*(line + 1)) && *(line + 1) != '?')
+		return (0);
+	return (*(line + 1)
+		&& (!quote_type || (quote_type == '"' && *(line + 1) != '"')));
 }

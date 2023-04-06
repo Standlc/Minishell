@@ -25,7 +25,7 @@ int	write_to_heredoc_fd(int fd, char *heredoc_line)
 
 	while (*heredoc_line)
 	{
-		if (is_env_var(heredoc_line, 0))
+		if (is_env_var_heredoc(heredoc_line, 0))
 		{
 			env_var_values = handle_env_var(&heredoc_line, 1);
 			if (!env_var_values)

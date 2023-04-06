@@ -42,7 +42,7 @@ void	heredoc_child(t_heredoc_data *heredoc)
 		perror("minishell: malloc");
 	else if (status == -1)
 	{
-		ft_putstr_fd("\nminishell: warning: ", 2);
+		ft_putstr_fd("minishell: warning: ", 2);
 		ft_putstr_fd("here-document delimited by end-of-file (wanted `", 2);
 		ft_putstr_fd(heredoc->limits[i - 1], 2);
 		ft_putstr_fd("')\n", 2);
