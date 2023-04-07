@@ -49,6 +49,9 @@
 # include "parsing.h"
 # include "execution.h"
 
+void	rl_clear_history(void);
+void	rl_replace_line(char *s, int n);
+
 int			hook_signals(void);
 char		***environnement(char **new_env);
 int			main(int argc, char **argv, char **env);

@@ -121,3 +121,6 @@ int	main(int argc, char **argv, char **env)
 	ft_putstr_fd("exit\n", 1);
 	return (g_status);
 }
+
+void	rl_clear_history(void){};
+void	rl_replace_line(char *s, int n){(void)s;(void)n;};
