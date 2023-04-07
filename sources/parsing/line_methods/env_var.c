@@ -19,8 +19,14 @@ int	env_var_name_len(char *line)
 	int	len;
 
 	len = 0;
-	while (line[len] && (ft_isalnum(line[len]) || line[len] == '?'))
+	while (line[len]
+		&& (ft_isalnum(line[len])
+			|| (line[len] == '?' && !len) || line[len] == '_'))
+	{
 		len++;
+		if (line[len] == '?')
+			break ;
+	}
 	return (len);
 }
 
@@ -33,7 +39,8 @@ char	*get_env_var_name(char **line)
 	if (!env_var_name)
 		return (NULL);
 	i = 0;
-	while (**line && (ft_isalnum(**line) || **line == '?'))
+	while (**line
+		&& (ft_isalnum(**line) || (**line == '?' && !i) || **line == '_'))
 	{
 		env_var_name[i] = **line;
 		*line += 1;

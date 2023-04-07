@@ -46,11 +46,3 @@ int	check_syntax(char *line)
 	}
 	return (0);
 }
-
-// cat (<< a) -> error, then nothing
-// (<< a) -> heredoc, no error
-
-//UNSURE
-// (()) -> ?
-// ((cat)) -> ?
-// ((cat file)) -> ?

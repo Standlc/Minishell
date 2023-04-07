@@ -20,12 +20,13 @@ int	validate_variable(char *argument)
 
 	i = 0;
 	if (!ft_isalpha(argument[i]) && argument[i] != '_')
-		return (ft_putstr_fd("not a valid identifier\n", 2), g_status = 1, 0);
+		return (ft_putstr_fd("minishell: not a valid identifier\n", 2),
+			g_status = 1, 0);
 	i++;
 	while (argument[i] && argument[i] != '=')
 	{
 		if (!ft_isalnum(argument[i]))
-			return (ft_putstr_fd("not a valid identifier\n", 2),
+			return (ft_putstr_fd("minishell: not a valid identifier\n", 2),
 				g_status = 1, 0);
 		i++;
 	}

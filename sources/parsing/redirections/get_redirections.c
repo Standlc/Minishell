@@ -40,9 +40,11 @@ int	handle_redirections(char **line, t_command *command,
 	char	*line_cpy;
 	char	**file_names;
 	int		status;
+	char	**args;
 
 	line_cpy = *line;
-	file_names = handle_widlcards(get_line_args(line));
+	args = get_line_args(line, is_export_command(command));
+	file_names = handle_widlcards(args);
 	if (!file_names)
 		return (ENOMEM);
 	if (str_arr_size(file_names) != 1)

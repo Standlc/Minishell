@@ -18,7 +18,8 @@ void	exit_heredoc(int sig)
 {
 	t_heredoc_data	heredoc;
 
-	(void)sig;
+	if (sig == SIGINT)
+		ft_putstr_fd("\n", 1);
 	heredoc = get_heredoc_data(NULL);
 	free_str_arr(*(environnement(NULL)));
 	close_heredoc_fds(heredoc.heredoc_fds);
@@ -32,9 +33,7 @@ void	exit_heredoc(int sig)
 void	heredoc_child(char *limit, int fd)
 {
 	int	status;
-	int	i;
 
-	i = 0;
 	signal(SIGINT, exit_heredoc);
 	status = read_user_input(fd, limit);
 	if (status == ENOMEM)

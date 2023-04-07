@@ -79,7 +79,8 @@ void	delete_env(t_command *command, int i)
 			delete_variable(new_env, j);
 			new_env = *(environnement(NULL));
 		}
-		j++;
+		else
+			j++;
 	}
 }
 

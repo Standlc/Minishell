@@ -81,9 +81,10 @@ int	line_arg_condition(char *line)
 		&& !is_redirection(line) && !is_parenthesis(line));
 }
 
-char	**get_line_args(char **line)
+char	**get_line_args(char **line, int expand_env_var)
 {
 	char	**str_arr;
+	char	**env_var_values;
 
 	str_arr = ft_calloc(2, sizeof(char **));
 	if (!str_arr)
@@ -92,7 +93,8 @@ char	**get_line_args(char **line)
 	{
 		if (is_env_var(*line, 0))
 		{
-			str_arr = join_arr_strjoin(str_arr, handle_env_var(line, 0));
+			env_var_values = handle_env_var(line, expand_env_var);
+			str_arr = join_arr_strjoin(str_arr, env_var_values);
 			if (!str_arr)
 				return (NULL);
 		}

@@ -41,8 +41,10 @@ int	check_missing_parenthesis(char **line)
 			*line += 1;
 			if (check_missing_parenthesis(line))
 				return (1);
+			*line += 1;
 		}
-		*line += 1;
+		else
+			*line += 1;
 	}
 	return (!**line);
 }

@@ -53,7 +53,7 @@ char	**handle_widlcards(char **curr_args)
 				return (free_str_arr(curr_args), NULL);
 		}
 		else
-			insert_index++;
+			replace_chars(new_args[insert_index++], WILDSTAR, '*');
 		i++;
 	}
 	return (free_str_arr(curr_args), new_args);

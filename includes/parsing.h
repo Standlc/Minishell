@@ -21,8 +21,6 @@
 t_heredoc_fds	*handle_heredocs(char *line);
 int				get_heredoc_amount(char *line);
 char			*get_heredoc_limit(char **line, char *heredoc_limit);
-int				do_the_heredocs(t_heredoc_fds *heredoc_fds,
-					char **limits, int *i);
 void			heredoc_child(char *limit, int fd);
 int				read_user_input(int fd, char *limit);
 char			*get_heredoc_limit(char **line, char *heredoc_limit);
@@ -39,7 +37,7 @@ int				get_pipeline(char **line, t_pipeline *pipeline,
 void			handle_parenthesis(char **line, t_pipeline *pipeline,
 					char parenthesis);
 
-char			**get_line_args(char **line);
+char			**get_line_args(char **line, int expand_env_var);
 char			**handle_env_var(char **line, int is_inside_quotes);
 char			*dup_line_word(char **line);
 
@@ -82,6 +80,7 @@ int				is_heredoc(char *line);
 int				is_directory(char *file);
 int				is_white_space(char c);
 int				is_env_var_heredoc(char *line, char quote_type);
+int				is_export_command(t_command *command);
 int				has_dot_slash_prefix(char *str);
 int				has_slash_prefix(char *str);
 
@@ -93,7 +92,6 @@ int				handle_double_right_redirection(t_command *command, char *file);
 
 int				assign_heredoc_fd(char **line, t_command *command,
 					t_heredoc_fds **heredoc_fds);
-char			*dup_line_word(char **line);
 
 void			skip_spaces(char **line);
 void			get_operator(char **line, t_pipeline *pipeline);

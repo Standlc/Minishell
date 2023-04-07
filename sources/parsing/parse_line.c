@@ -29,7 +29,7 @@ int	get_arguments(char **line, t_command *command, t_heredoc_fds **heredoc_fds)
 	{
 		if (!is_redirection(*line) && !status)
 		{
-			args = get_line_args(line);
+			args = get_line_args(line, is_export_command(command));
 			command->arguments = join_str_arr(command->arguments, args);
 			if (!command->arguments)
 				return (ENOMEM);
@@ -107,20 +107,3 @@ int	get_pipeline(char **line, t_pipeline *pipeline, t_heredoc_fds **heredoc_fds)
 	check_last_command_status(pipeline);
 	return (0);
 }
-
-// :
-// #
-// $'' $: $=
-//"$'"
-
-// cat a || (cat a && (cat b || cat a) || cat b)
-// cat a || (cat a || ((cat b && cat a) || cat b))
-
-// rev | < a cat > b < 6.c > c | rev &&  < a echo yo > b > a | cat || ls
-// echo "sdf$USER" -> sdfstde-la-
-// echo "sdf$USERsdf" -> sdf
-// echo "sdf$USER sdf" -> sdfstde-la-
-// echo "sdf $USER" -> sdf stde-la- 
-// com arg"$USER" -> argstan
-// a"$USER"a"$USER" -> astanastan
-// $USER"$USER"$USER -> stanstanstan
